@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bookshelf Benchmark</title>
+<meta name="description" content="How well do Claude, Gemini and GPT read the books on real bookshelf photos? Results heatmaps for two experiments.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='6' width='5' height='20' rx='1' fill='%232a78d6'/><rect x='11' y='9' width='5' height='17' rx='1' fill='%23256abf'/><rect x='18' y='5' width='4' height='21' rx='1' fill='%231c5cab'/><rect x='23' y='8' width='5' height='18' rx='1' transform='rotate(-10 25 17)' fill='%233987e5'/></svg>">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface-1: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #6f6d68;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --accent: #256abf;
+  --tooltip-bg: #0b0b0b;
+  --tooltip-ink: #ffffff;
+  /* Sequential blue, value 0 -> 1 (light surface: near-zero recedes to light) */
+  --seq-0:#cde2fb; --seq-1:#b7d3f6; --seq-2:#9ec5f4; --seq-3:#86b6ef; --seq-4:#6da7ec; --seq-5:#5598e7;
+  --seq-6:#3987e5; --seq-7:#2a78d6; --seq-8:#256abf; --seq-9:#1c5cab; --seq-10:#184f95; --seq-11:#104281; --seq-12:#0d366b;
+  --ink-0:#0b0b0b; --ink-1:#0b0b0b; --ink-2:#0b0b0b; --ink-3:#0b0b0b; --ink-4:#0b0b0b; --ink-5:#0b0b0b; --ink-6:#0b0b0b;
+  --ink-7:#ffffff; --ink-8:#ffffff; --ink-9:#ffffff; --ink-10:#ffffff; --ink-11:#ffffff; --ink-12:#ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19; --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #9a988f;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #86b6ef;
+    --tooltip-bg: #ffffff; --tooltip-ink: #0b0b0b;
+    /* Dark surface: anchor flips, near-zero recedes to dark */
+    --seq-0:#0d366b; --seq-1:#104281; --seq-2:#184f95; --seq-3:#1c5cab; --seq-4:#256abf; --seq-5:#2a78d6;
+    --seq-6:#3987e5; --seq-7:#5598e7; --seq-8:#6da7ec; --seq-9:#86b6ef; --seq-10:#9ec5f4; --seq-11:#b7d3f6; --seq-12:#cde2fb;
+    --ink-0:#ffffff; --ink-1:#ffffff; --ink-2:#ffffff; --ink-3:#ffffff; --ink-4:#ffffff; --ink-5:#ffffff;
+    --ink-6:#0b0b0b; --ink-7:#0b0b0b; --ink-8:#0b0b0b; --ink-9:#0b0b0b; --ink-10:#0b0b0b; --ink-11:#0b0b0b; --ink-12:#0b0b0b;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface-1: #1a1a19; --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #9a988f;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #86b6ef;
+  --tooltip-bg: #ffffff; --tooltip-ink: #0b0b0b;
+  --seq-0:#0d366b; --seq-1:#104281; --seq-2:#184f95; --seq-3:#1c5cab; --seq-4:#256abf; --seq-5:#2a78d6;
+  --seq-6:#3987e5; --seq-7:#5598e7; --seq-8:#6da7ec; --seq-9:#86b6ef; --seq-10:#9ec5f4; --seq-11:#b7d3f6; --seq-12:#cde2fb;
+  --ink-0:#ffffff; --ink-1:#ffffff; --ink-2:#ffffff; --ink-3:#ffffff; --ink-4:#ffffff; --ink-5:#ffffff;
+  --ink-6:#0b0b0b; --ink-7:#0b0b0b; --ink-8:#0b0b0b; --ink-9:#0b0b0b; --ink-10:#0b0b0b; --ink-11:#0b0b0b; --ink-12:#0b0b0b;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--page);
+  color: var(--text-primary);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 32px 16px 64px; }
+
+header.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+h1 { font-size: 30px; line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.01em; }
+.lede { color: var(--text-secondary); margin: 0; max-width: 680px; font-size: 16px; }
+.meta { color: var(--text-muted); font-size: 13px; margin-top: 10px; }
+.theme-btn {
+  flex: none; font: inherit; font-size: 13px; color: var(--text-secondary); background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer;
+}
+.theme-btn:hover { color: var(--text-primary); }
+
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 28px 0 8px; }
+.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.tile .label { font-size: 13px; color: var(--text-secondary); }
+.tile .value { font-size: 32px; font-weight: 650; line-height: 1.1; margin: 6px 0 4px; }
+.tile .sub { font-size: 13px; color: var(--text-muted); }
+
+section.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 20px; }
+h2 { font-size: 20px; margin: 0 0 4px; }
+.card > p.desc { color: var(--text-secondary); margin: 0 0 16px; max-width: 760px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 14px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; padding: 2px; }
+.seg button {
+  font: inherit; font-size: 13px; border: 0; background: transparent; color: var(--text-secondary);
+  padding: 5px 12px; border-radius: 6px; cursor: pointer;
+}
+.seg button[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); }
+.seg button:focus-visible, .cell:focus-visible, .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+.legend .bar {
+  width: 160px; height: 10px; border-radius: 4px;
+  background: linear-gradient(90deg, var(--seq-0), var(--seq-3), var(--seq-6), var(--seq-9), var(--seq-12));
+}
+
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.heat { border-collapse: separate; border-spacing: 2px; font-size: 13px; min-width: 640px; width: 100%; }
+table.heat th { font-weight: 600; color: var(--text-secondary); text-align: center; padding: 4px 6px; vertical-align: bottom; }
+table.heat th .small { display: block; font-weight: 400; color: var(--text-muted); font-size: 12px; }
+table.heat th.group { border-bottom: 1px solid var(--axis); padding-bottom: 6px; }
+table.heat th.rowh {
+  text-align: left; position: sticky; left: 0; background: var(--surface-1); z-index: 1;
+  padding: 0 12px 0 0; white-space: nowrap; font-weight: 600; color: var(--text-primary);
+}
+table.heat th.rowh .mode { font-weight: 400; color: var(--text-secondary); }
+table.heat thead th.rowh { color: var(--text-muted); font-weight: 400; vertical-align: bottom; }
+td.cell {
+  height: 38px; min-width: 64px; text-align: center; border-radius: 4px;
+  font-variant-numeric: tabular-nums; font-weight: 600; cursor: default;
+}
+td.gap { width: 10px; min-width: 10px; padding: 0; }
+td.delta { text-align: right; padding: 0 4px 0 10px; color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.delta strong { color: var(--text-primary); }
+td.empty { color: var(--text-muted); font-weight: 400; background: transparent; border: 1px dashed var(--grid); }
+.note { font-size: 13px; color: var(--text-muted); margin: 12px 0 0; }
+
+ol.findings { margin: 8px 0 0; padding-left: 20px; }
+ol.findings li { margin: 0 0 10px; }
+ol.findings li strong { color: var(--text-primary); }
+.card ul { margin: 8px 0 0; padding-left: 20px; }
+.card ul li { margin-bottom: 6px; color: var(--text-secondary); }
+
+#tip {
+  position: fixed; z-index: 10; pointer-events: none; max-width: 280px;
+  background: var(--tooltip-bg); color: var(--tooltip-ink); border-radius: 8px;
+  padding: 8px 10px; font-size: 12.5px; line-height: 1.45; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  opacity: 0; transform: translateY(4px); transition: opacity .1s, transform .1s;
+}
+#tip.on { opacity: 1; transform: none; }
+#tip b { font-weight: 650; }
+#tip .row { display: flex; justify-content: space-between; gap: 16px; font-variant-numeric: tabular-nums; }
+#tip .dim { opacity: 0.75; }
+
+footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
+
+@media (max-width: 720px) {
+  .tiles { grid-template-columns: 1fr; }
+  h1 { font-size: 25px; }
+  section.card { padding: 16px; }
+}
+@media (forced-colors: active) {
+  td.cell { border: 1px solid CanvasText; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Bookshelf Benchmark</h1>
+      <p class="lede">Can AI chat models read a bookshelf? We gave Claude, Gemini and GPT the same six real bookshelf photos and asked them to list every book whose title they could read, then checked their answers against a hand-verified list.</p>
+      <p class="meta" id="meta"></p>
+    </div>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch colour theme">Theme: auto</button>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section class="card" aria-labelledby="h-exp1">
+    <h2 id="h-exp1">Experiment 1: all six photos in one message</h2>
+    <p class="desc">Each row is one model and mode, given all six photos at once in the normal chat app. The scale beside the buttons shows which shades mean a high score. Rows are ordered by overall F1. Hover or focus a cell for the details.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Metric for experiment 1" data-target="exp1">
+        <button type="button" data-metric="f1" aria-pressed="true">F1</button>
+        <button type="button" data-metric="recall" aria-pressed="false">Recall</button>
+        <button type="button" data-metric="precision" aria-pressed="false">Precision</button>
+      </div>
+      <div class="legend" aria-hidden="true"><span>0</span><span class="bar"></span><span>1</span></div>
+    </div>
+    <div class="scroll"><table class="heat" id="exp1"></table></div>
+    <p class="note">Photos a and b are easy, c and d medium, e and f hard. Book counts are the number of books in the answer key for that photo.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-exp2">
+    <h2 id="h-exp2">Experiment 2: the hard photos, one per chat</h2>
+    <p class="desc">The two hard photos, sent on their own instead of with the other five. Each pair of columns compares the same model on the same photo: six photos at once versus one photo per chat.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Metric for experiment 2" data-target="exp2">
+        <button type="button" data-metric="f1" aria-pressed="false">F1</button>
+        <button type="button" data-metric="recall" aria-pressed="true">Recall</button>
+        <button type="button" data-metric="precision" aria-pressed="false">Precision</button>
+      </div>
+      <div class="legend" aria-hidden="true"><span>0</span><span class="bar"></span><span>1</span></div>
+    </div>
+    <div class="scroll"><table class="heat" id="exp2"></table></div>
+    <p class="note" id="skipped"></p>
+  </section>
+
+  <section class="card" aria-labelledby="h-find">
+    <h2 id="h-find">What we found</h2>
+    <ol class="findings">
+      <li><strong>Precision is high almost everywhere; recall is what separates the models.</strong> When a model names a book, it is nearly always really there. The difference is how many of the books each model manages to list.</li>
+      <li><strong>Claude reads crowded shelves far better.</strong> On the two hard photos, every Claude setup found more books than every Gemini and GPT setup. With one photo per chat, even the weakest Claude run found about twice as many as the best Gemini run.</li>
+      <li><strong>Gemini 3.8 Flash is best on the easy shelves.</strong> On the two easy photos it scored higher than every other model, including all the Claude runs.</li>
+      <li><strong>Sending six photos at once held Claude back.</strong> With one photo per chat, every Claude run found at least as many books, and Claude Opus 5.5 at low effort caught up with Opus 5.5 at high effort. Most of the low-versus-high effort gap in experiment 1 came from the six-photo setup.</li>
+      <li><strong>Gemini's limit is how well it reads, not the batching.</strong> Sent one hard photo at a time, Gemini still listed about the same number of books. It just named fewer wrong ones.</li>
+      <li><strong>Newer models improved.</strong> Opus 5.5 beat Opus 5, and Sonnet 5.5 beat Sonnet 5 by a wide margin, at the same effort.</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="h-how">
+    <h2 id="h-how">How it was measured</h2>
+    <ul>
+      <li><strong>Answer key:</strong> six photos, 295 books, each confirmed by a person against a zoomed-in crop of the photo. Books too hard to read with confidence were left out.</li>
+      <li><strong>Recall:</strong> of the books in the answer key, the share the model found. <strong>Precision:</strong> of the books the model named, the share that are in the answer key. <strong>F1</strong> combines the two.</li>
+      <li><strong>Matching:</strong> titles are matched approximately, so small differences in wording, punctuation, word order or a missing subtitle don't count as wrong.</li>
+      <li><strong>"Not in the answer key" isn't always a mistake.</strong> Models sometimes found real books that were left out of the answer key because they were hard to confirm, so precision is slightly understated.</li>
+      <li><strong>Setup:</strong> all runs used the normal consumer apps (ChatGPT, Claude.ai in incognito chats, Gemini), one run per setting. Small differences between runs may be noise.</li>
+      <li><strong>Photo labels:</strong> the Claude app doesn't show the model the filenames, so Claude lettered the photos in a different order. Its lists were matched back to the right photos before scoring.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Data, prompts and scoring code: <a href="https://github.com/atharva-729/bookshelf-benchmark">github.com/atharva-729/bookshelf-benchmark</a>.
+    Details in <a href="https://github.com/atharva-729/bookshelf-benchmark/blob/main/EXPERIMENTS.md">EXPERIMENTS.md</a> and <a href="https://github.com/atharva-729/bookshelf-benchmark/blob/main/METRICS.md">METRICS.md</a>.
+  </footer>
+</div>
+
+<div id="tip" role="tooltip" aria-hidden="true"></div>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  const D = window.BENCH;
+  const METRIC_NAMES = { f1: 'F1', recall: 'Recall', precision: 'Precision' };
+  const state = { exp1: 'f1', exp2: 'recall' };
+  const photoById = Object.fromEntries(D.photos.map(p => [p.id, p]));
+  const totalBooks = D.photos.reduce((s, p) => s + p.books, 0);
+  const fmt = v => (v == null ? '–' : v.toFixed(2));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const step = v => Math.max(0, Math.min(12, Math.round(v * 12)));
+  const cellStyle = v => `background:var(--seq-${step(v)});color:var(--ink-${step(v)})`;
+  const runLabel = r => `<span>${esc(r.model)}</span> <span class="mode">· ${esc(r.mode)}</span>`;
+
+  // ---------- header, tiles ----------
+  document.getElementById('meta').textContent =
+    `${D.photos.length} photos · ${totalBooks} books in the answer key · ${D.exp1.length} model setups · consumer chat apps`;
+
+  const byF1 = [...D.exp1].sort((a, b) => b.overall.f1 - a.overall.f1);
+  const best = byF1[0];
+  const easyF1 = r => {
+    const cells = D.photos.filter(p => p.difficulty === 'easy').map(p => r.photos[p.id]);
+    const tp = cells.reduce((s, c) => s + c.found, 0), fp = cells.reduce((s, c) => s + c.wrong, 0);
+    const tot = cells.reduce((s, c) => s + c.total, 0);
+    const pr = tp / (tp + fp), rc = tp / tot;
+    return 2 * pr * rc / (pr + rc);
+  };
+  const bestEasy = [...D.exp1].sort((a, b) => easyF1(b) - easyF1(a))[0];
+  const gains = D.exp2.map(r => ({ r, d: r.photos.combined.single.f1 - r.photos.combined.batch.f1 }))
+    .sort((a, b) => b.d - a.d);
+  const tiles = [
+    { label: 'Best overall (experiment 1)', value: best.overall.f1.toFixed(2), sub: `F1 · ${best.model}, ${best.mode}` },
+    { label: 'Best on the easy shelves', value: easyF1(bestEasy).toFixed(2), sub: `F1 · ${bestEasy.model}, ${bestEasy.mode}` },
+    gains.length && { label: 'Biggest gain from one photo per chat', value: `+${gains[0].d.toFixed(2)}`,
+      sub: `F1 on the hard photos · ${gains[0].r.model}, ${gains[0].r.mode}` },
+  ].filter(Boolean);
+  document.getElementById('tiles').innerHTML = tiles.map(t =>
+    `<div class="tile"><div class="label">${esc(t.label)}</div><div class="value">${esc(t.value)}</div><div class="sub">${esc(t.sub)}</div></div>`
+  ).join('');
+
+  // ---------- tooltip ----------
+  const tip = document.getElementById('tip');
+  function showTip(el) {
+    tip.innerHTML = el.dataset.tip;
+    tip.classList.add('on');
+    const r = el.getBoundingClientRect();
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = r.left + r.width / 2 - tw / 2;
+    x = Math.max(8, Math.min(x, window.innerWidth - tw - 8));
+    let y = r.top - th - 8;
+    if (y < 8) y = r.bottom + 8;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+  function hideTip() { tip.classList.remove('on'); }
+  document.addEventListener('mouseover', e => { const c = e.target.closest('td.cell[data-tip]'); if (c) showTip(c); });
+  document.addEventListener('mouseout', e => { if (e.target.closest('td.cell[data-tip]')) hideTip(); });
+  document.addEventListener('focusin', e => { const c = e.target.closest('td.cell[data-tip]'); if (c) showTip(c); });
+  document.addEventListener('focusout', hideTip);
+  window.addEventListener('scroll', hideTip, { passive: true });
+
+  function tipHtml(title, sub, c, extra) {
+    const rows = [['Recall', c.recall], ['Precision', c.precision], ['F1', c.f1]]
+      .map(([k, v]) => `<div class="row"><span>${k}</span><b>${fmt(v)}</b></div>`).join('');
+    const counts = c.total != null ? `<div class="dim">Found ${c.found} of ${c.total} · ${c.wrong} not in answer key</div>` : '';
+    return `<div><b>${esc(title)}</b></div><div class="dim">${esc(sub)}</div>${rows}${counts}${extra || ''}`;
+  }
+
+  // ---------- experiment 1 ----------
+  function renderExp1() {
+    const m = state.exp1;
+    const head = `<thead><tr><th class="rowh" scope="col">Model · mode</th>
+      <th scope="col">Overall<span class="small">${totalBooks} books</span></th><td class="gap"></td>
+      ${D.photos.map(p => `<th scope="col">${p.id}<span class="small">${p.difficulty} · ${p.books}</span></th>`).join('')}
+      </tr></thead>`;
+    const body = byF1.map(r => {
+      const who = `${r.model} · ${r.mode}`;
+      const overall = r.overall;
+      const oCell = `<td class="cell" tabindex="0" style="${cellStyle(overall[m])}"
+        aria-label="${esc(who)}, overall ${METRIC_NAMES[m]} ${fmt(overall[m])}"
+        data-tip="${esc(tipHtml(who, 'All six photos', overall))}">${fmt(overall[m])}</td>`;
+      const cells = D.photos.map(p => {
+        const c = r.photos[p.id];
+        if (!c) return `<td class="cell empty">–</td>`;
+        const sub = `Photo ${p.id} · ${p.difficulty} · ${p.books} books`;
+        return `<td class="cell" tabindex="0" style="${cellStyle(c[m])}"
+          aria-label="${esc(who)}, photo ${p.id}, ${METRIC_NAMES[m]} ${fmt(c[m])}"
+          data-tip="${esc(tipHtml(who, sub, c))}">${fmt(c[m])}</td>`;
+      }).join('');
+      return `<tr><th class="rowh" scope="row">${runLabel(r)}</th>${oCell}<td class="gap"></td>${cells}</tr>`;
+    }).join('');
+    document.getElementById('exp1').innerHTML =
+      `<caption style="position:absolute;left:-9999px">Experiment 1 ${METRIC_NAMES[m]} by model and photo</caption>${head}<tbody>${body}</tbody>`;
+  }
+
+  // ---------- experiment 2 ----------
+  function renderExp2() {
+    const m = state.exp2;
+    const groups = [
+      { id: 'e', label: 'Photo e', sub: `${photoById.e ? photoById.e.books : ''} books` },
+      { id: 'f', label: 'Photo f', sub: `${photoById.f ? photoById.f.books : ''} books` },
+      { id: 'combined', label: 'Both combined', sub: `${(photoById.e?.books || 0) + (photoById.f?.books || 0)} books` },
+    ];
+    const head = `<thead>
+      <tr><th class="rowh"></th>${groups.map((g, i) =>
+        `${i ? '<td class="gap"></td>' : ''}<th class="group" colspan="2" scope="colgroup">${g.label}<span class="small">${g.sub}</span></th>`).join('')}
+        <td class="gap"></td><th scope="col" rowspan="2" style="text-align:right">Change<span class="small">both, ${METRIC_NAMES[m]}</span></th></tr>
+      <tr><th class="rowh" scope="col">Model · mode</th>${groups.map((g, i) =>
+        `${i ? '<td class="gap"></td>' : ''}<th scope="col">6 at once</th><th scope="col">1 per chat</th>`).join('')}<td class="gap"></td></tr>
+      </thead>`;
+    const rows = [...D.exp2].sort((a, b) => b.photos.combined.single.f1 - a.photos.combined.single.f1);
+    const body = rows.map(r => {
+      const who = `${r.model} · ${r.mode}`;
+      const cells = groups.map((g, i) => {
+        const c = r.photos[g.id];
+        const pair = ['batch', 'single'].map(k => {
+          if (!c) return `<td class="cell empty">–</td>`;
+          const v = c[k][m];
+          const cond = k === 'batch' ? 'All six photos in one message' : 'One photo per chat';
+          const data = { ...c[k], total: c.total };
+          return `<td class="cell" tabindex="0" style="${cellStyle(v)}"
+            aria-label="${esc(who)}, ${g.label}, ${cond}, ${METRIC_NAMES[m]} ${fmt(v)}"
+            data-tip="${esc(tipHtml(who, `${g.label} · ${cond}`, data))}">${fmt(v)}</td>`;
+        }).join('');
+        return (i ? '<td class="gap"></td>' : '') + pair;
+      }).join('');
+      const d = r.photos.combined.single[m] - r.photos.combined.batch[m];
+      const sign = d > 0.0005 ? '+' : d < -0.0005 ? '−' : '±';
+      const deltaTxt = `${sign}${Math.abs(d).toFixed(2)}`;
+      const delta = `<td class="delta">${Math.abs(d) >= 0.05 ? `<strong>${deltaTxt}</strong>` : deltaTxt}</td>`;
+      return `<tr><th class="rowh" scope="row">${runLabel(r)}</th>${cells}<td class="gap"></td>${delta}</tr>`;
+    }).join('');
+    document.getElementById('exp2').innerHTML =
+      `<caption style="position:absolute;left:-9999px">Experiment 2 ${METRIC_NAMES[m]}: six photos at once versus one photo per chat</caption>${head}<tbody>${body}</tbody>`;
+    const sk = D.exp2Skipped || [];
+    document.getElementById('skipped').textContent = sk.length
+      ? `Not run: ${sk.map(s => `${s.model} (${s.mode})`).join(', ')}. These kept giving trouble in their chat apps. Changes of 0.05 or more are in bold; smaller ones may be run-to-run noise.`
+      : 'Changes of 0.05 or more are in bold; smaller ones may be run-to-run noise.';
+  }
+
+  // ---------- controls ----------
+  document.querySelectorAll('.seg').forEach(seg => {
+    seg.addEventListener('click', e => {
+      const b = e.target.closest('button[data-metric]');
+      if (!b) return;
+      state[seg.dataset.target] = b.dataset.metric;
+      seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      seg.dataset.target === 'exp1' ? renderExp1() : renderExp2();
+    });
+  });
+
+  const themes = ['auto', 'light', 'dark'];
+  const themeBtn = document.getElementById('themeBtn');
+  function applyTheme(t) {
+    if (t === 'auto') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', t);
+    themeBtn.textContent = `Theme: ${t}`;
+  }
+  let theme = 'auto';
+  try { theme = localStorage.getItem('bb-theme') || 'auto'; } catch (e) { /* storage unavailable */ }
+  if (!themes.includes(theme)) theme = 'auto';
+  applyTheme(theme);
+  themeBtn.addEventListener('click', () => {
+    theme = themes[(themes.indexOf(theme) + 1) % themes.length];
+    applyTheme(theme);
+    try { localStorage.setItem('bb-theme', theme); } catch (e) { /* storage unavailable */ }
+  });
+
+  renderExp1();
+  renderExp2();
+})();
+</script>
+</body>
+</html>
