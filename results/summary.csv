@@ -1,0 +1,5 @@
+experiment,model,mode,reply_readable,missing_images,duplicates_removed,tp,fp,fn,precision,recall,f1,macro_f1,easy_f1,medium_f1,hard_f1,author_accuracy
+gemini-3.1-pro__extended-thinking,Gemini 3.1 Pro,extended-thinking,True,0,0,137,17,158,0.890,0.464,0.610,0.671,0.753,0.896,0.378,0.974
+gemini-3.1-pro__standard,Gemini 3.1 Pro,standard,True,0,0,129,9,166,0.935,0.437,0.596,0.659,0.783,0.892,0.291,0.963
+gemini-3.8-flash__extended-thinking,Gemini 3.8 Flash,extended-thinking,True,0,0,163,5,132,0.970,0.553,0.704,0.739,0.935,0.954,0.341,0.968
+gemini-3.8-flash__standard,Gemini 3.8 Flash,standard,True,0,0,158,10,137,0.940,0.536,0.683,0.711,0.931,0.939,0.289,0.932
