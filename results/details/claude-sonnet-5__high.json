@@ -1,0 +1,2237 @@
+{
+  "metadata": {
+    "model": "Claude Sonnet 5",
+    "mode": "high",
+    "interface": "Claude.ai web app",
+    "date": "",
+    "notes": ""
+  },
+  "images": {
+    "a.jpg": {
+      "status": "ok",
+      "reply_label": "d",
+      "duplicates_removed": 0,
+      "matched": [
+        {
+          "predicted": {
+            "title": "Nature and Its Symbols",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Nature and Its Symbols",
+            "author": "Lucia Impelluso"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Analytical Psychology",
+            "author": "C.G. Jung"
+          },
+          "ground_truth": {
+            "title": "Analytical Psychology",
+            "author": "C.G. Jung"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Aspects of Form",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Aspects of Form",
+            "author": "Lancelot Law Whyte"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "The Truth in Painting",
+            "author": "Jacques Derrida"
+          },
+          "ground_truth": {
+            "title": "The Truth in Painting",
+            "author": "Jacques Derrida"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Romantic Art",
+            "author": "William Vaughan"
+          },
+          "ground_truth": {
+            "title": "Romantic Art",
+            "author": "William Vaughan"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Dutch Painting",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Dutch Painting",
+            "author": "R.H. Fuchs"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Colour",
+            "author": "Hazel Rossotti"
+          },
+          "ground_truth": {
+            "title": "Colour",
+            "author": "Hazel Rossotti"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Meaning in the Visual Arts",
+            "author": "Erwin Panofsky"
+          },
+          "ground_truth": {
+            "title": "Meaning in the Visual Arts",
+            "author": "Erwin Panofsky"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Origin of Species",
+            "author": "Charles Darwin"
+          },
+          "ground_truth": {
+            "title": "The Origin of Species",
+            "author": "Charles Darwin"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Mathematics and Logic",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Mathematics and Logic",
+            "author": "Mark Kac and Stanislaw M. Ulam"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "The Letters of Vincent van Gogh",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "The Letters of Vincent van Gogh",
+            "author": "Edited by Mark Roskill"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Art and Culture",
+            "author": "Clement Greenberg"
+          },
+          "ground_truth": {
+            "title": "Art and Culture",
+            "author": "Clement Greenberg"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "On Growth and Form",
+            "author": "D'Arcy Thompson"
+          },
+          "ground_truth": {
+            "title": "On Growth and Form",
+            "author": "D'Arcy Thompson"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Postmodernism",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Postmodernism: ICA Documents",
+            "author": null
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Spanish Short Stories",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Spanish Short Stories 2",
+            "author": "Penguin Parallel Text"
+          },
+          "title_similarity": 0.955,
+          "author_correct": null
+        }
+      ],
+      "not_in_ground_truth": [
+        {
+          "title": "British Art",
+          "author": null
+        }
+      ],
+      "missed": [
+        {
+          "title": "Russische Avantgarde aus der Sammlung Costakis",
+          "author": "Kestner-Gesellschaft"
+        },
+        {
+          "title": "Deconstruction: Theory and Practice",
+          "author": "Christopher Norris"
+        },
+        {
+          "title": "Synchronicity",
+          "author": "C.G. Jung"
+        },
+        {
+          "title": "Freedom from the Known",
+          "author": "J. Krishnamurti"
+        },
+        {
+          "title": "Fallacies in Mathematics",
+          "author": "E.A. Maxwell"
+        },
+        {
+          "title": "A History of England and Great Britain",
+          "author": "Professor Meiklejohn"
+        },
+        {
+          "title": "Selected Writings on Art and Literature",
+          "author": "Charles Baudelaire"
+        },
+        {
+          "title": "Concepts of Modern Mathematics",
+          "author": "Ian Stewart"
+        },
+        {
+          "title": "Recodings",
+          "author": "Hal Foster"
+        },
+        {
+          "title": "Practical Plane and Solid Geometry",
+          "author": null
+        },
+        {
+          "title": "The Psychology of Perception",
+          "author": "M.D. Vernon"
+        },
+        {
+          "title": "Spanish Short Stories 1",
+          "author": "Penguin Parallel Text"
+        },
+        {
+          "title": "Painting and Experience in Fifteenth-Century Italy",
+          "author": "Michael Baxandall"
+        },
+        {
+          "title": "The Penguin Dictionary of Psychology",
+          "author": null
+        },
+        {
+          "title": "Cybernetics",
+          "author": "Norbert Wiener"
+        },
+        {
+          "title": "Essays on the Theory of Numbers",
+          "author": "Richard Dedekind"
+        },
+        {
+          "title": "Introduction to Numerical Analysis",
+          "author": "F.B. Hildebrand"
+        },
+        {
+          "title": "Theory of Sets",
+          "author": "E. Kamke"
+        },
+        {
+          "title": "Geometry and the Liberal Arts",
+          "author": "Dan Pedoe"
+        },
+        {
+          "title": "Realism",
+          "author": "Linda Nochlin"
+        },
+        {
+          "title": "The High Renaissance and Mannerism",
+          "author": "Linda Murray"
+        },
+        {
+          "title": "Verbos Españoles Conjugados",
+          "author": null
+        },
+        {
+          "title": "The Thames and Hudson Encyclopaedia of British Art",
+          "author": null
+        },
+        {
+          "title": "101 Spanish Proverbs",
+          "author": null
+        },
+        {
+          "title": "101 Spanish Idioms",
+          "author": null
+        },
+        {
+          "title": "As One Is",
+          "author": "J. Krishnamurti"
+        },
+        {
+          "title": "Modern Judgements: Racine",
+          "author": "R.C. Knight (ed.)"
+        },
+        {
+          "title": "Visual Theory",
+          "author": "Norman Bryson, Michael Ann Holly, and Keith Moxey"
+        },
+        {
+          "title": "Speech and Language in Psychoanalysis",
+          "author": "Jacques Lacan & Anthony Wilden"
+        },
+        {
+          "title": "Romantic Art Theories",
+          "author": "August Wiedmann"
+        },
+        {
+          "title": "The Works of Jacques Lacan",
+          "author": "Malcolm Bowie"
+        },
+        {
+          "title": "Lacan",
+          "author": "Malcolm Bowie"
+        },
+        {
+          "title": "Reading Landscape: Country-City-Capital",
+          "author": "Simon Pugh (ed.)"
+        },
+        {
+          "title": "Patterns of Intention",
+          "author": "Michael Baxandall"
+        },
+        {
+          "title": "Art and Psyche",
+          "author": "Ellen Handler Spitz"
+        },
+        {
+          "title": "The Politics of Procrustes",
+          "author": "Antony Flew"
+        },
+        {
+          "title": "Elementary Particles",
+          "author": "Gerald L. Wick"
+        },
+        {
+          "title": "Relativity",
+          "author": "John Marks"
+        },
+        {
+          "title": "Cells: Form and Function",
+          "author": "John Stares"
+        },
+        {
+          "title": "Molecules of Life",
+          "author": "John Stares"
+        },
+        {
+          "title": "Western Architecture",
+          "author": "R. Furneaux Jordan"
+        },
+        {
+          "title": "The Selfish Gene",
+          "author": "Richard Dawkins"
+        },
+        {
+          "title": "Art and Imagination",
+          "author": "Roger Scruton"
+        },
+        {
+          "title": "Artists Handbook",
+          "author": null
+        },
+        {
+          "title": "Art and Its Objects",
+          "author": "Richard Wollheim"
+        },
+        {
+          "title": "The Essentials of Psycho-Analysis",
+          "author": "Sigmund Freud"
+        },
+        {
+          "title": "Short Stories in Spanish / Cuentos en Español",
+          "author": "New Penguin Parallel Text"
+        },
+        {
+          "title": "System and Structure",
+          "author": "Anthony Wilden"
+        },
+        {
+          "title": "Inquiries into the Fundamentals of Aesthetics",
+          "author": "Stefan Morawski"
+        },
+        {
+          "title": "Edward Hopper: An Intimate Biography",
+          "author": "Gail Levin"
+        }
+      ]
+    },
+    "b.jpg": {
+      "status": "ok",
+      "reply_label": "e",
+      "duplicates_removed": 0,
+      "matched": [
+        {
+          "predicted": {
+            "title": "Letters to His Son Lucien",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Letters to His Son Lucien",
+            "author": "Camille Pissarro (Edited by John Rewald)"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "The Female Body",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "The Female Body",
+            "author": null
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Vision and Painting",
+            "author": "Norman Bryson"
+          },
+          "ground_truth": {
+            "title": "Vision and Painting",
+            "author": "Norman Bryson"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Looking at the Overlooked",
+            "author": "Norman Bryson"
+          },
+          "ground_truth": {
+            "title": "Looking at the Overlooked",
+            "author": "Norman Bryson"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Rembrandt's Enterprise",
+            "author": "Svetlana Alpers"
+          },
+          "ground_truth": {
+            "title": "Rembrandt's Enterprise",
+            "author": "Svetlana Alpers"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Absolute Bourgeois",
+            "author": "T.J. Clark"
+          },
+          "ground_truth": {
+            "title": "The Absolute Bourgeois",
+            "author": "T.J. Clark"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Gustave Courbet",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Gustave Courbet",
+            "author": "Arts Council 1978"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Cézanne: The Early Years 1859-1872",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Cézanne: The Early Years 1859–1872",
+            "author": "Lawrence Gowing"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Our Friend the Atom",
+            "author": "Heinz Haber"
+          },
+          "ground_truth": {
+            "title": "Our Friend the Atom",
+            "author": "Heinz Haber"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Constable",
+            "author": "Michael Rosenthal"
+          },
+          "ground_truth": {
+            "title": "Constable",
+            "author": "Michael Rosenthal"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Rococo to Revolution",
+            "author": "Michael Levey"
+          },
+          "ground_truth": {
+            "title": "Rococo to Revolution",
+            "author": "Michael Levey"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "A Life of Picasso",
+            "author": "John Richardson"
+          },
+          "ground_truth": {
+            "title": "A Life of Picasso (Volume II: 1907–1917)",
+            "author": "John Richardson"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Cézanne",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Cézanne: Les dernières années (1895–1906)",
+            "author": null
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        }
+      ],
+      "not_in_ground_truth": [
+        {
+          "title": "Modern Art and After",
+          "author": null
+        }
+      ],
+      "missed": [
+        {
+          "title": "Art of the Renaissance",
+          "author": "Germain Bazin"
+        },
+        {
+          "title": "High Renaissance and Mannerism",
+          "author": "Linda Murray"
+        },
+        {
+          "title": "Pagan Mysteries in the Renaissance",
+          "author": "Edgar Wind"
+        },
+        {
+          "title": "Studies in Iconology",
+          "author": "Erwin Panofsky"
+        },
+        {
+          "title": "The Birth and Rebirth of Pictorial Space",
+          "author": "John White"
+        },
+        {
+          "title": "Romanticism and Realism: The Mythology of Nineteenth-Century Art",
+          "author": "Charles Rosen & Henri Zerner"
+        },
+        {
+          "title": "The Social History of Art",
+          "author": "Arnold Hauser"
+        },
+        {
+          "title": "An Outline of English Painting",
+          "author": "R.H. Wilenski"
+        },
+        {
+          "title": "Memoirs of the Life of John Constable",
+          "author": "C.R. Leslie"
+        },
+        {
+          "title": "The Necessity of Art",
+          "author": "Ernst Fischer"
+        },
+        {
+          "title": "Art & Language",
+          "author": null
+        },
+        {
+          "title": "Functions of Painting",
+          "author": "Fernand Léger"
+        },
+        {
+          "title": "The Thames and Hudson Dictionary of Art and Artists",
+          "author": null
+        },
+        {
+          "title": "The End of Art Theory: Criticism and Postmodernity",
+          "author": "Victor Burgin"
+        },
+        {
+          "title": "The Hidden Order of Art",
+          "author": "Anton Ehrenzweig"
+        },
+        {
+          "title": "Renderings",
+          "author": "Max Kozloff"
+        },
+        {
+          "title": "Landscapes of France: Impressionism and Its Rivals",
+          "author": null
+        },
+        {
+          "title": "Modern Home Atlas",
+          "author": "Philip"
+        },
+        {
+          "title": "The Great Age of Exploration",
+          "author": "Reader's Digest"
+        },
+        {
+          "title": "William Blake",
+          "author": "Tate Gallery"
+        },
+        {
+          "title": "Perception: Mechanisms and Models",
+          "author": "Scientific American"
+        },
+        {
+          "title": "The Language of Pattern",
+          "author": "Keith Albarn, Jenny Miall Smith, Stanford Steele, Dinah Walker"
+        },
+        {
+          "title": "Mathematics: An Introduction to Its Spirit and Use",
+          "author": "Scientific American"
+        },
+        {
+          "title": "Towards a New Art: Essays on the Background to Abstract Art 1910–20",
+          "author": "Tate Gallery"
+        },
+        {
+          "title": "Pissarro",
+          "author": "Arts Council"
+        },
+        {
+          "title": "The Painting of Modern Life",
+          "author": "T.J. Clark"
+        },
+        {
+          "title": "Image of the People",
+          "author": "T.J. Clark"
+        },
+        {
+          "title": "Marcel Broodthaers",
+          "author": "Tate Gallery"
+        },
+        {
+          "title": "Modern Art and Modernism: A Critical Anthology",
+          "author": "Edited by Francis Frascina and Charles Harrison"
+        },
+        {
+          "title": "Pollock and After: The Critical Debate",
+          "author": "Edited by Francis Frascina"
+        },
+        {
+          "title": "The Art of Describing",
+          "author": "Svetlana Alpers"
+        },
+        {
+          "title": "Modernism, Criticism, Realism",
+          "author": "Edited by Charles Harrison and Fred Orton"
+        },
+        {
+          "title": "A Life of Picasso (Volume III: 1917–1932)",
+          "author": "John Richardson"
+        },
+        {
+          "title": "The Age of Neo-Classicism",
+          "author": "Arts Council of Great Britain"
+        },
+        {
+          "title": "The Dream of Icarus",
+          "author": "Kenneth Coutts-Smith"
+        },
+        {
+          "title": "Rococo, Classicism and Romanticism",
+          "author": null
+        }
+      ]
+    },
+    "c.png": {
+      "status": "ok",
+      "reply_label": "f",
+      "duplicates_removed": 0,
+      "matched": [
+        {
+          "predicted": {
+            "title": "The Cruel Prince",
+            "author": "Holly Black"
+          },
+          "ground_truth": {
+            "title": "The Cruel Prince",
+            "author": "Holly Black"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "$100M Money Models",
+            "author": "Alex Hormozi"
+          },
+          "ground_truth": {
+            "title": "$100M Money Models",
+            "author": "Alex Hormozi"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Art of Reading Minds",
+            "author": "Henrik Fexeus"
+          },
+          "ground_truth": {
+            "title": "The Art of Reading Minds",
+            "author": "Henrik Fexeus"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Reframe Your Brain",
+            "author": "Scott Adams"
+          },
+          "ground_truth": {
+            "title": "Reframe Your Brain",
+            "author": "Scott Adams"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Book of Man",
+            "author": "Osho"
+          },
+          "ground_truth": {
+            "title": "The Book of Man",
+            "author": "Osho"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Perfect Us",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "The Perfect Us",
+            "author": "Durjoy Datta"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Ikigai",
+            "author": "Héctor García and Francesc Miralles"
+          },
+          "ground_truth": {
+            "title": "Ikigai",
+            "author": "Héctor García & Francesc Miralles"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Song of Achilles",
+            "author": "Madeline Miller"
+          },
+          "ground_truth": {
+            "title": "The Song of Achilles",
+            "author": "Madeline Miller"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Don't Believe Everything You Think",
+            "author": "Joseph Nguyen"
+          },
+          "ground_truth": {
+            "title": "Don't Believe Everything You Think",
+            "author": "Joseph Nguyen"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Man's Search for Meaning",
+            "author": "Viktor E. Frankl"
+          },
+          "ground_truth": {
+            "title": "Man's Search for Meaning",
+            "author": "Viktor E. Frankl"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Manifest Now",
+            "author": "Idil Ahmed"
+          },
+          "ground_truth": {
+            "title": "Manifest Now",
+            "author": "Idil Ahmed"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Disciplined Trader",
+            "author": "Mark Douglas"
+          },
+          "ground_truth": {
+            "title": "The Disciplined Trader",
+            "author": "Mark Douglas"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Attitude Is Your Superpower",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Attitude is Your Superpower",
+            "author": "Eduardo Clemente"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "The Ex",
+            "author": "Freida McFadden"
+          },
+          "ground_truth": {
+            "title": "The Ex",
+            "author": "Freida McFadden"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Hostage",
+            "author": "Eli Sharabi"
+          },
+          "ground_truth": {
+            "title": "Hostage",
+            "author": "Eli Sharabi"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Here, There and Everywhere",
+            "author": "Sudha Murty"
+          },
+          "ground_truth": {
+            "title": "Here, There and Everywhere",
+            "author": "Sudha Murty"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Do Not Disturb",
+            "author": "Freida McFadden"
+          },
+          "ground_truth": {
+            "title": "Do Not Disturb",
+            "author": "Freida McFadden"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Master Your Life",
+            "author": "Nick Trenton"
+          },
+          "ground_truth": {
+            "title": "Master Your Life",
+            "author": "Nick Trenton"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Never Let Me Go",
+            "author": "Kazuo Ishiguro"
+          },
+          "ground_truth": {
+            "title": "Never Let Me Go",
+            "author": "Kazuo Ishiguro"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Art of Detachment",
+            "author": "Shubham Kumar Singh"
+          },
+          "ground_truth": {
+            "title": "The Art of Detachment",
+            "author": "Shubham Kumar Singh"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Tuesdays with Morrie",
+            "author": "Mitch Albom"
+          },
+          "ground_truth": {
+            "title": "Tuesdays with Morrie",
+            "author": "Mitch Albom"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The 48 Laws of Power",
+            "author": "Robert Greene"
+          },
+          "ground_truth": {
+            "title": "The 48 Laws of Power",
+            "author": "Robert Greene"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Harry Potter and the Order of the Phoenix",
+            "author": "J.K. Rowling"
+          },
+          "ground_truth": {
+            "title": "Harry Potter and the Order of the Phoenix",
+            "author": "J.K. Rowling"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Dragon Ball Super",
+            "author": "Akira Toriyama"
+          },
+          "ground_truth": {
+            "title": "Dragon Ball Super (Vol. 23)",
+            "author": "Akira Toriyama / Toyotarou"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Attack on Titan Omnibus",
+            "author": "Hajime Isayama"
+          },
+          "ground_truth": {
+            "title": "Attack on Titan: Omnibus (Volumes 1-2-3)",
+            "author": "Hajime Isayama"
+          },
+          "title_similarity": 0.9,
+          "author_correct": true
+        }
+      ],
+      "not_in_ground_truth": [],
+      "missed": [
+        {
+          "title": "जादू (The Magic - Hindi Edition)",
+          "author": "Rhonda Byrne"
+        }
+      ]
+    },
+    "d.jpg": {
+      "status": "ok",
+      "reply_label": "a",
+      "duplicates_removed": 0,
+      "matched": [
+        {
+          "predicted": {
+            "title": "Rock Paper Scissors",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Rock Paper Scissors",
+            "author": "Alice Feeney"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "The Art of Thinking Clearly",
+            "author": "Rolf Dobelli"
+          },
+          "ground_truth": {
+            "title": "The Art of Thinking Clearly",
+            "author": "Rolf Dobelli"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "All Religions Are Not the Same",
+            "author": "Sanjay Dixit"
+          },
+          "ground_truth": {
+            "title": "All Religions Are Not the Same",
+            "author": "Sanjay Dixit"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Fast Like a Girl",
+            "author": "Mindy Pelz"
+          },
+          "ground_truth": {
+            "title": "Fast Like a Girl",
+            "author": "Mindy Pelz"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Win Your Inner Battles",
+            "author": "Darius Foroux"
+          },
+          "ground_truth": {
+            "title": "Win Your Inner Battles",
+            "author": "Darius Foroux"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Secret of the Nagas",
+            "author": "Amish Tripathi"
+          },
+          "ground_truth": {
+            "title": "Secret of the Nagas",
+            "author": "Amish Tripathi"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        }
+      ],
+      "not_in_ground_truth": [],
+      "missed": [
+        {
+          "title": "The Obstacle Is the Way",
+          "author": "Ryan Holiday"
+        },
+        {
+          "title": "Determined",
+          "author": "Robert Sapolsky"
+        }
+      ]
+    },
+    "e.jpg": {
+      "status": "ok",
+      "reply_label": "b",
+      "duplicates_removed": 0,
+      "matched": [
+        {
+          "predicted": {
+            "title": "The High Lord",
+            "author": "Trudi Canavan"
+          },
+          "ground_truth": {
+            "title": "The High Lord",
+            "author": "Trudi Canavan"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Tell Me Your Dreams",
+            "author": "Sidney Sheldon"
+          },
+          "ground_truth": {
+            "title": "Tell Me Your Dreams",
+            "author": "Sidney Sheldon"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Hannibal",
+            "author": "Thomas Harris"
+          },
+          "ground_truth": {
+            "title": "Hannibal",
+            "author": "Thomas Harris"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Stolen",
+            "author": "Lesley Pearse"
+          },
+          "ground_truth": {
+            "title": "Stolen",
+            "author": "Lesley Pearse"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Sixteen Horses",
+            "author": "Greg Buchanan"
+          },
+          "ground_truth": {
+            "title": "Sixteen Horses",
+            "author": "Greg Buchanan"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Brilliance of the Moon",
+            "author": "Lian Hearn"
+          },
+          "ground_truth": {
+            "title": "Brilliance of the Moon",
+            "author": "Lian Hearn"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "All Cheeses Great and Small",
+            "author": "Alex James"
+          },
+          "ground_truth": {
+            "title": "All Cheeses Great & Small",
+            "author": "Alex James"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Gods of Guilt",
+            "author": "Michael Connelly"
+          },
+          "ground_truth": {
+            "title": "The Gods of Guilt",
+            "author": "Michael Connelly"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Inheritance of Loss",
+            "author": "Kiran Desai"
+          },
+          "ground_truth": {
+            "title": "The Inheritance of Loss",
+            "author": "Kiran Desai"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Speaking for Myself",
+            "author": "Cherie Blair"
+          },
+          "ground_truth": {
+            "title": "Speaking for Myself",
+            "author": "Cherie Blair"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Chamber",
+            "author": "John Grisham"
+          },
+          "ground_truth": {
+            "title": "The Chamber",
+            "author": "John Grisham"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "When Coal Turned Gold",
+            "author": "Martha Sarathi Bhattacharyya"
+          },
+          "ground_truth": {
+            "title": "When Coal Turned Gold",
+            "author": "Partha Sarathi Bhattacharyya"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Lion, the Witch and the Wardrobe",
+            "author": "C.S. Lewis"
+          },
+          "ground_truth": {
+            "title": "The Lion, the Witch and the Wardrobe",
+            "author": "C.S. Lewis"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Stars Shine Down",
+            "author": "Sidney Sheldon"
+          },
+          "ground_truth": {
+            "title": "The Stars Shine Down",
+            "author": "Sidney Sheldon"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "A Wing and a Prayer",
+            "author": "Lyn Andrews"
+          },
+          "ground_truth": {
+            "title": "A Wing and a Prayer",
+            "author": "Lyn Andrews"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Woman in the Window",
+            "author": "A.J. Finn"
+          },
+          "ground_truth": {
+            "title": "The Woman in the Window",
+            "author": "A.J. Finn"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Girls' Book of Spells",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "The Girls' Book of Spells",
+            "author": "Rachel Elliot"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Our Game",
+            "author": "John le Carré"
+          },
+          "ground_truth": {
+            "title": "Our Game",
+            "author": "John le Carré"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Da Vinci Code",
+            "author": "Dan Brown"
+          },
+          "ground_truth": {
+            "title": "The Da Vinci Code",
+            "author": "Dan Brown"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Leading",
+            "author": "Alex Ferguson"
+          },
+          "ground_truth": {
+            "title": "Leading",
+            "author": "Alex Ferguson with Michael Moritz"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Prince Caspian",
+            "author": "C.S. Lewis"
+          },
+          "ground_truth": {
+            "title": "Prince Caspian",
+            "author": "C.S. Lewis"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Alice in Wonderland",
+            "author": "Lewis Carroll"
+          },
+          "ground_truth": {
+            "title": "Alice in Wonderland",
+            "author": "Lewis Carroll"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Inferno",
+            "author": "Dan Brown"
+          },
+          "ground_truth": {
+            "title": "Inferno",
+            "author": "Dan Brown"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Mappillai",
+            "author": "Carlo Pizzati"
+          },
+          "ground_truth": {
+            "title": "Mappillai",
+            "author": "Carlo Pizzati"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Herbal Alchemist's Handbook",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "The Herbal Alchemist's Handbook",
+            "author": "Karen Harrison"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "The Girl with the Dragon Tattoo",
+            "author": "Stieg Larsson"
+          },
+          "ground_truth": {
+            "title": "The Girl with the Dragon Tattoo",
+            "author": "Stieg Larsson"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Angels & Demons",
+            "author": "Dan Brown"
+          },
+          "ground_truth": {
+            "title": "Angels & Demons",
+            "author": "Dan Brown"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Chocolat",
+            "author": "Joanne Harris"
+          },
+          "ground_truth": {
+            "title": "Chocolat",
+            "author": "Joanne Harris"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Audacity of Hope",
+            "author": "Barack Obama"
+          },
+          "ground_truth": {
+            "title": "The Audacity of Hope",
+            "author": "Barack Obama"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Everyday Confidence",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Everyday Confidence",
+            "author": null
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Bad Day for Badger",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Bad Day for Badger",
+            "author": null
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Long Way Home",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Long Way Home",
+            "author": "Michael Morpurgo"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "One Hundred Names",
+            "author": "Cecelia Ahern"
+          },
+          "ground_truth": {
+            "title": "One Hundred Names",
+            "author": "Cecelia Ahern"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Venus on Fire, Mars on Ice",
+            "author": "John Gray"
+          },
+          "ground_truth": {
+            "title": "Venus on Fire, Mars on Ice",
+            "author": "John Gray"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Way of the Warrior Kid",
+            "author": "Jocko Willink"
+          },
+          "ground_truth": {
+            "title": "Way of the Warrior Kid",
+            "author": "Jocko Willink"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Rotten Romans",
+            "author": "Terry Deary"
+          },
+          "ground_truth": {
+            "title": "Rotten Romans",
+            "author": "Terry Deary"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Lottie Project",
+            "author": "Jacqueline Wilson"
+          },
+          "ground_truth": {
+            "title": "The Lottie Project",
+            "author": "Jacqueline Wilson"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "White Fang",
+            "author": "Jack London"
+          },
+          "ground_truth": {
+            "title": "White Fang",
+            "author": "Jack London"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Witches",
+            "author": "Roald Dahl"
+          },
+          "ground_truth": {
+            "title": "The Witches",
+            "author": "Roald Dahl"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Jane Austen",
+            "author": "David Nokes"
+          },
+          "ground_truth": {
+            "title": "Jane Austen",
+            "author": "David Nokes"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Harry Potter and the Cursed Child",
+            "author": "J.K. Rowling"
+          },
+          "ground_truth": {
+            "title": "Harry Potter and the Cursed Child",
+            "author": "J.K. Rowling"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Seven Husbands of Evelyn Hugo",
+            "author": "Taylor Jenkins Reid"
+          },
+          "ground_truth": {
+            "title": "The Seven Husbands of Evelyn Hugo",
+            "author": "Taylor Jenkins Reid"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Atomic Habits",
+            "author": "James Clear"
+          },
+          "ground_truth": {
+            "title": "Atomic Habits",
+            "author": "James Clear"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Star Wars Episode V: The Empire Strikes Back",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Star Wars Episode V: The Empire Strikes Back",
+            "author": "Ryder Windham"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Still Me",
+            "author": "Jojo Moyes"
+          },
+          "ground_truth": {
+            "title": "Still Me",
+            "author": "Jojo Moyes"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Giver of Stars",
+            "author": "Jojo Moyes"
+          },
+          "ground_truth": {
+            "title": "The Giver of Stars",
+            "author": "Jojo Moyes"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "After You",
+            "author": "Jojo Moyes"
+          },
+          "ground_truth": {
+            "title": "After You",
+            "author": "Jojo Moyes"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Agent: Codebreaker",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Agent 21: Codebreaker",
+            "author": "Chris Ryan"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Dirty Bertie",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Dirty Bertie: Worms!",
+            "author": "Alan MacDonald"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Diary of a Wimpy Kid",
+            "author": "Jeff Kinney"
+          },
+          "ground_truth": {
+            "title": "Diary of a Wimpy Kid: Rodrick Rules",
+            "author": "Jeff Kinney"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Suspicious Minds",
+            "author": "Gwenda Bond"
+          },
+          "ground_truth": {
+            "title": "Stranger Things: Suspicious Minds",
+            "author": "Gwenda Bond"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        }
+      ],
+      "not_in_ground_truth": [],
+      "missed": [
+        {
+          "title": "The Winner Stands Alone",
+          "author": "Paulo Coelho"
+        },
+        {
+          "title": "Nasty Nature",
+          "author": "Nick Arnold"
+        },
+        {
+          "title": "The Small House at Allington",
+          "author": "Anthony Trollope"
+        },
+        {
+          "title": "Wish You Were Dead",
+          "author": "Peter James"
+        },
+        {
+          "title": "The Spiritual Practices of Rumi",
+          "author": "Will Johnson"
+        },
+        {
+          "title": "The Secret Garden",
+          "author": "Frances Hodgson Burnett"
+        },
+        {
+          "title": "The War of Jenkins' Ear",
+          "author": "Michael Morpurgo"
+        },
+        {
+          "title": "The Personal MBA",
+          "author": "Josh Kaufman"
+        },
+        {
+          "title": "Lorna Doone",
+          "author": "R.D. Blackmore"
+        },
+        {
+          "title": "साबरमती का संत",
+          "author": "यशपाल जैन"
+        },
+        {
+          "title": "डेरे वाले",
+          "author": "शैलेश मटियानी"
+        },
+        {
+          "title": "The Lost Symbol",
+          "author": "Dan Brown"
+        },
+        {
+          "title": "Diary of a Wimpy Kid: The Long Haul",
+          "author": "Jeff Kinney"
+        },
+        {
+          "title": "I Don't Love You Anymore",
+          "author": "Rithvik Singh"
+        },
+        {
+          "title": "The Short Fiction Scenario",
+          "author": "Sergei Eisenstein"
+        },
+        {
+          "title": "Summer Adventure Stories",
+          "author": "Enid Blyton"
+        },
+        {
+          "title": "Mother Courage and Her Children",
+          "author": "Bertolt Brecht"
+        },
+        {
+          "title": "Don't Let's Go to the Dogs Tonight",
+          "author": "Alexandra Fuller"
+        },
+        {
+          "title": "Frankenstein",
+          "author": "Mary Shelley"
+        },
+        {
+          "title": "The Wimpy Kid Do-It-Yourself Book",
+          "author": "Jeff Kinney"
+        },
+        {
+          "title": "A Certain Justice",
+          "author": "P.D. James"
+        },
+        {
+          "title": "Wuthering Heights",
+          "author": "Emily Brontë"
+        },
+        {
+          "title": "The Nine Lives of Montezuma",
+          "author": "Michael Morpurgo"
+        },
+        {
+          "title": "The Horse and His Boy",
+          "author": "C.S. Lewis"
+        },
+        {
+          "title": "The Magician's Nephew",
+          "author": "C.S. Lewis"
+        },
+        {
+          "title": "The Scorch Trials",
+          "author": "James Dashner"
+        },
+        {
+          "title": "Srilaaji",
+          "author": "Shobhaa De"
+        },
+        {
+          "title": "The Fry Chronicles",
+          "author": "Stephen Fry"
+        },
+        {
+          "title": "मेघनाद",
+          "author": "केविन मिसल (Kevin Missal)"
+        },
+        {
+          "title": "लाइफ के कड़वे सच",
+          "author": "श्वेताभ गंगवार"
+        },
+        {
+          "title": "Tears of the Giraffe",
+          "author": "Alexander McCall Smith"
+        },
+        {
+          "title": "Maskerade",
+          "author": "Terry Pratchett"
+        },
+        {
+          "title": "The Captain's Daughter",
+          "author": "Leah Fleming"
+        },
+        {
+          "title": "The Doomsday Conspiracy",
+          "author": "Sidney Sheldon"
+        },
+        {
+          "title": "The Woman in White",
+          "author": "Wilkie Collins"
+        },
+        {
+          "title": "Before I Go to Sleep",
+          "author": "S.J. Watson"
+        },
+        {
+          "title": "Harry Potter and the Goblet of Fire",
+          "author": "J.K. Rowling"
+        },
+        {
+          "title": "Wolves of the Calla",
+          "author": "Stephen King"
+        },
+        {
+          "title": "The Girl Who Takes an Eye for an Eye",
+          "author": "David Lagercrantz"
+        },
+        {
+          "title": "Viking at School",
+          "author": "Jeremy Strong"
+        },
+        {
+          "title": "The Owls of Blossom Wood: To the Rescue",
+          "author": "Catherine Coe"
+        },
+        {
+          "title": "Magic Ballerina: Delphie and the Magic Spell",
+          "author": "Darcey Bussell"
+        },
+        {
+          "title": "The Mayor of Casterbridge",
+          "author": "Thomas Hardy"
+        },
+        {
+          "title": "Silas Marner",
+          "author": "George Eliot"
+        },
+        {
+          "title": "In the Fifth at Malory Towers",
+          "author": "Enid Blyton"
+        },
+        {
+          "title": "First Term at Malory Towers",
+          "author": "Enid Blyton"
+        },
+        {
+          "title": "Tom Gates: Everything's Amazing (Sort Of)",
+          "author": "Liz Pichon"
+        },
+        {
+          "title": "Tom Gates: Excellent Excuses (and Other Good Stuff)",
+          "author": "Liz Pichon"
+        },
+        {
+          "title": "Riding the Storm",
+          "author": "Lucy Daniels"
+        },
+        {
+          "title": "The Troublesome Offspring of Cardinal Guzman",
+          "author": "Louis de Bernières"
+        },
+        {
+          "title": "Horrible Science: Disgusting Digestion",
+          "author": "Nick Arnold"
+        },
+        {
+          "title": "Hunted",
+          "author": "P.C. Cast & Kristin Cast"
+        },
+        {
+          "title": "Ah, Sweet Mystery of Life",
+          "author": "Roald Dahl"
+        },
+        {
+          "title": "The Wind in the Willows",
+          "author": "Kenneth Grahame"
+        },
+        {
+          "title": "The Phantom Tollbooth",
+          "author": "Norton Juster"
+        },
+        {
+          "title": "What Katy Did",
+          "author": "Susan M. Coolidge"
+        },
+        {
+          "title": "The Thirty-Nine Steps",
+          "author": "John Buchan"
+        }
+      ]
+    },
+    "f.jpg": {
+      "status": "ok",
+      "reply_label": "c",
+      "duplicates_removed": 0,
+      "matched": [
+        {
+          "predicted": {
+            "title": "Dad, I Want to Hear Your Story",
+            "author": null
+          },
+          "ground_truth": {
+            "title": "Dad, I Want to Hear Your Story",
+            "author": "Jeffrey Mason"
+          },
+          "title_similarity": 1.0,
+          "author_correct": null
+        },
+        {
+          "predicted": {
+            "title": "Expert Secrets",
+            "author": "Russell Brunson"
+          },
+          "ground_truth": {
+            "title": "Expert Secrets",
+            "author": "Russell Brunson"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Your Fault",
+            "author": "Mercedes Ron"
+          },
+          "ground_truth": {
+            "title": "Your Fault",
+            "author": "Mercedes Ron"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "12 Months to 1 Million",
+            "author": "Ryan Daniel Moran"
+          },
+          "ground_truth": {
+            "title": "12 Months to $1 Million",
+            "author": "Ryan Daniel Moran"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Limitless",
+            "author": "Jim Kwik"
+          },
+          "ground_truth": {
+            "title": "Limitless",
+            "author": "Jim Kwik"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Last Queen",
+            "author": "Chitra Banerjee Divakaruni"
+          },
+          "ground_truth": {
+            "title": "The Last Queen",
+            "author": "Chitra Banerjee Divakaruni"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Guest List",
+            "author": "Lucy Foley"
+          },
+          "ground_truth": {
+            "title": "The Guest List",
+            "author": "Lucy Foley"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Leaders Eat Last",
+            "author": "Simon Sinek"
+          },
+          "ground_truth": {
+            "title": "Leaders Eat Last",
+            "author": "Simon Sinek"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "$100M Money Models",
+            "author": "Alex Hormozi"
+          },
+          "ground_truth": {
+            "title": "$100M Money Models",
+            "author": "Alex Hormozi"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Lord of the Rings",
+            "author": "J.R.R. Tolkien"
+          },
+          "ground_truth": {
+            "title": "The Lord of the Rings",
+            "author": "J.R.R. Tolkien"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "Atomic Habits",
+            "author": "James Clear"
+          },
+          "ground_truth": {
+            "title": "Atomic Habits",
+            "author": "James Clear"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
+            "title": "The Diary of a Young Girl",
+            "author": "Anne Frank"
+          },
+          "ground_truth": {
+            "title": "The Diary of a Young Girl",
+            "author": "Anne Frank"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        }
+      ],
+      "not_in_ground_truth": [],
+      "missed": [
+        {
+          "title": "The Magic of the Lost Earrings",
+          "author": "Sudha Murty"
+        },
+        {
+          "title": "You Can",
+          "author": "George Matthew Adams"
+        },
+        {
+          "title": "The Great Gatsby",
+          "author": "F. Scott Fitzgerald"
+        },
+        {
+          "title": "The Great Indian Novel",
+          "author": "Shashi Tharoor"
+        },
+        {
+          "title": "The Secret of Secrets",
+          "author": "Dan Brown"
+        },
+        {
+          "title": "The Mistake",
+          "author": "Elle Kennedy"
+        },
+        {
+          "title": "The Villain",
+          "author": "L.J. Shen"
+        },
+        {
+          "title": "The Secret",
+          "author": "Rhonda Byrne"
+        },
+        {
+          "title": "Those Who Live Without Discipline Die Without Honor",
+          "author": null
+        },
+        {
+          "title": "Timmy Failure",
+          "author": "Stephan Pastis"
+        },
+        {
+          "title": "Hunt the Villain",
+          "author": "Rina Kent"
+        },
+        {
+          "title": "Good Vibes, Good Life",
+          "author": "Vex King"
+        },
+        {
+          "title": "The Prophet",
+          "author": "Kahlil Gibran"
+        },
+        {
+          "title": "Three Weeks in Paris",
+          "author": "Barbara Taylor Bradford"
+        },
+        {
+          "title": "Placebo",
+          "author": null
+        },
+        {
+          "title": "My First Ruskin Bond Collection",
+          "author": null
+        },
+        {
+          "title": "The Reappearance of Rachel Price",
+          "author": "Holly Jackson"
+        },
+        {
+          "title": "Wild Fictions",
+          "author": "Amitav Ghosh"
+        },
+        {
+          "title": "Chip War",
+          "author": "Chris Miller"
+        },
+        {
+          "title": "The Diary of a CEO",
+          "author": "Steven Bartlett"
+        },
+        {
+          "title": "Think Like a Monk",
+          "author": "Jay Shetty"
+        },
+        {
+          "title": "The 4-Hour Work Week",
+          "author": "Tim Ferriss"
+        },
+        {
+          "title": "Leather & Lark",
+          "author": "Brynne Weaver"
+        },
+        {
+          "title": "Breaking Dawn",
+          "author": "Stephenie Meyer"
+        },
+        {
+          "title": "When the Night Agrees to Speak to Me",
+          "author": "Ananda Devi"
+        },
+        {
+          "title": "Breaking the Mould",
+          "author": "Raghuram G. Rajan & Rohit Lamba"
+        },
+        {
+          "title": "Essentialism",
+          "author": "Greg McKeown"
+        }
+      ]
+    }
+  }
+}

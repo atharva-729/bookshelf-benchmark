@@ -7,7 +7,7 @@ What `benchmark/evaluate.py` calculates, and how.
 Models rarely write a title exactly like the ground truth does ("Attack on Titan Omnibus" vs "Attack on Titan: Omnibus (Volumes 1-2-3)"). So each predicted title is compared to each ground-truth title for that image, and they count as the **same book** if they're similar enough.
 
 1. **Normalise both titles:** lowercase, drop accents on Latin letters (é → e), turn `&` into "and", and replace punctuation with spaces. Non-Latin scripts such as Devanagari are kept as they are.
-2. **Compare several versions of each title:** the full title, the main title (the part before `:`, `(` or `/`), and each of those without a leading "The", "A" or "An".
+2. **Compare several versions of each title:** the full title, the main title (the part before `:`, `(` or `/`), the subtitle (the part after `:`), and each of those without a leading "The", "A" or "An". The subtitle version lets "Disgusting Digestion" match "Horrible Science: Disgusting Digestion".
 3. **Score the pair:** the similarity is the best score across those versions, using Python's `difflib.SequenceMatcher` (0 to 1). The comparison is also run with the words sorted, so word order doesn't matter ("Racine: Modern Judgements" = "Modern Judgements: Racine").
    - If one title is the **start or the end** of the other and has at least 3 words, the pair scores 0.90. That covers a model leaving out a subtitle ("Attack on Titan Omnibus"), or adding or dropping a series or publisher name ("Penguin Parallel Text Spanish Short Stories 1", "Dictionary of Art and Artists").
    - Shorter overlaps don't count, so "You Can" doesn't match "You Can Win".
@@ -16,6 +16,12 @@ Models rarely write a title exactly like the ground truth does ("Attack on Titan
 6. **Duplicates:** if a model lists the same title twice, the repeat is removed before matching. It isn't counted as right or wrong. How many were removed is reported.
 
 Authors don't affect whether a book matches. They're scored separately (see below).
+
+## Photo labels
+
+All 6 photos are sent in one message, and the model labels its lists `a` to `f`. Some chat apps don't show the model the filenames, so it letters the photos in the order it received them, which may not be `a` to `f`. The Claude app did this: every Claude reply had correct lists under shifted letters.
+
+So before scoring, the script finds the one-to-one letter → photo assignment that matches the most books. If that beats the letters as written, it uses that assignment and reports it in the `relabelled` column (for example `a->d b->e ...`). Only whole lists move: a single book listed under the wrong photo still counts as a miss and as "not in the ground truth". `per_image.csv` and the details files show which letter each photo's list came from (`reply_label`).
 
 The thresholds are constants at the top of `evaluate.py`. Every match and non-match is written to `results/details/<experiment>.json`, so you can check the matching by hand.
 
@@ -48,6 +54,7 @@ The overall precision, recall and F1 are **micro-averaged**: TP, FP and FN are a
 
 | Field | Meaning |
 | --- | --- |
+| **relabelled** | Letters that were reassigned to a different photo before scoring (see [Photo labels](#photo-labels)). Empty if the letters were already right. |
 | **reply_readable** | Whether the reply contained a JSON object with keys naming the photos (`a` to `f`; `A` and `a.jpg` also work). If not (a refusal, or broken JSON), every photo is scored as an empty answer. |
 | **missing_images** | Photos with no book list in the reply, because the model left them out or the whole reply was unreadable. Each counts as an empty answer: all FN, recall 0 for that photo. Its status in `per_image.csv` is `missing` or `parse_error`. |
 | **duplicates_removed** | Repeated titles within a photo, removed before scoring |
@@ -64,6 +71,7 @@ Empty reply files are skipped entirely: they're experiments that haven't been ru
 
 ## Known limitations
 
+- **Different scripts don't match.** A title transliterated into Latin letters ("Life Ke Kadve Sach") doesn't match the same title in Devanagari (लाइफ के कड़वे सच).
 - **Volume numbers are loosely checked.** "A Life of Picasso Volume I" matches the ground truth's Volume III, because the main title is the same.
 - **Fuzzy matching can be wrong.** It can occasionally pair two different books with very similar titles, or miss a match when a title is reworded heavily. Check the details file if a number looks surprising.
 - **Some ground-truth "authors" aren't people.** A few are publishers or institutions, such as "Tate Gallery" and "Arts Council". A model that gives the real author there will be marked wrong. This only affects author accuracy, not precision, recall or F1.

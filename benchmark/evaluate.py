@@ -16,6 +16,8 @@ import re
 import sys
 import unicodedata
 from difflib import SequenceMatcher
+from functools import lru_cache
+from itertools import permutations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,19 +47,34 @@ def normalize(text):
     return ' '.join(''.join(out).split())
 
 
+@lru_cache(maxsize=None)
 def title_variants(title):
-    """Full title, main title (before ':', '(' or '/'), each with and without a leading article."""
+    """Full title, main title (before ':', '(' or '/'), subtitle (after ':', up to any '('),
+    each with and without a leading article.
+
+    Returns (variant, same words sorted) pairs; the sorted form makes word order irrelevant.
+    """
     variants = {normalize(title), normalize(re.split(r'[:(/]', title)[0])}
+    if ':' in title:
+        variants.add(normalize(title.split(':', 1)[1].split('(')[0]))
     for v in list(variants):
         for article in ARTICLES:
             if v.startswith(article):
                 variants.add(v[len(article):])
     variants.discard('')
-    return variants
+    return tuple((v, ' '.join(sorted(v.split()))) for v in sorted(variants))
 
 
 def similarity(a, b):
     return SequenceMatcher(None, a, b).ratio()
+
+
+def similarity_if_close(a, b):
+    """Exact similarity when it could reach the match threshold, otherwise 0 (fast path)."""
+    sm = SequenceMatcher(None, a, b)
+    if sm.real_quick_ratio() < TITLE_THRESHOLD or sm.quick_ratio() < TITLE_THRESHOLD:
+        return 0.0
+    return sm.ratio()
 
 
 def is_specific_part(a, b):
@@ -67,14 +84,18 @@ def is_specific_part(a, b):
 
 
 def title_score(pred, gt):
-    """(best variant similarity, full-title similarity). The second breaks ties."""
+    """(best variant similarity, full-title similarity). The second breaks ties.
+
+    Scores below TITLE_THRESHOLD come back as 0, since only matches matter.
+    """
     best = 0.0
-    for p in title_variants(pred):
-        for g in title_variants(gt):
-            best = max(best, similarity(p, g),
-                       similarity(' '.join(sorted(p.split())), ' '.join(sorted(g.split()))))  # word order ignored
+    for p, p_sorted in title_variants(pred):
+        for g, g_sorted in title_variants(gt):
+            best = max(best, similarity_if_close(p, g), similarity_if_close(p_sorted, g_sorted))
             if is_specific_part(p, g):
                 best = max(best, PART_SCORE)
+    if best < TITLE_THRESHOLD:
+        return 0.0, 0.0
     return best, similarity(normalize(pred), normalize(gt))
 
 
@@ -209,6 +230,34 @@ def fmt(x):
     return f'{x:.3f}'
 
 
+def align_labels(predictions, gt):
+    """Undo whole-list label swaps.
+
+    Some chat apps don't show the model the filenames, so it letters the photos in whatever
+    order they arrived. This finds the one-to-one label -> photo assignment that matches the
+    most books and uses it if it beats the labels as written. Individual books listed under
+    the wrong photo are not moved and still count as errors.
+
+    Returns (predictions keyed by the photo they were scored against, {label: photo} for moved labels).
+    """
+    labels, photos = sorted(predictions), sorted(gt)
+    tp = {(label, photo): len(match_books(dedupe(predictions[label])[0], gt[photo]['books'])[0])
+          for label in labels for photo in photos}
+    best_perm = tuple(labels)
+    best = sum(tp[label, label] for label in labels)
+    for perm in permutations(photos, len(labels)):
+        total = sum(tp[label, photo] for label, photo in zip(labels, perm))
+        if total > best:
+            best, best_perm = total, perm
+    mapping = dict(zip(labels, best_perm))
+    moved = {label: photo for label, photo in mapping.items() if label != photo}
+    return {photo: predictions[label] for label, photo in mapping.items()}, moved
+
+
+def label_of(image):
+    return Path(image).stem
+
+
 def main():
     raw_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'results' / 'raw'
     out_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / 'results'
@@ -222,8 +271,13 @@ def main():
         if not reply:
             continue  # not run yet
         predictions = extract_predictions(reply, gt)
+        moved = {}
         if predictions is None:
             print(f'WARNING {path.name}: no JSON with image keys (a, b, ...) found; every image scored as empty')
+        else:
+            predictions, moved = align_labels(predictions, gt)
+        reply_label = {photo: label for label, photo in moved.items()}
+        relabelled = ' '.join(f'{label_of(label)}->{label_of(photo)}' for label, photo in sorted(moved.items()))
 
         totals = {'tp': 0, 'fp': 0, 'fn': 0, 'author_known': 0, 'author_right': 0}
         by_difficulty, f1s, details = {}, [], {}
@@ -248,19 +302,21 @@ def main():
             d[0] += s['tp']; d[1] += s['fp']; d[2] += s['fn']
             image_rows.append({
                 'experiment': experiment, 'image': image, 'difficulty': entry['difficulty'],
+                'reply_label': label_of(reply_label.get(image, image)) if status == 'ok' else '',
                 'status': status, 'gt_books': len(entry['books']), 'predicted': len(books),
                 'tp': s['tp'], 'fp': s['fp'], 'fn': s['fn'],
                 'precision': fmt(p), 'recall': fmt(r), 'f1': fmt(f),
                 'author_accuracy': fmt(s['author_right'] / s['author_known']) if s['author_known'] else '',
             })
-            details[image] = {'status': status, 'duplicates_removed': dups,
+            details[image] = {'status': status, 'reply_label': label_of(reply_label.get(image, image)),
+                              'duplicates_removed': dups,
                               **{k: s[k] for k in ('matched', 'not_in_ground_truth', 'missed')}}
 
         p, r, f = prf(totals['tp'], totals['fp'], totals['fn'])
         row = {
             'experiment': experiment, 'model': meta.get('model', ''), 'mode': meta.get('mode', ''),
-            'reply_readable': predictions is not None, 'missing_images': missing_images,
-            'duplicates_removed': duplicates,
+            'reply_readable': predictions is not None, 'relabelled': relabelled,
+            'missing_images': missing_images, 'duplicates_removed': duplicates,
             'tp': totals['tp'], 'fp': totals['fp'], 'fn': totals['fn'],
             'precision': fmt(p), 'recall': fmt(r), 'f1': fmt(f),
             'macro_f1': fmt(sum(f1s) / len(f1s)),
@@ -277,7 +333,7 @@ def main():
         print(f'No results found in {raw_dir}. Paste model replies into the files there first.')
         return
 
-    summary_fields = ['experiment', 'model', 'mode', 'reply_readable', 'missing_images',
+    summary_fields = ['experiment', 'model', 'mode', 'reply_readable', 'relabelled', 'missing_images',
                       'duplicates_removed', 'tp', 'fp', 'fn', 'precision', 'recall', 'f1', 'macro_f1',
                       'easy_f1', 'medium_f1', 'hard_f1', 'author_accuracy']
     with open(out_dir / 'summary.csv', 'w', newline='', encoding='utf-8') as fh:
@@ -293,6 +349,8 @@ def main():
     print(f"{'experiment':<38}{'P':>7}{'R':>7}{'F1':>7}{'easy':>7}{'med':>7}{'hard':>7}{'auth':>7}")
     for r in summary_rows:
         flag = f"  ({r['missing_images']} image(s) missing)" if r['missing_images'] else ''
+        if r['relabelled']:
+            flag += f"  (photo labels corrected: {r['relabelled']})"
         print(f"{r['experiment']:<38}{r['precision']:>7}{r['recall']:>7}{r['f1']:>7}"
               f"{r.get('easy_f1', ''):>7}{r.get('medium_f1', ''):>7}{r.get('hard_f1', ''):>7}"
               f"{r['author_accuracy']:>7}{flag}")
