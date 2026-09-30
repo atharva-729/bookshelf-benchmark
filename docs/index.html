@@ -20,11 +20,11 @@
   --accent: #256abf;
   --tooltip-bg: #0b0b0b;
   --tooltip-ink: #ffffff;
-  /* Sequential blue, value 0 -> 1 (light surface: near-zero recedes to light) */
-  --seq-0:#cde2fb; --seq-1:#b7d3f6; --seq-2:#9ec5f4; --seq-3:#86b6ef; --seq-4:#6da7ec; --seq-5:#5598e7;
-  --seq-6:#3987e5; --seq-7:#2a78d6; --seq-8:#256abf; --seq-9:#1c5cab; --seq-10:#184f95; --seq-11:#104281; --seq-12:#0d366b;
-  --ink-0:#0b0b0b; --ink-1:#0b0b0b; --ink-2:#0b0b0b; --ink-3:#0b0b0b; --ink-4:#0b0b0b; --ink-5:#0b0b0b; --ink-6:#0b0b0b;
-  --ink-7:#ffffff; --ink-8:#ffffff; --ink-9:#ffffff; --ink-10:#ffffff; --ink-11:#ffffff; --ink-12:#ffffff;
+  /* Heatmap scale, identical in light and dark: 0 = white, 1 = dark green.
+     Dark text on steps 0-8, white on 9-12 (every cell >= 4.8:1 contrast). */
+  --seq-0:#ffffff; --seq-1:#eef8ee; --seq-2:#dcf1dc; --seq-3:#c5e8c6; --seq-4:#aadcab; --seq-5:#8ccf8f; --seq-6:#6dc072; --seq-7:#4fae57; --seq-8:#2f8f3b; --seq-9:#237a31; --seq-10:#186528; --seq-11:#0f5220; --seq-12:#083f18;
+  --ink-0:#0b0b0b; --ink-1:#0b0b0b; --ink-2:#0b0b0b; --ink-3:#0b0b0b; --ink-4:#0b0b0b; --ink-5:#0b0b0b; --ink-6:#0b0b0b; --ink-7:#0b0b0b; --ink-8:#0b0b0b; --ink-9:#ffffff; --ink-10:#ffffff; --ink-11:#ffffff; --ink-12:#ffffff;
+  --cell-edge: rgba(11,11,11,0.12);
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
@@ -32,11 +32,6 @@
     --page: #0d0d0d; --surface-1: #1a1a19; --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #9a988f;
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #86b6ef;
     --tooltip-bg: #ffffff; --tooltip-ink: #0b0b0b;
-    /* Dark surface: anchor flips, near-zero recedes to dark */
-    --seq-0:#0d366b; --seq-1:#104281; --seq-2:#184f95; --seq-3:#1c5cab; --seq-4:#256abf; --seq-5:#2a78d6;
-    --seq-6:#3987e5; --seq-7:#5598e7; --seq-8:#6da7ec; --seq-9:#86b6ef; --seq-10:#9ec5f4; --seq-11:#b7d3f6; --seq-12:#cde2fb;
-    --ink-0:#ffffff; --ink-1:#ffffff; --ink-2:#ffffff; --ink-3:#ffffff; --ink-4:#ffffff; --ink-5:#ffffff;
-    --ink-6:#0b0b0b; --ink-7:#0b0b0b; --ink-8:#0b0b0b; --ink-9:#0b0b0b; --ink-10:#0b0b0b; --ink-11:#0b0b0b; --ink-12:#0b0b0b;
   }
 }
 :root[data-theme="dark"] {
@@ -44,10 +39,6 @@
   --page: #0d0d0d; --surface-1: #1a1a19; --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #9a988f;
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #86b6ef;
   --tooltip-bg: #ffffff; --tooltip-ink: #0b0b0b;
-  --seq-0:#0d366b; --seq-1:#104281; --seq-2:#184f95; --seq-3:#1c5cab; --seq-4:#256abf; --seq-5:#2a78d6;
-  --seq-6:#3987e5; --seq-7:#5598e7; --seq-8:#6da7ec; --seq-9:#86b6ef; --seq-10:#9ec5f4; --seq-11:#b7d3f6; --seq-12:#cde2fb;
-  --ink-0:#ffffff; --ink-1:#ffffff; --ink-2:#ffffff; --ink-3:#ffffff; --ink-4:#ffffff; --ink-5:#ffffff;
-  --ink-6:#0b0b0b; --ink-7:#0b0b0b; --ink-8:#0b0b0b; --ink-9:#0b0b0b; --ink-10:#0b0b0b; --ink-11:#0b0b0b; --ink-12:#0b0b0b;
 }
 
 * { box-sizing: border-box; }
@@ -91,7 +82,7 @@ h2 { font-size: 20px; margin: 0 0 4px; }
 
 .legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
 .legend .bar {
-  width: 160px; height: 10px; border-radius: 4px;
+  width: 160px; height: 10px; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--cell-edge);
   background: linear-gradient(90deg, var(--seq-0), var(--seq-3), var(--seq-6), var(--seq-9), var(--seq-12));
 }
 
@@ -107,6 +98,7 @@ table.heat th.rowh {
 table.heat th.rowh .mode { font-weight: 400; color: var(--text-secondary); }
 table.heat thead th.rowh { color: var(--text-muted); font-weight: 400; vertical-align: bottom; }
 td.cell {
+  box-shadow: inset 0 0 0 1px var(--cell-edge);
   height: 38px; min-width: 64px; text-align: center; border-radius: 4px;
   font-variant-numeric: tabular-nums; font-weight: 600; cursor: default;
 }
@@ -115,6 +107,17 @@ td.delta { text-align: right; padding: 0 4px 0 10px; color: var(--text-secondary
 td.delta strong { color: var(--text-primary); }
 td.empty { color: var(--text-muted); font-weight: 400; background: transparent; border: 1px dashed var(--grid); }
 .note { font-size: 13px; color: var(--text-muted); margin: 12px 0 0; }
+
+.photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.photos figure { margin: 0; }
+.photos a.ph { display: block; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4 / 3; background: var(--grid); }
+.photos a.ph:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.photos img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .2s; }
+.photos a.ph:hover img { transform: scale(1.03); }
+.photos figcaption { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; font-size: 14px; }
+.photos figcaption .id { font-size: 18px; font-weight: 700; }
+.photos figcaption .diff { font-weight: 600; }
+.photos figcaption .count { color: var(--text-secondary); margin-left: auto; font-variant-numeric: tabular-nums; }
 
 ol.findings { margin: 8px 0 0; padding-left: 20px; }
 ol.findings li { margin: 0 0 10px; }
@@ -137,6 +140,7 @@ footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
 
 @media (max-width: 720px) {
   .tiles { grid-template-columns: 1fr; }
+  .photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   h1 { font-size: 25px; }
   section.card { padding: 16px; }
 }
@@ -157,6 +161,12 @@ footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
   </header>
 
   <div class="tiles" id="tiles"></div>
+
+  <section class="card" aria-labelledby="h-photos">
+    <h2 id="h-photos">The photos</h2>
+    <p class="desc">Six real bookshelf photos: two easy, two medium and two hard. The number is how many books are in the answer key for that photo. Click a photo to open it larger.</p>
+    <div class="photos" id="photos"></div>
+  </section>
 
   <section class="card" aria-labelledby="h-exp1">
     <h2 id="h-exp1">Experiment 1: all six photos in one message</h2>
@@ -259,6 +269,16 @@ footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
   document.getElementById('tiles').innerHTML = tiles.map(t =>
     `<div class="tile"><div class="label">${esc(t.label)}</div><div class="value">${esc(t.value)}</div><div class="sub">${esc(t.sub)}</div></div>`
   ).join('');
+
+  // ---------- photo gallery ----------
+  const cap = w => w.charAt(0).toUpperCase() + w.slice(1);
+  document.getElementById('photos').innerHTML = D.photos.map(p => `
+    <figure>
+      <a class="ph" href="photos/${p.id}.jpg" target="_blank" rel="noopener" aria-label="Open photo ${p.id} (${p.difficulty}, ${p.books} books) larger">
+        <img src="photos/${p.id}_thumb.jpg" alt="Bookshelf photo ${p.id}, ${p.difficulty}, ${p.books} books in the answer key" loading="lazy">
+      </a>
+      <figcaption><span class="id">${p.id}</span><span class="diff">${cap(p.difficulty)}</span><span class="count">${p.books} books</span></figcaption>
+    </figure>`).join('');
 
   // ---------- tooltip ----------
   const tip = document.getElementById('tip');
