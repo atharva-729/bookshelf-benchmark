@@ -83,4 +83,5 @@ Each reply is pasted, unedited, into its experiment's file in `results/raw/`.
 - [benchmark/prompt.md](benchmark/prompt.md): the standard prompt.
 - `results/raw/`: one file per experiment, where the model replies are pasted.
 - `python benchmark/evaluate.py`: scores everything pasted so far. See [METRICS.md](METRICS.md) for what it measures.
+- Results page: [docs/index.html](docs/index.html), served by GitHub Pages. After re-scoring, run `python benchmark/build_site.py` to refresh its data (`docs/data.js`).
 - Experiment 2 (one photo per chat, hard photos only): [benchmark/prompt_single.md](benchmark/prompt_single.md), replies in `results/raw_single/`, scored with `python benchmark/evaluate_single.py`. See [EXPERIMENTS.md](EXPERIMENTS.md).
