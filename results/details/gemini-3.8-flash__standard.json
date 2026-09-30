@@ -9,6 +9,7 @@
   "images": {
     "a.jpg": {
       "status": "ok",
+      "reply_label": "a",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -685,6 +686,18 @@
         },
         {
           "predicted": {
+            "title": "Racine",
+            "author": "R.C. Knight"
+          },
+          "ground_truth": {
+            "title": "Modern Judgements: Racine",
+            "author": "R.C. Knight (ed.)"
+          },
+          "title_similarity": 1.0,
+          "author_correct": true
+        },
+        {
+          "predicted": {
             "title": "Recordings",
             "author": "Hal Foster"
           },
@@ -700,10 +713,6 @@
         {
           "title": "Selected Writings on Art and Artists",
           "author": "Charles Baudelaire"
-        },
-        {
-          "title": "Racine",
-          "author": "R.C. Knight"
         }
       ],
       "missed": [
@@ -718,10 +727,6 @@
         {
           "title": "Geometry and the Liberal Arts",
           "author": "Dan Pedoe"
-        },
-        {
-          "title": "Modern Judgements: Racine",
-          "author": "R.C. Knight (ed.)"
         },
         {
           "title": "Reading Landscape: Country-City-Capital",
@@ -743,6 +748,7 @@
     },
     "b.jpg": {
       "status": "ok",
+      "reply_label": "b",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -1300,6 +1306,7 @@
     },
     "c.png": {
       "status": "ok",
+      "reply_label": "c",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -1613,6 +1620,7 @@
     },
     "d.jpg": {
       "status": "ok",
+      "reply_label": "d",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -1707,6 +1715,7 @@
     },
     "e.jpg": {
       "status": "ok",
+      "reply_label": "e",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -2305,6 +2314,7 @@
     },
     "f.jpg": {
       "status": "ok",
+      "reply_label": "f",
       "duplicates_removed": 0,
       "matched": [
         {

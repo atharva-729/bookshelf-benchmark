@@ -1,0 +1,53 @@
+# Claude Opus 5.5 / low / one photo per chat
+
+<!-- Run e.jpg and f.jpg in two separate new chats, using benchmark/prompt_single.md. -->
+<!-- Paste each full reply under its photo heading. Leave a section empty until it has been run. -->
+
+model: Claude Opus 5.5
+mode: low
+interface: Claude.ai web app
+date: 
+notes: 
+
+## e.jpg
+{"filename":null,"difficulty":"hard","books":[{"title":"Harry Potter and the Goblet of Fire","author":"J.K. Rowling"},{"title":"After You","author":"Jojo Moyes"},{"title":"The Giver of Stars","author":"Jojo Moyes"},{"title":"Still Me","author":"Jojo Moyes"},{"title":"Star Wars Episode V: The Empire Strikes Back","author":"Ryder Windham"},{"title":"Delphie and the Magic Spell","author":"Darcey Bussell"},{"title":"Nasty Nature","author":"Nick Arnold"},{"title":"Wolves of the Calla","author":"Stephen King"},{"title":"Atomic Habits","author":"James Clear"},{"title":"The Seven Husbands of Evelyn Hugo","author":"Taylor Jenkins Reid"},{"title":"The Mayor of Casterbridge","author":"Thomas Hardy"},{"title":"In the Fifth at Malory Towers","author":"Enid Blyton"},{"title":"First Term at Malory Towers","author":"Enid Blyton"},{"title":"The Small House at Allington","author":"Anthony Trollope"},{"title":"Jane Austen","author":"David Nokes"},{"title":"The Witches","author":"Roald Dahl"},{"title":"Wish You Were Dead","author":"Peter James"},{"title":"Farm Boy","author":"Michael Morpurgo"},{"title":"The Secret Garden","author":"Frances Hodgson Burnett"},{"title":"Everything's Amazing (Sort Of)","author":"Liz Pichon"},{"title":"Excellent Excuses (and Other Good Stuff)","author":"Liz Pichon"},{"title":"Harry Potter and the Cursed Child","author":"J.K. Rowling"},{"title":"The Personal MBA","author":"Josh Kaufman"},{"title":"Disgusting Digestion","author":"Nick Arnold"},{"title":"Rotten Romans","author":"Terry Deary"},{"title":"Way of the Warrior Kid","author":"Jocko Willink"},{"title":"Lorna Doone","author":"R. D. Blackmore"},{"title":"Frankenstein","author":null},{"title":"White Fang","author":"Jack London"},{"title":"Diary of a Wimpy Kid","author":"Jeff Kinney"},{"title":"Diary of a Wimpy Kid: The Long Haul","author":"Jeff Kinney"},{"title":"Diary of a Wimpy Kid: Rodrick Rules","author":"Jeff Kinney"},{"title":"A Certain Justice","author":"P.D. James"},{"title":"Wuthering Heights","author":"Brontë"},{"title":"Stranger Things: Suspicious Minds","author":"Gwenda Bond"},{"title":"The Lottie Project","author":"Jacqueline Wilson"},{"title":"Venus on Fire, Mars on Ice","author":"John Gray"},{"title":"The Lost Symbol","author":"Dan Brown"},{"title":"One Hundred Names","author":"Cecelia Ahern"},{"title":"Long Way Home","author":"Michael Morpurgo"},{"title":"Bad Day for Badger","author":null},{"title":"Everyday Confidence","author":null},{"title":"The Audacity of Hope","author":"Barack Obama"},{"title":"I Don't Love You Anymore","author":"Rithvik Singh"},{"title":"Stories of Magic and Adventure","author":"Enid Blyton"},{"title":"Chocolat","author":"Joanne Harris"},{"title":"Mother Courage and Her Children","author":"Bertolt Brecht"},{"title":"Don't Let's Go to the Dogs Tonight","author":"Alexandra Fuller"},{"title":"Angels & Demons","author":"Dan Brown"},{"title":"The Girl with the Dragon Tattoo","author":"Stieg Larsson"},{"title":"The Herbal Alchemist's Handbook","author":"Karen Harrison"},{"title":"Mappillai","author":"Carlo Pizzati"},{"title":"Alice in Wonderland","author":"Lewis Carroll"},{"title":"Inferno","author":"Dan Brown"},{"title":"Prince Caspian","author":"C.S. Lewis"},{"title":"The Horse and His Boy","author":"C.S. Lewis"},{"title":"The Lion, the Witch and the Wardrobe","author":"C.S. Lewis"},{"title":"The Magician's Nephew","author":"C.S. Lewis"},{"title":"Leading","author":"Alex Ferguson with Michael Moritz"},{"title":"The Da Vinci Code","author":"Dan Brown"},{"title":"The Scorch Trials","author":"James Dashner"},{"title":"The Fry Chronicles","author":"Stephen Fry"},{"title":"Our Game","author":"John le Carré"},{"title":"The Girls' Book of Spells","author":"Rachel Elliot"},{"title":"Life Ke Kadve Sach","author":"Shwetabh Gangwar"},{"title":"The Woman in the Window","author":"A.J. Finn"},{"title":"A Wing and a Prayer","author":"Lyn Andrews"},{"title":"The Stars Shine Down","author":"Sidney Sheldon"},{"title":"The Phantom Tollbooth","author":"Norton Juster"},{"title":"Tears of the Giraffe","author":"Alexander McCall Smith"},{"title":"When Coal Turned Gold","author":"Partha Sarathi Bhattacharyya"},{"title":"The Chamber","author":"John Grisham"},{"title":"Maskerade","author":"Terry Pratchett"},{"title":"The Captain's Daughter","author":"Leah Fleming"},{"title":"The Doomsday Conspiracy","author":"Sidney Sheldon"},{"title":"The Inheritance of Loss","author":"Kiran Desai"},{"title":"Speaking for Myself","author":"Cherie Blair"},{"title":"The Gods of Guilt","author":"Michael Connelly"},{"title":"All Cheeses Great and Small","author":"Alex James"},{"title":"Before I Go to Sleep","author":"S.J. Watson"},{"title":"Brilliance of the Moon","author":"Lian Hearn"},{"title":"Tell Me Your Dreams","author":"Sidney Sheldon"},{"title":"Hannibal","author":"Thomas Harris"},{"title":"Sixteen Horses","author":"Greg Buchanan"},{"title":"Agent 21: Codebreaker","author":"Chris Ryan"},{"title":"Stolen","author":"Lesley Pearse"},{"title":"The High Lord","author":"Trudi Canavan"},{"title":"What Katy Did","author":"Susan M. Coolidge"},{"title":"The Thirty-Nine Steps","author":"John Buchan"}]}
+
+## f.jpg
+{"filename": "unknown", "difficulty": "hard", "books": [
+{"title": "The Diary of a CEO", "author": "Steven Bartlett"},
+{"title": "The Last Queen", "author": "Chitra Banerjee Divakaruni"},
+{"title": "Leaders Eat Last", "author": "Simon Sinek"},
+{"title": "The Game", "author": null},
+{"title": "The Guest List", "author": "Lucy Foley"},
+{"title": "Limitless", "author": "Jim Kwik"},
+{"title": "Placebo", "author": null},
+{"title": "The 4-Hour Workweek", "author": "Tim Ferriss"},
+{"title": "Chip War", "author": "Chris Miller"},
+{"title": "Think Like a Monk", "author": "Jay Shetty"},
+{"title": "You Can", "author": "George Matthew Adams"},
+{"title": "The Diary of a Young Girl", "author": "Anne Frank"},
+{"title": "Hunt the Villain", "author": "Rina Kent"},
+{"title": "Those Who Live Without Discipline Die Without Honor", "author": null},
+{"title": "12 Months to $1 Million", "author": "Ryan Daniel Moran"},
+{"title": "The Prophet", "author": "Kahlil Gibran"},
+{"title": "The Mistake", "author": "Elle Kennedy"},
+{"title": "The Bitcoin Standard", "author": "Saifedean Ammous"},
+{"title": "Jiggy McCue", "author": "Michael Lawrence"},
+{"title": "Timmy Failure", "author": "Stephan Pastis"},
+{"title": "Atomic Habits", "author": "James Clear"},
+{"title": "Expert Secrets", "author": "Russell Brunson"},
+{"title": "Your Fault", "author": "Mercedes Ron"},
+{"title": "Good Vibes, Good Life", "author": "Vex King"},
+{"title": "Dad, I Want to Hear Your Story", "author": "Jeffrey Mason"},
+{"title": "Breaking Dawn", "author": "Stephenie Meyer"},
+{"title": "Ruskin Bond Collection", "author": "Ruskin Bond"},
+{"title": "Coronavirus", "author": "Dr Michael Mosley"},
+{"title": "Inglorious Empire", "author": "Shashi Tharoor"},
+{"title": "Three Weeks in Paris", "author": "Barbara Taylor Bradford"},
+{"title": "The Secret Life of Bees", "author": "Sue Monk Kidd"},
+{"title": "$100M Money Models", "author": "Alex Hormozi"},
+{"title": "Essentialism", "author": "Greg McKeown"},
+{"title": "The Lord of the Rings", "author": "J.R.R. Tolkien"},
+{"title": "The Magic of the Lost Earrings", "author": "Sudha Murty"},
+{"title": "Kafka on the Shore", "author": "Haruki Murakami"}
+]}

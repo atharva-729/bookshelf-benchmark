@@ -9,6 +9,7 @@
   "images": {
     "a.jpg": {
       "status": "ok",
+      "reply_label": "a",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -755,6 +756,7 @@
     },
     "b.jpg": {
       "status": "ok",
+      "reply_label": "b",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -1296,6 +1298,7 @@
     },
     "c.png": {
       "status": "ok",
+      "reply_label": "c",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -1609,6 +1612,7 @@
     },
     "d.jpg": {
       "status": "ok",
+      "reply_label": "d",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -1698,6 +1702,7 @@
     },
     "e.jpg": {
       "status": "ok",
+      "reply_label": "e",
       "duplicates_removed": 0,
       "matched": [
         {
@@ -2308,6 +2313,7 @@
     },
     "f.jpg": {
       "status": "ok",
+      "reply_label": "f",
       "duplicates_removed": 0,
       "matched": [
         {
