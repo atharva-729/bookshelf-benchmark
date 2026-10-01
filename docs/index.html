@@ -125,6 +125,17 @@ table.compare thead th { color: var(--text-secondary); font-weight: 600; border-
 table.compare tbody th { font-weight: 600; white-space: nowrap; width: 1%; }
 table.compare td { color: var(--text-secondary); }
 
+.fails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.fail { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.fail h3 { font-size: 15px; margin: 0 0 2px; }
+.fail p { margin: 0 0 10px; font-size: 13px; color: var(--text-muted); }
+.card .fail ul { list-style: none; margin: 0; padding: 0; }
+.card .fail li { font-size: 14px; color: var(--text-primary); margin: 0 0 6px; padding: 0; }
+.fail li:last-child { margin-bottom: 0; }
+.fail .said { color: var(--text-secondary); text-decoration: line-through; text-decoration-color: var(--axis); }
+.fail .arrow { color: var(--text-muted); padding: 0 4px; }
+.fail .tag { color: var(--text-muted); font-size: 12.5px; white-space: nowrap; }
+
 ol.findings { margin: 8px 0 0; padding-left: 20px; }
 ol.findings li { margin: 0 0 10px; }
 ol.findings li strong { color: var(--text-primary); }
@@ -147,6 +158,7 @@ footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
 @media (max-width: 720px) {
   .tiles { grid-template-columns: 1fr; }
   .photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fails { grid-template-columns: 1fr; }
   h1 { font-size: 25px; }
   section.card { padding: 16px; }
 }
@@ -214,6 +226,49 @@ footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
       <li><strong>Gemini's limit is how well it reads, not the batching.</strong> Sent one hard photo at a time, Gemini still listed about the same number of books. It just named fewer wrong ones.</li>
       <li><strong>Newer models improved.</strong> Opus 5.5 beat Opus 5, and Sonnet 5.5 beat Sonnet 5 by a wide margin, at the same effort.</li>
     </ol>
+  </section>
+
+  <section class="card" aria-labelledby="h-fail">
+    <h2 id="h-fail">Where models went wrong</h2>
+    <p class="desc">Real examples from experiment 1. The model's answer is struck through; the book on the shelf follows.</p>
+    <div class="fails">
+      <div class="fail">
+        <h3>Right author, wrong book</h3>
+        <p>The model reads the author and names their better-known title.</p>
+        <ul>
+          <li><span class="said">The Magic of the Lost Temple</span><span class="arrow">→</span>The Magic of the Lost Earrings <span class="tag">· 5 runs</span></li>
+          <li><span class="said">Behave</span><span class="arrow">→</span>Determined <span class="tag">· Sapolsky</span></li>
+          <li><span class="said">Bit of a Blur</span><span class="arrow">→</span>All Cheeses Great &amp; Small <span class="tag">· Alex James</span></li>
+        </ul>
+      </div>
+      <div class="fail">
+        <h3>Missed by every model</h3>
+        <p>41 of the 295 books were found by none of the 12 runs.</p>
+        <ul>
+          <li>Hindi titles <span class="tag">· जादू, मेघनाद, डेरे वाले</span></li>
+          <li>Upside-down or thin spines <span class="tag">· Silas Marner, Hunted</span></li>
+          <li>Partly hidden covers <span class="tag">· The Great Gatsby, Wild Fictions</span></li>
+        </ul>
+      </div>
+      <div class="fail">
+        <h3>Too vague to count</h3>
+        <p>Part of the title, not enough to say which book.</p>
+        <ul>
+          <li><span class="said">Harry Potter</span><span class="arrow">→</span>Harry Potter and the Goblet of Fire</li>
+          <li><span class="said">Diary of a Wimpy Kid</span><span class="arrow">→</span>Diary of a Wimpy Kid: The Long Haul</li>
+          <li><span class="said">British Art</span><span class="arrow">→</span>The Thames and Hudson Encyclopaedia of British Art</li>
+        </ul>
+      </div>
+      <div class="fail">
+        <h3>Marked wrong, but really there</h3>
+        <p>On the shelf, but left out of the answer key as too hard to confirm.</p>
+        <ul>
+          <li>The Secret Life of Bees <span class="tag">· named in 6 runs</span></li>
+          <li>Jiggy McCue <span class="tag">· 3 runs</span></li>
+          <li>The Bitcoin Standard <span class="tag">· 2 runs</span></li>
+        </ul>
+      </div>
+    </div>
   </section>
 
   <section class="card" aria-labelledby="h-harness">

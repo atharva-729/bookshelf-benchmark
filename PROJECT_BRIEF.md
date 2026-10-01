@@ -403,7 +403,7 @@ The goal is to produce an interesting, measurable, reproducible experiment that 
 - [x] Build the evaluator with fuzzy title/author matching (not exact string match).
 - [x] Calculate precision, recall and F1, both overall and per image.
 - [x] Produce a per-image results table (models × shelves).
-- [ ] Collect failure examples (hallucinations, misreads, missed books).
+- [x] Collect failure examples (hallucinations, misreads, missed books).
 
 ### Harness experiment
 
