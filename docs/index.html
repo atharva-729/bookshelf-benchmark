@@ -119,6 +119,12 @@ td.empty { color: var(--text-muted); font-weight: 400; background: transparent; 
 .photos figcaption .diff { font-weight: 600; }
 .photos figcaption .count { color: var(--text-secondary); margin-left: auto; font-variant-numeric: tabular-nums; }
 
+table.compare { border-collapse: collapse; font-size: 14px; width: 100%; min-width: 560px; }
+table.compare th, table.compare td { text-align: left; vertical-align: top; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--grid); }
+table.compare thead th { color: var(--text-secondary); font-weight: 600; border-bottom-color: var(--axis); }
+table.compare tbody th { font-weight: 600; white-space: nowrap; width: 1%; }
+table.compare td { color: var(--text-secondary); }
+
 ol.findings { margin: 8px 0 0; padding-left: 20px; }
 ol.findings li { margin: 0 0 10px; }
 ol.findings li strong { color: var(--text-primary); }
@@ -208,6 +214,31 @@ footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
       <li><strong>Gemini's limit is how well it reads, not the batching.</strong> Sent one hard photo at a time, Gemini still listed about the same number of books. It just named fewer wrong ones.</li>
       <li><strong>Newer models improved.</strong> Opus 5.5 beat Opus 5, and Sonnet 5.5 beat Sonnet 5 by a wide margin, at the same effort.</li>
     </ol>
+  </section>
+
+  <section class="card" aria-labelledby="h-harness">
+    <h2 id="h-harness">Model vs harness: same model, very different result</h2>
+    <p class="desc">The answer key itself was built with Claude Opus 5.5, the same model that scored best here, and together with a person it found nearly every readable book. Yet in a single chat, Opus 5.5 at high effort found about 77% of the books on the hardest photo. The model was the same; what changed was how it was used.</p>
+    <div class="scroll"><table class="compare">
+      <thead><tr><th scope="col"></th><th scope="col">Building the answer key</th><th scope="col">A single chat</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Image detail</th><td>Full-resolution originals, cropped into small regions and enlarged</td><td>The whole photo at once; chat apps usually shrink large images before the model sees them</td></tr>
+        <tr><th scope="row">Passes</th><td>Over a hundred zoomed crops, shelf by shelf, some rotated so spines read upright</td><td>One look at the whole shelf</td></tr>
+        <tr><th scope="row">Task</th><td>Check and extend an existing list</td><td>List everything from scratch</td></tr>
+        <tr><th scope="row">Checking</th><td>A person confirmed every addition against a crop</td><td>The model alone, in one reply</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" style="font-size:14px;color:var(--text-secondary)">The biggest factor is resolution: in a shrunk 24-megapixel photo, a spine title can end up only a few pixels tall and simply can't be read. Effort mattered less: in experiment 2, low effort matched high once the six-photo batching was removed. In other words, the surrounding system (zooming, multiple passes, verification) can matter more than the model or its settings.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-next">
+    <h2 id="h-next">Possible next experiments</h2>
+    <ul>
+      <li><strong>A simple zoom harness:</strong> split each hard photo into overlapping full-resolution crops, ask the model about each crop, then merge the lists. This would measure how much of the gap is resolution alone. It needs API access rather than the chat apps.</li>
+      <li><strong>Repeat runs:</strong> run each setup several times to see how much results vary from run to run.</li>
+      <li><strong>Image compression:</strong> compare original, moderately and heavily compressed photos for accuracy and cost.</li>
+      <li><strong>Other ways of packaging the photos:</strong> a ZIP, a PDF, or a document instead of separate images.</li>
+    </ul>
   </section>
 
   <section class="card" aria-labelledby="h-how">

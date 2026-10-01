@@ -397,22 +397,22 @@ The goal is to produce an interesting, measurable, reproducible experiment that 
 - [x] Curate ground truth (originally 11 photographs; cut down to 6 photographs / 295 books after review. The other 5 are kept in `unused/`).
 - [x] Freeze the ground truth (treat `ground_truth.json` as immutable from here on).
 - [ ] Reorganise the repo into the preferred layout (`data/images/`, `data/ground_truth.json`, `results/`, `benchmark/`, `docs/`).
-- [ ] Write and freeze the standardized prompt (JSON output with title/author, instruction not to guess).
-- [ ] Run at least 2–3 accessible multimodal models (e.g. Claude, GPT, Gemini) with the standardized prompt.
-- [ ] Save all raw model outputs under `results/`, and record how each model was accessed (API vs consumer interface, model version, settings).
-- [ ] Build the evaluator with fuzzy title/author matching (not exact string match).
-- [ ] Calculate precision, recall and F1, both overall and per image.
-- [ ] Produce a per-image results table (models × shelves).
+- [x] Write and freeze the standardized prompt (JSON output with title/author, instruction not to guess).
+- [x] Run at least 2–3 accessible multimodal models (e.g. Claude, GPT, Gemini) with the standardized prompt.
+- [x] Save all raw model outputs under `results/`, and record how each model was accessed (API vs consumer interface, model version, settings).
+- [x] Build the evaluator with fuzzy title/author matching (not exact string match).
+- [x] Calculate precision, recall and F1, both overall and per image.
+- [x] Produce a per-image results table (models × shelves).
 - [ ] Collect failure examples (hallucinations, misreads, missed books).
 
 ### Harness experiment
 
-- [ ] Build a lightweight verification harness (identify → flag uncertain → re-inspect/crop → final list).
+- [ ] Build a lightweight verification harness (not done: needs API access. Observation recorded on the results page: the same model found nearly all books when used with zooming, multiple passes and human checks, vs ~77% on the hardest photo in one chat) (identify → flag uncertain → re-inspect/crop → final list).
 - [ ] Compare direct prompting vs the harness on the same models.
 
 ### Representation / packaging experiments
 
-- [ ] Check whether model performance is the same when multiple pictures are given at once in a single prompt versus one picture per prompt.
+- [x] Check whether model performance is the same when multiple pictures are given at once in a single prompt versus one picture per prompt.
 - [ ] Compare individual images vs a ZIP of all 6 images, where supported (accuracy, latency, tokens, cost, failure rate, consistency).
 - [ ] Image compression: test original vs moderately vs highly compressed images (tokens, upload size, latency, accuracy, hallucination rate).
 - [ ] Test other representations of the same information (PDF, DOCX, Markdown, plain text, base64) where applicable.
@@ -420,5 +420,5 @@ The goal is to produce an interesting, measurable, reproducible experiment that 
 
 ### Presentation
 
-- [ ] Build the static GitHub Pages site (`docs/index.html`): what was tested, dataset, models/configurations, methodology, results, failure examples, observations, next experiments.
+- [x] Build the static GitHub Pages site (`docs/index.html`): what was tested, dataset, models/configurations, methodology, results, failure examples, observations, next experiments.
 - [ ] Publish the site to GitHub Pages.
