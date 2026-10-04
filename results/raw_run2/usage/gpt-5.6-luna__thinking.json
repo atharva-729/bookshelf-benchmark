@@ -1,0 +1,12 @@
+﻿{
+  "experiment": "gpt-5.6-luna__thinking",
+  "source": "ChatGPT conversation data (backend-api/conversation), read in the browser after the run",
+  "model_slug": "gpt-5-6-t-mini",
+  "user_message_utc": "2026-10-04T10:35:02.245Z",
+  "latency_s": 1040.3,
+  "app_reported": "Worked for 17m 19s",
+  "message_counts": {"assistant:thoughts": 16, "assistant:code": 14, "tool:execution_output": 78, "assistant:text": 1, "assistant:reasoning_recap": 1},
+  "chars": {"prompt_text": 997, "reply_text": 9733, "thoughts_visible": 1141, "code": 3649, "tool_output": 3046},
+  "images_as_stored": [[1300, 956], [1300, 956], [1080, 1440], [2048, 1536], [1536, 2048], [1536, 2048]],
+  "notes": "Think mode on the Go plan routed to gpt-5-6-t-mini. Visible thoughts are summaries; hidden reasoning tokens are not known."
+}

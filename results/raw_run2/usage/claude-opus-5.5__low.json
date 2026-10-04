@@ -1,0 +1,14 @@
+{
+  "experiment": "claude-opus-5.5__low",
+  "source": "Claude.ai conversation data (chat_conversations API), read in the browser after the run",
+  "model_slug": "claude-opus-5-5",
+  "settings": {"effort_level": "low"},
+  "user_message_utc": "2026-10-04T10:15:40.132Z",
+  "thinking": null,
+  "reply_done_utc": "2026-10-04T10:16:34.742Z",
+  "latency_s": 54.6,
+  "reply_stream_s": null,
+  "chars": {"prompt_text": 1021, "reply_text": 16598},
+  "images_preview_px": [[1288, 947], [1288, 947], [952, 1269], [1269, 952], [952, 1269], [952, 1269]],
+  "notes": "No thinking block. Reply start time not recorded separately, so streaming speed is not known for this run."
+}
