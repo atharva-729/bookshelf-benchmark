@@ -1,0 +1,13 @@
+﻿{
+  "experiment": "claude-sonnet-5.5__low",
+  "source": "Claude.ai conversation data (chat_conversations API), read in the browser after the run",
+  "model_slug": "claude-sonnet-5-5",
+  "settings": {"effort_level": "low"},
+  "user_message_utc": "2026-10-04T10:44:39.706Z",
+  "thinking": null,
+  "reply_done_utc": "2026-10-04T10:45:06.715Z",
+  "latency_s": 27.0,
+  "reply_stream_s": null,
+  "chars": {"prompt_text": 1021, "reply_text": 11854},
+  "notes": "No thinking block."
+}

@@ -1,0 +1,14 @@
+{
+  "experiment": "claude-opus-5.5__high",
+  "source": "Claude.ai conversation data (chat_conversations API), read in the browser after the run",
+  "model_slug": "claude-opus-5-5",
+  "settings": {"effort_level": "high"},
+  "user_message_utc": "2026-10-04T10:32:10.639Z",
+  "thinking": {"start_utc": "2026-10-04T10:32:20.986Z", "stop_utc": "2026-10-04T10:33:26.069Z", "seconds": 65.1, "text_visible": false, "summaries": 10},
+  "reply_done_utc": "2026-10-04T10:34:14.594Z",
+  "latency_s": 124.0,
+  "reply_stream_s": 48.5,
+  "chars": {"prompt_text": 1021, "reply_text": 16819},
+  "images_preview_px": [[1288, 947], [1288, 947], [952, 1269], [1269, 952], [952, 1269], [952, 1269]],
+  "notes": "Thinking text is hidden by the app; thinking tokens must be estimated from duration x the reply's streaming speed. Preview sizes are the app's previews, not necessarily what the model saw."
+}

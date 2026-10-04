@@ -1,0 +1,13 @@
+experiment,model,mode,latency_s,input_tokens_mid,output_tokens_mid,cost_low,cost_mid,cost_high,price_in,price_out,method
+claude-opus-5.5__high,Claude Opus 5.5,high,124.0,19995,11256,0.19926,0.30509,0.36959,4.0,20.0,thinking 65 s x 99 tok/s (reply speed)
+claude-opus-5.5__low,Claude Opus 5.5,low,55.7,19995,4742,0.1335,0.17483,0.17483,4.0,20.0,no thinking block
+claude-opus-5__high,Claude Opus 5,high,172.5,19995,14150,0.28081,0.45372,0.57497,5.0,25.0,thinking 115 s x 84 tok/s (reply speed)
+claude-sonnet-5.5__high,Claude Sonnet 5.5,high,69.2,19995,8987,0.08382,0.12986,0.15523,2.0,10.0,thinking 35 s x 145 tok/s (reply speed)
+claude-sonnet-5.5__low,Claude Sonnet 5.5,low,27.0,19995,3387,0.0532,0.07386,0.07386,2.0,10.0,no thinking block
+claude-sonnet-5__high,Claude Sonnet 5,high,96.0,19995,10596,0.08706,0.14595,0.18418,2.0,10.0,thinking 66 s x 116 tok/s (reply speed)
+gemini-3.1-pro__extended-thinking,Gemini 3.1 Pro,extended-thinking,80.3,6975,4271,0.05223,0.06521,0.0849,2.0,12.0,thinking ~ (80 - 59) s x 49 tok/s
+gemini-3.1-pro__standard,Gemini 3.1 Pro,standard,59.0,6975,2887,0.04188,0.0486,0.07936,2.0,12.0,no thinking shown
+gemini-3.8-flash__extended-thinking,Gemini 3.8 Flash,extended-thinking,178.0,6975,22744,0.05105,0.09052,0.13251,0.75,3.75,thinking ~ (178 - 25) s x 129 tok/s
+gemini-3.8-flash__standard,Gemini 3.8 Flash,standard,25.0,6975,3220,0.01479,0.01731,0.02838,0.75,3.75,no thinking shown
+gpt-5.6-luna__standard,GPT 5.6 Luna,standard,305.4,189294,10784,0.01039,0.01915,0.06087,0.2,1.2,12 model turns (Python tool loop); hidden reasoning unknown
+gpt-5.6-luna__thinking,GPT 5.6 Luna,thinking,1040.3,215632,18364,0.01151,0.02877,0.11051,0.2,1.2,15 model turns (Python tool loop); hidden reasoning unknown
