@@ -1,0 +1,13 @@
+﻿{
+  "experiment": "claude-sonnet-5__high",
+  "source": "Claude.ai conversation data (chat_conversations API), read in the browser after the run",
+  "model_slug": "claude-sonnet-5",
+  "settings": {"effort_level": "high"},
+  "user_message_utc": "2026-10-04T10:55:25.663Z",
+  "thinking": {"start_utc": "2026-10-04T10:55:30.422Z", "stop_utc": "2026-10-04T10:56:36.269Z", "seconds": 65.8, "text_visible": false, "summaries": 11},
+  "reply_done_utc": "2026-10-04T10:57:01.705Z",
+  "latency_s": 96.0,
+  "reply_stream_s": 25.4,
+  "chars": {"prompt_text": 1021, "reply_text": 10329},
+  "notes": "Thinking text hidden by the app; estimate thinking tokens from duration x reply streaming speed."
+}

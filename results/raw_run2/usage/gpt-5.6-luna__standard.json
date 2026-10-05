@@ -1,0 +1,31 @@
+{
+  "experiment": "gpt-5.6-luna__standard",
+  "source": "ChatGPT conversation data (backend-api/conversation), read in the browser after the run",
+  "model_slug": "gpt-5-6",
+  "sent_utc": "2026-10-04T10:25:47.730Z",
+  "latency_s": 305.4,
+  "app_reported": "Worked for 4m 49s",
+  "message_counts": {
+    "assistant:thoughts": 11,
+    "assistant:code": 11,
+    "tool:execution_output": 27,
+    "assistant:text": 3,
+    "assistant:reasoning_recap": 1
+  },
+  "chars": {
+    "prompt_text": 997,
+    "reply_text": 8976,
+    "thoughts_visible": 923,
+    "code": 2766,
+    "tool_output": 16499
+  },
+  "images_as_stored": [
+    {"file": "a.jpg", "width": 1300, "height": 956, "bytes": 210088},
+    {"file": "b.jpg", "width": 1300, "height": 956, "bytes": 228527},
+    {"file": "c.png", "width": 1080, "height": 1440, "bytes": 3032199},
+    {"file": "d.jpg", "width": 2048, "height": 1536, "bytes": 627852},
+    {"file": "e.jpg", "width": 1536, "height": 2048, "bytes": 777252},
+    {"file": "f.jpg", "width": 1536, "height": 2048, "bytes": 1073360}
+  ],
+  "notes": "Think toggle was off, but the app still produced 11 reasoning blocks and ran Python OCR 11 times. Visible thoughts are summaries, so hidden reasoning tokens are not known."
+}
