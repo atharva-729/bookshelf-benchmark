@@ -892,6 +892,970 @@ window.BENCH = {
    }
   }
  ],
+ "exp1Run2": [
+  {
+   "id": "claude-opus-5.5__high",
+   "model": "Claude Opus 5.5",
+   "mode": "high effort",
+   "provider": "Claude",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.968,
+    "recall": 0.817,
+    "f1": 0.886,
+    "found": 241,
+    "wrong": 8,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.983,
+     "recall": 0.908,
+     "f1": 0.944,
+     "found": 59,
+     "wrong": 1,
+     "listed": 60,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.935,
+     "recall": 0.878,
+     "f1": 0.905,
+     "found": 43,
+     "wrong": 3,
+     "listed": 46,
+     "total": 49
+    },
+    "c": {
+     "precision": 1.0,
+     "recall": 0.962,
+     "f1": 0.98,
+     "found": 25,
+     "wrong": 0,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 1.0,
+     "recall": 0.875,
+     "f1": 0.933,
+     "found": 7,
+     "wrong": 0,
+     "listed": 7,
+     "total": 8
+    },
+    "e": {
+     "precision": 1.0,
+     "recall": 0.769,
+     "f1": 0.869,
+     "found": 83,
+     "wrong": 0,
+     "listed": 83,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.857,
+     "recall": 0.615,
+     "f1": 0.716,
+     "found": 24,
+     "wrong": 4,
+     "listed": 28,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "claude-opus-5.5__low",
+   "model": "Claude Opus 5.5",
+   "mode": "low effort",
+   "provider": "Claude",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.941,
+    "recall": 0.807,
+    "f1": 0.869,
+    "found": 238,
+    "wrong": 15,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.967,
+     "recall": 0.908,
+     "f1": 0.937,
+     "found": 59,
+     "wrong": 2,
+     "listed": 61,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.955,
+     "recall": 0.857,
+     "f1": 0.903,
+     "found": 42,
+     "wrong": 2,
+     "listed": 44,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.96,
+     "recall": 0.923,
+     "f1": 0.941,
+     "found": 24,
+     "wrong": 1,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 1.0,
+     "recall": 0.875,
+     "f1": 0.933,
+     "found": 7,
+     "wrong": 0,
+     "listed": 7,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.951,
+     "recall": 0.722,
+     "f1": 0.821,
+     "found": 78,
+     "wrong": 4,
+     "listed": 82,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.824,
+     "recall": 0.718,
+     "f1": 0.767,
+     "found": 28,
+     "wrong": 6,
+     "listed": 34,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "claude-opus-5__high",
+   "model": "Claude Opus 5",
+   "mode": "high effort",
+   "provider": "Claude",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.948,
+    "recall": 0.749,
+    "f1": 0.837,
+    "found": 221,
+    "wrong": 12,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.945,
+     "recall": 0.8,
+     "f1": 0.867,
+     "found": 52,
+     "wrong": 3,
+     "listed": 55,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.952,
+     "recall": 0.816,
+     "f1": 0.879,
+     "found": 40,
+     "wrong": 2,
+     "listed": 42,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.96,
+     "recall": 0.923,
+     "f1": 0.941,
+     "found": 24,
+     "wrong": 1,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 1.0,
+     "recall": 0.875,
+     "f1": 0.933,
+     "found": 7,
+     "wrong": 0,
+     "listed": 7,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.975,
+     "recall": 0.713,
+     "f1": 0.824,
+     "found": 77,
+     "wrong": 2,
+     "listed": 79,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.84,
+     "recall": 0.538,
+     "f1": 0.656,
+     "found": 21,
+     "wrong": 4,
+     "listed": 25,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "claude-sonnet-5.5__high",
+   "model": "Claude Sonnet 5.5",
+   "mode": "high effort",
+   "provider": "Claude",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.962,
+    "recall": 0.695,
+    "f1": 0.807,
+    "found": 205,
+    "wrong": 8,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.963,
+     "recall": 0.8,
+     "f1": 0.874,
+     "found": 52,
+     "wrong": 2,
+     "listed": 54,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.975,
+     "recall": 0.796,
+     "f1": 0.876,
+     "found": 39,
+     "wrong": 1,
+     "listed": 40,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.96,
+     "recall": 0.923,
+     "f1": 0.941,
+     "found": 24,
+     "wrong": 1,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 1.0,
+     "recall": 0.875,
+     "f1": 0.933,
+     "found": 7,
+     "wrong": 0,
+     "listed": 7,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.968,
+     "recall": 0.565,
+     "f1": 0.713,
+     "found": 61,
+     "wrong": 2,
+     "listed": 63,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.917,
+     "recall": 0.564,
+     "f1": 0.698,
+     "found": 22,
+     "wrong": 2,
+     "listed": 24,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "claude-sonnet-5.5__low",
+   "model": "Claude Sonnet 5.5",
+   "mode": "low effort",
+   "provider": "Claude",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.923,
+    "recall": 0.569,
+    "f1": 0.704,
+    "found": 168,
+    "wrong": 14,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.923,
+     "recall": 0.369,
+     "f1": 0.527,
+     "found": 24,
+     "wrong": 2,
+     "listed": 26,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.944,
+     "recall": 0.694,
+     "f1": 0.8,
+     "found": 34,
+     "wrong": 2,
+     "listed": 36,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.96,
+     "recall": 0.923,
+     "f1": 0.941,
+     "found": 24,
+     "wrong": 1,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 1.0,
+     "recall": 0.875,
+     "f1": 0.933,
+     "found": 7,
+     "wrong": 0,
+     "listed": 7,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.983,
+     "recall": 0.528,
+     "f1": 0.687,
+     "found": 57,
+     "wrong": 1,
+     "listed": 58,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.733,
+     "recall": 0.564,
+     "f1": 0.638,
+     "found": 22,
+     "wrong": 8,
+     "listed": 30,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "claude-sonnet-5__high",
+   "model": "Claude Sonnet 5",
+   "mode": "high effort",
+   "provider": "Claude",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.949,
+    "recall": 0.508,
+    "f1": 0.662,
+    "found": 150,
+    "wrong": 8,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.917,
+     "recall": 0.508,
+     "f1": 0.653,
+     "found": 33,
+     "wrong": 3,
+     "listed": 36,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.903,
+     "recall": 0.571,
+     "f1": 0.7,
+     "found": 28,
+     "wrong": 3,
+     "listed": 31,
+     "total": 49
+    },
+    "c": {
+     "precision": 1.0,
+     "recall": 0.962,
+     "f1": 0.98,
+     "found": 25,
+     "wrong": 0,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 0.857,
+     "recall": 0.75,
+     "f1": 0.8,
+     "found": 6,
+     "wrong": 1,
+     "listed": 7,
+     "total": 8
+    },
+    "e": {
+     "precision": 1.0,
+     "recall": 0.444,
+     "f1": 0.615,
+     "found": 48,
+     "wrong": 0,
+     "listed": 48,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.909,
+     "recall": 0.256,
+     "f1": 0.4,
+     "found": 10,
+     "wrong": 1,
+     "listed": 11,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "gemini-3.1-pro__extended-thinking",
+   "model": "Gemini 3.1 Pro",
+   "mode": "extended thinking",
+   "provider": "Gemini",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.915,
+    "recall": 0.508,
+    "f1": 0.654,
+    "found": 150,
+    "wrong": 14,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.946,
+     "recall": 0.815,
+     "f1": 0.876,
+     "found": 53,
+     "wrong": 3,
+     "listed": 56,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.977,
+     "recall": 0.857,
+     "f1": 0.913,
+     "found": 42,
+     "wrong": 1,
+     "listed": 43,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.92,
+     "recall": 0.885,
+     "f1": 0.902,
+     "found": 23,
+     "wrong": 2,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 0.75,
+     "recall": 0.75,
+     "f1": 0.75,
+     "found": 6,
+     "wrong": 2,
+     "listed": 8,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.895,
+     "recall": 0.157,
+     "f1": 0.268,
+     "found": 17,
+     "wrong": 2,
+     "listed": 19,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.692,
+     "recall": 0.231,
+     "f1": 0.346,
+     "found": 9,
+     "wrong": 4,
+     "listed": 13,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "gemini-3.1-pro__standard",
+   "model": "Gemini 3.1 Pro",
+   "mode": "standard",
+   "provider": "Gemini",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.897,
+    "recall": 0.502,
+    "f1": 0.643,
+    "found": 148,
+    "wrong": 17,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.947,
+     "recall": 0.831,
+     "f1": 0.885,
+     "found": 54,
+     "wrong": 3,
+     "listed": 57,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.975,
+     "recall": 0.796,
+     "f1": 0.876,
+     "found": 39,
+     "wrong": 1,
+     "listed": 40,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.92,
+     "recall": 0.885,
+     "f1": 0.902,
+     "found": 23,
+     "wrong": 2,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 0.75,
+     "recall": 0.75,
+     "f1": 0.75,
+     "found": 6,
+     "wrong": 2,
+     "listed": 8,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.731,
+     "recall": 0.176,
+     "f1": 0.284,
+     "found": 19,
+     "wrong": 7,
+     "listed": 26,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.778,
+     "recall": 0.179,
+     "f1": 0.292,
+     "found": 7,
+     "wrong": 2,
+     "listed": 9,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "gemini-3.8-flash__extended-thinking",
+   "model": "Gemini 3.8 Flash",
+   "mode": "extended thinking",
+   "provider": "Gemini",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.975,
+    "recall": 0.539,
+    "f1": 0.694,
+    "found": 159,
+    "wrong": 4,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.983,
+     "recall": 0.892,
+     "f1": 0.935,
+     "found": 58,
+     "wrong": 1,
+     "listed": 59,
+     "total": 65
+    },
+    "b": {
+     "precision": 1.0,
+     "recall": 0.878,
+     "f1": 0.935,
+     "found": 43,
+     "wrong": 0,
+     "listed": 43,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.962,
+     "recall": 0.962,
+     "f1": 0.962,
+     "found": 25,
+     "wrong": 1,
+     "listed": 26,
+     "total": 26
+    },
+    "d": {
+     "precision": 1.0,
+     "recall": 0.625,
+     "f1": 0.769,
+     "found": 5,
+     "wrong": 0,
+     "listed": 5,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.9,
+     "recall": 0.167,
+     "f1": 0.281,
+     "found": 18,
+     "wrong": 2,
+     "listed": 20,
+     "total": 108
+    },
+    "f": {
+     "precision": 1.0,
+     "recall": 0.256,
+     "f1": 0.408,
+     "found": 10,
+     "wrong": 0,
+     "listed": 10,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "gemini-3.8-flash__standard",
+   "model": "Gemini 3.8 Flash",
+   "mode": "standard",
+   "provider": "Gemini",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.886,
+    "recall": 0.475,
+    "f1": 0.618,
+    "found": 140,
+    "wrong": 18,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.948,
+     "recall": 0.846,
+     "f1": 0.894,
+     "found": 55,
+     "wrong": 3,
+     "listed": 58,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.933,
+     "recall": 0.857,
+     "f1": 0.894,
+     "found": 42,
+     "wrong": 3,
+     "listed": 45,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.96,
+     "recall": 0.923,
+     "f1": 0.941,
+     "found": 24,
+     "wrong": 1,
+     "listed": 25,
+     "total": 26
+    },
+    "d": {
+     "precision": 0.714,
+     "recall": 0.625,
+     "f1": 0.667,
+     "found": 5,
+     "wrong": 2,
+     "listed": 7,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.571,
+     "recall": 0.074,
+     "f1": 0.131,
+     "found": 8,
+     "wrong": 6,
+     "listed": 14,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.667,
+     "recall": 0.154,
+     "f1": 0.25,
+     "found": 6,
+     "wrong": 3,
+     "listed": 9,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "gpt-5.6-luna__standard",
+   "model": "GPT 5.6 Luna",
+   "mode": "standard",
+   "provider": "GPT",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.931,
+    "recall": 0.41,
+    "f1": 0.569,
+    "found": 121,
+    "wrong": 9,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.926,
+     "recall": 0.385,
+     "f1": 0.543,
+     "found": 25,
+     "wrong": 2,
+     "listed": 27,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.885,
+     "recall": 0.469,
+     "f1": 0.613,
+     "found": 23,
+     "wrong": 3,
+     "listed": 26,
+     "total": 49
+    },
+    "c": {
+     "precision": 1.0,
+     "recall": 0.846,
+     "f1": 0.917,
+     "found": 22,
+     "wrong": 0,
+     "listed": 22,
+     "total": 26
+    },
+    "d": {
+     "precision": 0.8,
+     "recall": 0.5,
+     "f1": 0.615,
+     "found": 4,
+     "wrong": 1,
+     "listed": 5,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.977,
+     "recall": 0.398,
+     "f1": 0.566,
+     "found": 43,
+     "wrong": 1,
+     "listed": 44,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.667,
+     "recall": 0.103,
+     "f1": 0.178,
+     "found": 4,
+     "wrong": 2,
+     "listed": 6,
+     "total": 39
+    }
+   }
+  },
+  {
+   "id": "gpt-5.6-luna__thinking",
+   "model": "GPT 5.6 Luna",
+   "mode": "thinking",
+   "provider": "GPT",
+   "relabelled": "",
+   "overall": {
+    "precision": 0.915,
+    "recall": 0.437,
+    "f1": 0.592,
+    "found": 129,
+    "wrong": 12,
+    "total": 295
+   },
+   "photos": {
+    "a": {
+     "precision": 0.963,
+     "recall": 0.4,
+     "f1": 0.565,
+     "found": 26,
+     "wrong": 1,
+     "listed": 27,
+     "total": 65
+    },
+    "b": {
+     "precision": 0.839,
+     "recall": 0.531,
+     "f1": 0.65,
+     "found": 26,
+     "wrong": 5,
+     "listed": 31,
+     "total": 49
+    },
+    "c": {
+     "precision": 0.9,
+     "recall": 0.692,
+     "f1": 0.783,
+     "found": 18,
+     "wrong": 2,
+     "listed": 20,
+     "total": 26
+    },
+    "d": {
+     "precision": 0.8,
+     "recall": 0.5,
+     "f1": 0.615,
+     "found": 4,
+     "wrong": 1,
+     "listed": 5,
+     "total": 8
+    },
+    "e": {
+     "precision": 0.977,
+     "recall": 0.389,
+     "f1": 0.556,
+     "found": 42,
+     "wrong": 1,
+     "listed": 43,
+     "total": 108
+    },
+    "f": {
+     "precision": 0.867,
+     "recall": 0.333,
+     "f1": 0.481,
+     "found": 13,
+     "wrong": 2,
+     "listed": 15,
+     "total": 39
+    }
+   }
+  }
+ ],
+ "cost": {
+  "claude-opus-5.5__high": {
+   "low": 0.19926,
+   "mid": 0.30509,
+   "high": 0.36959,
+   "inTokens": 19995,
+   "outTokens": 11256,
+   "latency": 124.0,
+   "method": "thinking 65 s x 99 tok/s (reply speed)"
+  },
+  "claude-opus-5.5__low": {
+   "low": 0.1335,
+   "mid": 0.17483,
+   "high": 0.17483,
+   "inTokens": 19995,
+   "outTokens": 4742,
+   "latency": 55.7,
+   "method": "no thinking block"
+  },
+  "claude-opus-5__high": {
+   "low": 0.28081,
+   "mid": 0.45372,
+   "high": 0.57497,
+   "inTokens": 19995,
+   "outTokens": 14150,
+   "latency": 172.5,
+   "method": "thinking 115 s x 84 tok/s (reply speed)"
+  },
+  "claude-sonnet-5.5__high": {
+   "low": 0.08382,
+   "mid": 0.12986,
+   "high": 0.15523,
+   "inTokens": 19995,
+   "outTokens": 8987,
+   "latency": 69.2,
+   "method": "thinking 35 s x 145 tok/s (reply speed)"
+  },
+  "claude-sonnet-5.5__low": {
+   "low": 0.0532,
+   "mid": 0.07386,
+   "high": 0.07386,
+   "inTokens": 19995,
+   "outTokens": 3387,
+   "latency": 27.0,
+   "method": "no thinking block"
+  },
+  "claude-sonnet-5__high": {
+   "low": 0.08706,
+   "mid": 0.14595,
+   "high": 0.18418,
+   "inTokens": 19995,
+   "outTokens": 10596,
+   "latency": 96.0,
+   "method": "thinking 66 s x 116 tok/s (reply speed)"
+  },
+  "gemini-3.1-pro__extended-thinking": {
+   "low": 0.05223,
+   "mid": 0.06521,
+   "high": 0.0849,
+   "inTokens": 6975,
+   "outTokens": 4271,
+   "latency": 80.3,
+   "method": "thinking ~ (80 - 59) s x 49 tok/s"
+  },
+  "gemini-3.1-pro__standard": {
+   "low": 0.04188,
+   "mid": 0.0486,
+   "high": 0.07936,
+   "inTokens": 6975,
+   "outTokens": 2887,
+   "latency": 59.0,
+   "method": "no thinking shown"
+  },
+  "gemini-3.8-flash__extended-thinking": {
+   "low": 0.05105,
+   "mid": 0.09052,
+   "high": 0.13251,
+   "inTokens": 6975,
+   "outTokens": 22744,
+   "latency": 178.0,
+   "method": "thinking ~ (178 - 25) s x 129 tok/s"
+  },
+  "gemini-3.8-flash__standard": {
+   "low": 0.01479,
+   "mid": 0.01731,
+   "high": 0.02838,
+   "inTokens": 6975,
+   "outTokens": 3220,
+   "latency": 25.0,
+   "method": "no thinking shown"
+  },
+  "gpt-5.6-luna__standard": {
+   "low": 0.01039,
+   "mid": 0.01915,
+   "high": 0.06087,
+   "inTokens": 189294,
+   "outTokens": 10784,
+   "latency": 305.4,
+   "method": "12 model turns (Python tool loop); hidden reasoning unknown"
+  },
+  "gpt-5.6-luna__thinking": {
+   "low": 0.01151,
+   "mid": 0.02877,
+   "high": 0.11051,
+   "inTokens": 215632,
+   "outTokens": 18364,
+   "latency": 1040.3,
+   "method": "15 model turns (Python tool loop); hidden reasoning unknown"
+  }
+ },
  "exp2": [
   {
    "id": "claude-opus-5.5__high",

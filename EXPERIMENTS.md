@@ -88,6 +88,56 @@ Titles are matched approximately, so small differences in wording or punctuation
 
 ---
 
+# Experiment 1, run 2: repeat run and cost estimate
+
+## Why
+
+To estimate cost (the chat apps show no token counts) we needed timing and usage data, and the original chats weren't kept. So all 12 setups were run again on 2026-10-04 with the same prompt and photos. This also gives a first look at run-to-run variation.
+
+## How it was run
+
+A coding agent (Claude Code with the Claude in Chrome extension, in Brave) drove the chat apps: it opened an incognito/temporary chat, set the model and mode, attached the six photos in order, pasted [benchmark/prompt.md](benchmark/prompt.md) and saved the reply exactly as the app's Copy button gave it. It also read each app's own conversation data to confirm the model and setting, and to record thinking and reply timestamps.
+
+- Replies: `results/raw_run2/<model>__<mode>.md` (header has the send time, latency and thinking notes).
+- Usage data per run: `results/raw_run2/usage/*.json` (Claude and ChatGPT; Gemini exposes nothing beyond the page).
+- Scores: `python benchmark/evaluate.py results/raw_run2 results/run2`.
+- Cost: `python benchmark/estimate_cost.py` → `results/run2/cost.csv`.
+
+Notes from the run:
+- Gemini 3.8 Flash with extended thinking failed once ("Sorry, something went wrong") and was retried in a new chat, as in experiment 2.
+- ChatGPT (Go plan) ran Python OCR on the photos even in standard mode (11 code calls), and its Think mode was served by a different model, `gpt-5-6-t-mini`, rather than `gpt-5-6`. Think mode took 17 minutes.
+- Claude hides the thinking text but records how long it thought (Opus 5.5 high: 65 s, Opus 5 high: 115 s, Sonnet 5 high: 66 s, Sonnet 5.5 high: 35 s; low effort: no thinking).
+
+## How cost is estimated
+
+It's the API-equivalent cost of the same request at list prices, as a low / mid / high range:
+- **Input:** prompt + six photos, by each provider's image-token rule (Claude: w×h/750 after resizing to ≤2576 px, ≤4,784 per image; Gemini 3: 1,120 per image; GPT-5.x: one token per 32×32 patch of the image as ChatGPT stored it).
+- **Output:** reply tokens (characters ÷ 3.5) plus thinking. Claude: thinking seconds × the same run's reply-writing speed. Gemini extended: extra seconds over the standard run × the standard run's speed. GPT: visible code and reasoning, plus unknown hidden reasoning (range 0 to latency × 50 tok/s), with the loop re-reading the images every turn.
+- Hidden system prompts the apps add are not counted. Both GPT modes are priced at the GPT-5.6 Luna rate (an assumption).
+
+## Results
+
+| Run | F1 run 1 → run 2 | Est. cost (mid) |
+| --- | ---: | ---: |
+| Claude Opus 5.5, high | 0.856 → 0.886 | $0.31 |
+| Claude Opus 5.5, low | 0.717 → **0.869** | $0.17 |
+| Claude Opus 5, high | 0.834 → 0.837 | $0.45 |
+| Claude Sonnet 5.5, high | 0.799 → 0.807 | $0.13 |
+| Claude Sonnet 5.5, low | 0.726 → 0.704 | $0.07 |
+| Claude Sonnet 5, high | 0.582 → 0.662 | $0.15 |
+| Gemini 3.8 Flash, extended thinking | 0.704 → 0.694 | $0.09 |
+| Gemini 3.8 Flash, standard | 0.687 → 0.618 | $0.02 |
+| Gemini 3.1 Pro, extended thinking | 0.610 → 0.654 | $0.07 |
+| Gemini 3.1 Pro, standard | 0.596 → 0.643 | $0.05 |
+| GPT 5.6 Luna, thinking | 0.450 → 0.592 | $0.03 |
+| GPT 5.6 Luna, standard | 0.474 → 0.569 | $0.02 |
+
+- **Variation between runs is large.** Opus 5.5 at low effort jumped by 0.15 F1. One run per setting can mislead.
+- **Extra effort pays off unevenly.** +0.01–0.02 F1 for Opus 5.5, Gemini 3.1 Pro and GPT; +0.10 for Sonnet 5.5 and +0.08 for Gemini 3.8 Flash.
+- The results page plots F1 against estimated cost (log scale) for run 2.
+
+---
+
 # Experiment 2: one photo per chat (hard photos)
 
 ## What we're trying to find out

@@ -416,7 +416,8 @@ The goal is to produce an interesting, measurable, reproducible experiment that 
 - [ ] Compare individual images vs a ZIP of all 6 images, where supported (accuracy, latency, tokens, cost, failure rate, consistency).
 - [ ] Image compression: test original vs moderately vs highly compressed images (tokens, upload size, latency, accuracy, hallucination rate).
 - [ ] Test other representations of the same information (PDF, DOCX, Markdown, plain text, base64) where applicable.
-- [ ] Run repeated trials to measure consistency.
+- [ ] Run repeated trials to measure consistency. (Started: experiment 1 was run a second time on 2026-10-04, see EXPERIMENTS.md; more repeats needed.)
+- [x] Estimate cost per run (API-equivalent, from chat timing and usage data) and plot accuracy vs cost.
 
 ### Presentation
 
