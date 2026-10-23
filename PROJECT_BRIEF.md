@@ -394,9 +394,9 @@ The goal is to produce an interesting, measurable, reproducible experiment that 
 
 ### MVP: Bookshelf benchmark
 
-- [x] Curate ground truth (originally 11 photographs; cut down to 6 photographs / 295 books after review. The other 5 are kept in `unused/`).
-- [x] Freeze the ground truth (treat `ground_truth.json` as immutable from here on).
-- [ ] Reorganise the repo into the preferred layout (`data/images/`, `data/ground_truth.json`, `results/`, `benchmark/`, `docs/`).
+- [x] Curate ground truth (originally 11 photographs; cut down to 6 photographs / 295 books after review. The other 5 are kept in `archive/`).
+- [x] Freeze the ground truth (treat `data/ground_truth.json` as immutable from here on).
+- [x] Reorganise the repo into the preferred layout (`data/images/`, `data/ground_truth.json`, `results/<experiment>/`, `benchmark/`, `docs/`; detailed notes in `notes/`, unused material in `archive/`).
 - [x] Write and freeze the standardized prompt (JSON output with title/author, instruction not to guess).
 - [x] Run at least 2–3 accessible multimodal models (e.g. Claude, GPT, Gemini) with the standardized prompt.
 - [x] Save all raw model outputs under `results/`, and record how each model was accessed (API vs consumer interface, model version, settings).
@@ -416,7 +416,7 @@ The goal is to produce an interesting, measurable, reproducible experiment that 
 - [ ] Compare individual images vs a ZIP of all 6 images, where supported (accuracy, latency, tokens, cost, failure rate, consistency).
 - [ ] Image compression: test original vs moderately vs highly compressed images (tokens, upload size, latency, accuracy, hallucination rate).
 - [ ] Test other representations of the same information (PDF, DOCX, Markdown, plain text, base64) where applicable.
-- [ ] Run repeated trials to measure consistency. (Started: experiment 1 was run a second time on 2026-10-04, see EXPERIMENTS.md; more repeats needed.)
+- [ ] Run repeated trials to measure consistency. (Started: experiment 1 was run a second time on 2026-10-04, see notes/experiments.md; more repeats needed.)
 - [x] Estimate cost per run (API-equivalent, from chat timing and usage data) and plot accuracy vs cost.
 
 ### Presentation

@@ -1,8 +1,8 @@
 # Single-photo prompt
 
-For experiment 2 (one photo per chat). Attach **one** image from `data/` (`e.jpg` or `f.jpg`), then send this exact text in the same message. Copy everything between the lines.
+For experiment 2 (one photo per chat). Attach **one** image from `data/images/` (`e.jpg` or `f.jpg`), then send this exact text in the same message. Copy everything between the lines.
 
-The rules are the same as in the standard prompt ([prompt.md](prompt.md)). Only the parts about several photos are removed.
+The rules are the same as in the standard prompt ([all_photos.md](all_photos.md)). Only the parts about several photos are removed.
 
 ---
 

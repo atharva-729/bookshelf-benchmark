@@ -3,662 +3,943 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bookshelf Benchmark</title>
-<meta name="description" content="How well do Claude, Gemini and GPT read the books on real bookshelf photos? Results heatmaps for two experiments.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='4' y='6' width='5' height='20' rx='1' fill='%232a78d6'/><rect x='11' y='9' width='5' height='17' rx='1' fill='%23256abf'/><rect x='18' y='5' width='4' height='21' rx='1' fill='%231c5cab'/><rect x='23' y='8' width='5' height='18' rx='1' transform='rotate(-10 25 17)' fill='%233987e5'/></svg>">
+<title>Can AI read a bookshelf?</title>
+<meta name="description" content="Claude, Gemini and ChatGPT were given the same six bookshelf photos and asked to list every book they could read. What they named was almost always right. What they missed was the story.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230b0b0b'/><rect x='5' y='7' width='5' height='19' fill='%23ffd43b'/><rect x='11' y='10' width='5' height='16' fill='%23f4f1e8'/><rect x='17' y='6' width='4' height='20' fill='%232a78d6'/><rect x='22' y='9' width='5' height='17' transform='rotate(-10 24.5 17.5)' fill='%23c2361a'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 :root {
   color-scheme: light;
-  --page: #f9f9f7;
-  --surface-1: #fcfcfb;
-  --text-primary: #0b0b0b;
-  --text-secondary: #52514e;
-  --text-muted: #6f6d68;
-  --grid: #e1e0d9;
-  --axis: #c3c2b7;
-  --border: rgba(11,11,11,0.10);
-  --accent: #256abf;
-  --tooltip-bg: #0b0b0b;
-  --tooltip-ink: #ffffff;
-  /* Heatmap scale, identical in light and dark: 0 = white, 1 = dark green.
-     Dark text on steps 0-8, white on 9-12 (every cell >= 4.8:1 contrast). */
-  --seq-0:#ffffff; --seq-1:#eef8ee; --seq-2:#dcf1dc; --seq-3:#c5e8c6; --seq-4:#aadcab; --seq-5:#8ccf8f; --seq-6:#6dc072; --seq-7:#4fae57; --seq-8:#2f8f3b; --seq-9:#237a31; --seq-10:#186528; --seq-11:#0f5220; --seq-12:#083f18;
-  --ink-0:#0b0b0b; --ink-1:#0b0b0b; --ink-2:#0b0b0b; --ink-3:#0b0b0b; --ink-4:#0b0b0b; --ink-5:#0b0b0b; --ink-6:#0b0b0b; --ink-7:#0b0b0b; --ink-8:#0b0b0b; --ink-9:#ffffff; --ink-10:#ffffff; --ink-11:#ffffff; --ink-12:#ffffff;
-  --cell-edge: rgba(11,11,11,0.12);
-  /* Scatter: one hue per provider (validated, light surface). */
-  --s-claude: #2a78d6; --s-gemini: #eb6834; --s-gpt: #1baf7a;
+  --paper: #f4f1e8; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #3b3a36; --hair: #c9c6ba;
+  --blue: #1c4f9c; --red: #c2361a; --green: #0a7d4f; --yellow: #ffd43b;
+  --s-claude: #2a78d6; --s-gpt: #eb6834; --s-gemini: #1baf7a;
+  --q0:#cde2fb; --q1:#b7d3f6; --q2:#9ec5f4; --q3:#86b6ef; --q4:#6da7ec; --q5:#5598e7; --q6:#3987e5; --q7:#2a78d6; --q8:#256abf; --q9:#1c5cab; --q10:#184f95;
+  --f0:#0b0b0b; --f1:#0b0b0b; --f2:#0b0b0b; --f3:#0b0b0b; --f4:#0b0b0b; --f5:#0b0b0b; --f6:#0b0b0b; --f7:#ffffff; --f8:#ffffff; --f9:#ffffff; --f10:#ffffff;
 }
-@media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
-    color-scheme: dark;
-    --page: #0d0d0d; --surface-1: #1a1a19; --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #9a988f;
-    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #86b6ef;
-    --tooltip-bg: #ffffff; --tooltip-ink: #0b0b0b;
-    --s-claude: #3987e5; --s-gemini: #d95926; --s-gpt: #199e70;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --page: #0d0d0d; --surface-1: #1a1a19; --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #9a988f;
-  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --accent: #86b6ef;
-  --tooltip-bg: #ffffff; --tooltip-ink: #0b0b0b;
-  --s-claude: #3987e5; --s-gemini: #d95926; --s-gpt: #199e70;
-}
-
 * { box-sizing: border-box; }
-html, body { margin: 0; }
-body {
-  background: var(--page);
-  color: var(--text-primary);
-  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
-  -webkit-font-smoothing: antialiased;
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 "IBM Plex Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+.prose { max-width: 680px; }
+h1, h2, h3 { font-family: "Newsreader", Georgia, serif; font-weight: 500; letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(32px, 3.8vw, 50px); line-height: 1.04; }
+h2 { font-size: clamp(25px, 2.8vw, 34px); line-height: 1.1; margin-bottom: 12px; }
+h3 { font-size: 21px; line-height: 1.25; margin: 30px 0 8px; }
+p { margin: 0 0 16px; }
+a { color: inherit; text-decoration-color: var(--yellow); text-decoration-thickness: 3px; text-underline-offset: 3px; }
+mark { background: var(--yellow); color: var(--ink); padding: 1px 4px; border-radius: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.mono, code { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+code { font-size: 0.92em; }
+.lede { font-size: 17px; line-height: 1.5; max-width: 78ch; }
+.more { font: 600 12.5px/1 "IBM Plex Mono", monospace; white-space: nowrap; }
+.note { font-size: 14.5px; line-height: 1.5; opacity: 0.86; }
+
+/* bands: each chapter is a full-width strip with its own colour */
+.band { padding: 60px 0; background: var(--paper); color: var(--ink); }
+.band.ink { background: var(--ink); color: var(--paper); }
+.band.blue { background: var(--blue); color: #ffffff; }
+.band.red { background: var(--red); color: #ffffff; }
+.band.green { background: var(--green); color: #ffffff; }
+.band.white { background: var(--surface); }
+.chapter { display: flex; align-items: baseline; gap: 14px; font: 600 13px/1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
+.chapter b { font: 500 40px/0.8 "Newsreader", serif; letter-spacing: -0.02em; color: var(--red); }
+.band.ink .chapter b, .band.blue .chapter b, .band.red .chapter b, .band.green .chapter b { color: var(--yellow); }
+
+/* the brief: question, approach and answer on one screen */
+header.band { padding: 22px 0 40px; }
+.topline { display: flex; justify-content: space-between; gap: 10px 24px; flex-wrap: wrap; font: 500 12.5px/1.4 "IBM Plex Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; padding-bottom: 34px; }
+.topline > span, .topline nav i { opacity: 0.7; }
+.topline nav { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.topline nav a { text-decoration: none; opacity: 0.8; }
+.topline nav a:hover { opacity: 1; text-decoration: underline; text-decoration-color: var(--yellow); }
+.topline nav i { font-style: normal; }
+.kicker { display: flex; align-items: center; gap: 12px; font: 600 12.5px/1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
+.kicker::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: 0.3; }
+.kicker b { color: var(--red); }
+.band.ink .kicker b, .band.blue .kicker b, .band.green .kicker b, .band.red .kicker b { color: var(--yellow); }
+.aimgrid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 44px; align-items: start; }
+.ps { margin: 16px 0 0; font-size: 16.5px; line-height: 1.5; }
+.answer { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 20px; }
+.answer div { padding: 12px 14px; font-weight: 600; font-size: 15px; line-height: 1.35; color: #ffffff; }
+.answer small { display: block; font: 600 11px/1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; opacity: 0.9; }
+.answer .y { background: var(--green); } .answer .n { background: var(--red); }
+.aims { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+.aims li { display: grid; grid-template-columns: 84px 1fr; gap: 14px; padding: 11px 16px; border-left: 4px solid #55544e; background: #1c1c1a; font-size: 15px; line-height: 1.45; color: #d9d6cb; }
+.aims li > b { font: 600 11.5px/1.9 "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #a3a096; }
+.aims li strong { color: #ffffff; font-weight: 600; }
+.aims li.main { border-left-color: var(--yellow); background: #2d2a12; color: #ffffff; font-size: 16px; padding: 14px 16px; }
+.aims li.main > b { color: var(--yellow); }
+.aims .more { color: var(--yellow); }
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin-top: 26px; }
+.figures div { padding: 18px 20px 20px; color: var(--ink); }
+.figures div:nth-child(1) { background: var(--yellow); }
+.figures div:nth-child(2) { background: #ffffff; }
+.figures div:nth-child(3) { background: #8fc0f5; }
+.figures div:nth-child(4) { background: #ff9a73; }
+.figures strong { display: block; font: 500 34px/1 "Newsreader", serif; }
+.figures span { font-size: 14.5px; font-weight: 500; }
+
+/* the six photos */
+.shelfgrid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: 40px; align-items: start; margin-top: 22px; }
+.shelves { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 16px; }
+.shelves a.ph { display: block; aspect-ratio: 4 / 3; overflow: hidden; border: 2px solid var(--ink); background: var(--hair); }
+.shelves a.ph:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.shelves img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s; }
+.shelves a.ph:hover img { transform: scale(1.04); }
+.shelves figcaption { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.shelves figcaption b { font: 500 26px/1 "Newsreader", serif; }
+.shelves figcaption span:last-child { margin-left: auto; font: 500 13px/1 "IBM Plex Mono", monospace; }
+.tag { display: inline-block; font: 600 11.5px/1 "IBM Plex Mono", monospace; letter-spacing: 0.04em; padding: 5px 7px; border: 2px solid var(--ink); background: var(--surface); color: var(--ink); text-transform: uppercase; }
+.tag.easy, .tag.good { background: var(--green); border-color: var(--green); color: #ffffff; }
+.tag.medium { background: var(--yellow); border-color: var(--yellow); }
+.tag.hard, .tag.bad { background: var(--red); border-color: var(--red); color: #ffffff; }
+.tag.part { background: var(--yellow); border-color: var(--yellow); }
+
+/* panels keep their own light surface on any band */
+.panel { background: var(--surface); color: var(--ink); border: 2px solid var(--ink); }
+.panel.pad { padding: 20px 24px; }
+.chips { display: inline-flex; flex-wrap: wrap; border: 2px solid var(--ink); background: var(--surface); }
+.chips button { font: 500 14px/1 "IBM Plex Mono", monospace; color: var(--ink); background: transparent; border: 0; border-right: 1px solid var(--ink); cursor: pointer; padding: 10px 13px; }
+.chips button:last-child { border-right: 0; }
+.chips button[aria-pressed="true"] { background: var(--ink); color: var(--yellow); }
+.chips button:focus-visible { outline: 3px solid var(--red); outline-offset: -3px; }
+.bar { display: flex; justify-content: space-between; align-items: center; gap: 12px 16px; flex-wrap: wrap; margin: 26px 0 14px; }
+.bar .ctrls { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 7px; vertical-align: baseline; flex: none; }
+.dot.Claude { background: var(--s-claude); } .dot.GPT { background: var(--s-gpt); } .dot.Gemini { background: var(--s-gemini); }
+
+/* heatmap */
+.heat { width: 100%; border-collapse: separate; border-spacing: 3px; table-layout: fixed; }
+.heat th { font: 600 13.5px/1.25 "IBM Plex Mono", monospace; padding: 8px 4px; text-align: center; vertical-align: bottom; }
+.heat thead th small { display: block; font: 400 12px/1.3 "IBM Plex Sans", sans-serif; color: var(--ink2); margin-top: 2px; }
+.heat th[scope="row"] { text-align: left; width: 196px; font: 600 15px/1.25 "IBM Plex Sans", sans-serif; padding: 4px 10px 4px 0; vertical-align: middle; }
+.heat th[scope="row"] small { display: block; font: 400 13px/1.3 "IBM Plex Sans", sans-serif; color: var(--ink2); margin-left: 18px; }
+.heat thead th:first-child { width: 186px; }
+.heat th.all { width: 92px; }
+.heat td { text-align: center; padding: 9px 3px; border-radius: 3px; height: 58px; cursor: pointer; }
+.heat td:hover { outline: 3px solid var(--ink); outline-offset: 1px; }
+.heat td:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.heat td b { display: block; font: 600 18px/1.1 "IBM Plex Sans", sans-serif; }
+.heat td span { font-size: 12px; line-height: 1.25; display: block; margin-top: 3px; }
+.heat td.all { box-shadow: inset 0 0 0 2px var(--ink); }
+.heat tr.gap td, .heat tr.gap th { height: 6px; padding: 0; cursor: default; }
+.heat tr.gap td:hover { outline: 0; }
+.scale { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink2); flex-wrap: wrap; }
+.scale i { display: inline-block; width: 11px; height: 12px; }
+.results { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 24px; align-items: start; }
+.key { background: var(--paper); border: 2px solid var(--ink); padding: 16px 18px 6px; font-size: 13.5px; line-height: 1.45; }
+.key h4 { font: 600 12px/1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 12px; }
+.key .demo { display: grid; grid-template-columns: 84px 1fr; gap: 12px; align-items: center; margin-bottom: 12px; }
+.key .demo div { background: var(--q7); color: #ffffff; text-align: center; padding: 9px 4px; border-radius: 3px; }
+.key .demo div b { display: block; font-size: 17px; line-height: 1.1; } .key .demo div span { font-size: 11.5px; }
+.key dl { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--hair); }
+.key dt { font-weight: 600; margin-top: 7px; } .key dd { margin: 0; color: var(--ink2); }
+.key p { margin: 10px 0; }
+.points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 22px; }
+.points > div { padding: 14px 18px; background: var(--paper); border-left: 6px solid var(--ink); font-size: 15px; }
+.points b { display: block; font-size: 16.5px; margin-bottom: 2px; }
+.bottom { margin-top: 26px; padding: 16px 20px; background: var(--ink); color: var(--paper); font-size: 17px; line-height: 1.45; }
+.bottom b, .bottom .more { color: var(--yellow); }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin: 30px 0 8px; }
+.stat { padding: 22px 22px 24px; color: var(--ink); background: var(--surface); }
+.stat strong { display: block; font: 500 clamp(34px, 4.4vw, 54px)/1 "Newsreader", serif; letter-spacing: -0.02em; }
+.stat span { display: block; margin-top: 8px; font-size: 15px; line-height: 1.4; }
+.stat.r { background: var(--red); color: #ffffff; }
+.stat.g { background: var(--green); color: #ffffff; }
+.stat.y { background: var(--yellow); }
+.stat.b { background: var(--blue); color: #ffffff; }
+.stat.k { background: var(--ink); color: var(--paper); }
+
+/* charts */
+svg.chart { width: 100%; height: auto; display: block; }
+svg.chart text { font-family: "IBM Plex Sans", sans-serif; fill: var(--ink); }
+svg.chart .grid { stroke: #e2dfd4; stroke-width: 1; }
+svg.chart .tick { font: 500 12.5px "IBM Plex Mono", monospace; fill: var(--ink2); }
+svg.chart .axis { font-size: 13.5px; font-weight: 600; }
+svg.chart .lab { font-size: 13.5px; font-weight: 600; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+svg.chart .lab2 { font-size: 12.5px; fill: var(--ink2); }
+svg.chart .pt, svg.chart .row { cursor: pointer; outline: none; }
+svg.chart .row:hover .hit, svg.chart .row:focus-visible .hit { fill: #f1eee4; }
+svg.chart .pt:focus-visible .ring { stroke: var(--ink); stroke-width: 2.5; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14.5px; margin-top: 12px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i.hollow { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2.5px solid currentColor; }
+.legend i.solid { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+details.tableview { margin-top: 14px; }
+details.tableview summary { cursor: pointer; font: 600 13px/1.4 "IBM Plex Mono", monospace; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--paper); padding: 10px 12px; font-size: 13.5px; line-height: 1.45; max-width: 290px; border-radius: 3px; opacity: 0; transition: opacity .1s; }
+#tip b { display: block; font-size: 14.5px; color: var(--yellow); }
+#tip i { font-style: normal; opacity: 0.75; }
+
+/* the box behind a tile: every book that tile was scored on */
+dialog { width: min(1080px, calc(100% - 28px)); max-height: calc(100vh - 40px); padding: 0; border: 2px solid var(--ink); background: var(--surface); color: var(--ink); }
+dialog::backdrop { background: rgba(11, 11, 11, 0.62); }
+.dhead { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 16px 20px; background: var(--surface); border-bottom: 2px solid var(--ink); }
+.dhead h3 { margin: 0; font-size: 23px; }
+.dhead p { margin: 4px 0 0; font-size: 14px; color: var(--ink2); }
+.dhead button { font: 600 13px/1 "IBM Plex Mono", monospace; background: var(--ink); color: var(--yellow); border: 0; padding: 11px 13px; cursor: pointer; white-space: nowrap; }
+.dhead button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.dkey { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 10px 20px; font-size: 13px; color: var(--ink2); background: var(--paper); }
+.dphoto { padding: 18px 20px 22px; border-top: 2px solid var(--ink); }
+.dphoto:first-of-type { border-top: 0; }
+.dphoto .top { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: center; margin-bottom: 14px; }
+.dphoto .top img { width: 150px; aspect-ratio: 4 / 3; object-fit: cover; border: 2px solid var(--ink); display: block; }
+.dphoto .top h4 { font: 500 22px/1.2 "Newsreader", serif; margin: 0 0 4px; }
+.dphoto .top p { margin: 0; font-size: 14px; color: var(--ink2); }
+.lists { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; background: var(--paper); padding: 3px; }
+.lists > div { background: var(--surface); padding: 12px 14px 14px; border-top: 6px solid var(--hair); }
+.lists > div.found { border-color: var(--green); } .lists > div.extra { border-color: var(--red); } .lists > div.missed { border-color: var(--ink); }
+.lists h5 { font: 600 12px/1.2 "IBM Plex Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 8px; }
+.lists ul { list-style: none; margin: 0; padding: 0; font-size: 13.5px; line-height: 1.35; }
+.lists li { padding: 4px 0; border-bottom: 1px solid #ebe8de; }
+.lists li:last-child { border-bottom: 0; }
+.lists li small { display: block; color: var(--ink2); font-size: 12px; }
+.lists .none { color: var(--ink2); font-size: 13px; }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin: 30px 0; }
+.steps > div { padding: 22px; background: var(--surface); color: var(--ink); border-top: 8px solid var(--ink); }
+.steps > div:nth-child(1) { border-color: var(--yellow); }
+.steps > div:nth-child(2) { border-color: #ff9a73; }
+.steps > div:nth-child(3) { border-color: #6fd6ad; }
+.steps i { font: 600 13px/1 "IBM Plex Mono", monospace; font-style: normal; }
+.steps h4 { font: 600 18px/1.3 "IBM Plex Sans", sans-serif; margin: 10px 0 6px; }
+.steps p { font-size: 15px; margin: 0; }
+.fails { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 26px; }
+.fail { background: var(--surface); color: var(--ink); padding: 18px 20px; }
+.fail h4 { font: 600 17px/1.3 "IBM Plex Sans", sans-serif; margin: 0 0 2px; }
+.fail > p { margin: 0 0 12px; font-size: 14px; color: var(--ink2); }
+.fail ul { list-style: none; margin: 0; padding: 0; }
+.fail li { font-size: 15px; padding: 6px 0; border-top: 1px solid #ebe8de; }
+.fail s { color: var(--red); text-decoration-thickness: 2px; }
+.fail .arrow { padding: 0 6px; color: var(--ink2); }
+.fail small { color: var(--ink2); white-space: nowrap; }
+
+table.plain { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.plain th, table.plain td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+table.plain thead th { border-bottom: 2px solid var(--ink); font: 600 12.5px/1.3 "IBM Plex Mono", monospace; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: bottom; }
+table.plain td.num, table.plain th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.plain tr:last-child td { border-bottom: 0; }
+table.plain small { color: var(--ink2); }
+table.plain td.hit, table.plain td.miss { font-weight: 600; }
+td.hit { background: #d6f0e2; } td.miss { background: #fbe0d8; }
+.up { font-weight: 600; color: var(--green); } .down { font-weight: 600; color: var(--red); }
+blockquote { align-self: start; margin: 18px 0; padding: 20px 24px; background: var(--yellow); color: var(--ink); font: 500 22px/1.35 "Newsreader", serif; }
+blockquote cite { display: block; font: 500 13px/1.4 "IBM Plex Mono", monospace; font-style: normal; margin-top: 10px; }
+ul.tight { padding-left: 20px; margin: 0 0 16px; }
+ul.tight li { margin-bottom: 9px; }
+pre { background: var(--surface); color: var(--ink); padding: 18px 20px; overflow-x: auto; font: 500 13.5px/1.6 "IBM Plex Mono", monospace; margin: 14px 0; white-space: pre-wrap; }
+pre i { color: #6b6a63; font-style: normal; }
+.scroll { overflow-x: auto; }
+.scroll > * { min-width: 720px; }
+#story-start { padding: 22px 0; background: var(--yellow); color: var(--ink); }
+#story-start .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 24px; }
+#story-start b { font: 500 24px/1.2 "Newsreader", serif; }
+#story-start span { font: 500 12.5px/1.4 "IBM Plex Mono", monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+.story .band { padding: 72px 0; }
+footer { padding: 30px 0 60px; font-size: 14.5px; background: var(--ink); color: var(--paper); border-top: 1px solid #45443f; }
+
+@media (max-width: 760px) {
+  .wrap { width: calc(100% - 32px); }
+  .band, .story .band { padding: 44px 0; }
+  .figures, .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aimgrid, .shelfgrid, .results, .points, .two, .fails { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .points, .fails { gap: 3px; }
+  .aims li { grid-template-columns: 1fr; gap: 0; }
+  .shelves { grid-template-columns: 1fr 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .stat { padding: 16px 16px 18px; }
+  .stat strong { font-size: 26px; }
+  .lists { grid-template-columns: 1fr; }
+  .dphoto .top { grid-template-columns: 96px 1fr; }
+  .dphoto .top img { width: 96px; }
 }
-a { color: var(--accent); }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 32px 16px 64px; }
-
-header.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
-h1 { font-size: 30px; line-height: 1.15; margin: 0 0 8px; letter-spacing: -0.01em; }
-.lede { color: var(--text-secondary); margin: 0; max-width: 680px; font-size: 16px; }
-.meta { color: var(--text-muted); font-size: 13px; margin-top: 10px; }
-.theme-btn {
-  flex: none; font: inherit; font-size: 13px; color: var(--text-secondary); background: var(--surface-1);
-  border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer;
-}
-.theme-btn:hover { color: var(--text-primary); }
-
-.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 28px 0 8px; }
-.tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.tile .label { font-size: 13px; color: var(--text-secondary); }
-.tile .value { font-size: 32px; font-weight: 650; line-height: 1.1; margin: 6px 0 4px; }
-.tile .sub { font-size: 13px; color: var(--text-muted); }
-
-section.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 20px; }
-h2 { font-size: 20px; margin: 0 0 4px; }
-.card > p.desc { color: var(--text-secondary); margin: 0 0 16px; max-width: 760px; }
-.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 14px; }
-.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; padding: 2px; }
-.seg button {
-  font: inherit; font-size: 13px; border: 0; background: transparent; color: var(--text-secondary);
-  padding: 5px 12px; border-radius: 6px; cursor: pointer;
-}
-.seg button[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); }
-.seg button:focus-visible, .cell:focus-visible, .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.legend { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
-.legend .bar {
-  width: 160px; height: 10px; border-radius: 4px; box-shadow: inset 0 0 0 1px var(--cell-edge);
-  background: linear-gradient(90deg, var(--seq-0), var(--seq-3), var(--seq-6), var(--seq-9), var(--seq-12));
-}
-
-.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-table.heat { border-collapse: separate; border-spacing: 2px; font-size: 13px; min-width: 640px; width: 100%; }
-table.heat th { font-weight: 600; color: var(--text-secondary); text-align: center; padding: 4px 6px; vertical-align: bottom; }
-table.heat th .small { display: block; font-weight: 400; color: var(--text-muted); font-size: 12px; }
-table.heat th.group { border-bottom: 1px solid var(--axis); padding-bottom: 6px; }
-table.heat th.rowh {
-  text-align: left; position: sticky; left: 0; background: var(--surface-1); z-index: 1;
-  padding: 0 12px 0 0; white-space: nowrap; font-weight: 600; color: var(--text-primary);
-}
-table.heat tbody th.rowh { vertical-align: middle; }
-table.heat th.rowh .mode { font-weight: 400; color: var(--text-secondary); }
-table.heat thead th.rowh { color: var(--text-muted); font-weight: 400; vertical-align: bottom; }
-td.cell {
-  box-shadow: inset 0 0 0 1px var(--cell-edge);
-  height: 38px; min-width: 64px; text-align: center; border-radius: 4px;
-  font-variant-numeric: tabular-nums; font-weight: 600; cursor: default;
-}
-td.gap { width: 10px; min-width: 10px; padding: 0; }
-td.delta { text-align: right; padding: 0 4px 0 10px; color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
-td.delta strong { color: var(--text-primary); }
-td.empty { color: var(--text-muted); font-weight: 400; background: transparent; border: 1px dashed var(--grid); }
-.note { font-size: 13px; color: var(--text-muted); margin: 12px 0 0; }
-
-.photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.photos figure { margin: 0; }
-.photos a.ph { display: block; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 4 / 3; background: var(--grid); }
-.photos a.ph:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.photos img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .2s; }
-.photos a.ph:hover img { transform: scale(1.03); }
-.photos figcaption { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; font-size: 14px; }
-.photos figcaption .id { font-size: 18px; font-weight: 700; }
-.photos figcaption .diff { font-weight: 600; }
-.photos figcaption .count { color: var(--text-secondary); margin-left: auto; font-variant-numeric: tabular-nums; }
-
-table.compare { border-collapse: collapse; font-size: 14px; width: 100%; min-width: 560px; }
-table.compare th, table.compare td { text-align: left; vertical-align: top; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--grid); }
-table.compare thead th { color: var(--text-secondary); font-weight: 600; border-bottom-color: var(--axis); }
-table.compare tbody th { font-weight: 600; white-space: nowrap; width: 1%; }
-table.compare td { color: var(--text-secondary); }
-
-.fails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.fail { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
-.fail h3 { font-size: 15px; margin: 0 0 2px; }
-.fail p { margin: 0 0 10px; font-size: 13px; color: var(--text-muted); }
-.card .fail ul { list-style: none; margin: 0; padding: 0; }
-.card .fail li { font-size: 14px; color: var(--text-primary); margin: 0 0 6px; padding: 0; }
-.fail li:last-child { margin-bottom: 0; }
-.fail .said { color: var(--text-secondary); text-decoration: line-through; text-decoration-color: var(--axis); }
-.fail .arrow { color: var(--text-muted); padding: 0 4px; }
-.fail .tag { color: var(--text-muted); font-size: 12.5px; white-space: nowrap; }
-
-ol.findings { margin: 8px 0 0; padding-left: 20px; }
-ol.findings li { margin: 0 0 10px; }
-ol.findings li strong { color: var(--text-primary); }
-.card ul { margin: 8px 0 0; padding-left: 20px; }
-.card ul li { margin-bottom: 6px; color: var(--text-secondary); }
-
-tr.spacer td { height: 12px; padding: 0; }
-
-svg.scatter { display: block; width: 100%; height: auto; font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; }
-svg.scatter .grid { stroke: var(--grid); stroke-width: 1; }
-svg.scatter .tick { fill: var(--text-muted); }
-svg.scatter .title { fill: var(--text-secondary); font-size: 12.5px; }
-svg.scatter .corner { fill: var(--text-muted); font-size: 12.5px; }
-svg.scatter .lbl { fill: var(--text-primary); font-size: 12.5px; font-weight: 600; paint-order: stroke; stroke: var(--surface-1); stroke-width: 4px; stroke-linejoin: round; }
-svg.scatter .pt { cursor: default; outline: none; }
-svg.scatter .pt:focus-visible .hit { stroke: var(--accent); stroke-width: 2; }
-.key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--text-secondary); margin: 4px 0 10px; }
-.key span { display: inline-flex; align-items: center; gap: 6px; }
-.key i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; }
-.key i.hollow { background: var(--surface-1) !important; border: 2.5px solid var(--text-secondary); width: 12px; height: 12px; }
-details.tableview { margin-top: 12px; }
-details.tableview summary { cursor: pointer; font-size: 13px; color: var(--accent); }
-table.costs { border-collapse: collapse; font-size: 13px; width: 100%; min-width: 620px; margin-top: 10px; font-variant-numeric: tabular-nums; }
-table.costs th, table.costs td { padding: 6px 10px 6px 0; border-bottom: 1px solid var(--grid); text-align: right; }
-table.costs th:first-child, table.costs td:first-child { text-align: left; }
-table.costs thead th { color: var(--text-secondary); font-weight: 600; border-bottom-color: var(--axis); }
-table.costs td { color: var(--text-secondary); }
-table.costs td:first-child { color: var(--text-primary); }
-
-#tip {
-  position: fixed; z-index: 10; pointer-events: none; max-width: 280px;
-  background: var(--tooltip-bg); color: var(--tooltip-ink); border-radius: 8px;
-  padding: 8px 10px; font-size: 12.5px; line-height: 1.45; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-  opacity: 0; transform: translateY(4px); transition: opacity .1s, transform .1s;
-}
-#tip.on { opacity: 1; transform: none; }
-#tip b { font-weight: 650; }
-#tip .row { display: flex; justify-content: space-between; gap: 16px; font-variant-numeric: tabular-nums; }
-#tip .dim { opacity: 0.75; }
-
-footer { margin-top: 28px; color: var(--text-muted); font-size: 13px; }
-
-@media (max-width: 720px) {
-  .tiles { grid-template-columns: 1fr; }
-  .photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .fails { grid-template-columns: 1fr; }
-  h1 { font-size: 25px; }
-  section.card { padding: 16px; }
-}
-@media (forced-colors: active) {
-  td.cell { border: 1px solid CanvasText; }
-}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } #tip { transition: none; } .shelves img { transition: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <div>
-      <h1>Bookshelf Benchmark</h1>
-      <p class="lede">Can AI chat models read a bookshelf? We gave Claude, Gemini and GPT the same six real bookshelf photos and asked them to list every book whose title they could read, then checked their answers against a hand-verified list.</p>
-      <p class="meta" id="meta"></p>
-    </div>
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch colour theme">Theme: auto</button>
-  </header>
+<div id="tip" role="status"></div>
 
-  <div class="tiles" id="tiles"></div>
-
-  <section class="card" aria-labelledby="h-photos">
-    <h2 id="h-photos">The photos</h2>
-    <p class="desc">Six real bookshelf photos: two easy, two medium and two hard. The number is how many books are in the answer key for that photo. Click a photo to open it larger.</p>
-    <div class="photos" id="photos"></div>
-  </section>
-
-  <section class="card" aria-labelledby="h-exp1">
-    <h2 id="h-exp1">Experiment 1: all six photos in one message</h2>
-    <p class="desc">Each row is one model and mode, given all six photos at once in the normal chat app. Rows are grouped by model, higher effort first, so each pair shows what the extra effort bought; models run at only one setting come last. The experiment was run twice, a week apart, with the same prompt and photos: switch between the runs to see how much the results move. Hover or focus a cell for the details.</p>
-    <div class="controls">
-      <div class="seg" role="group" aria-label="Which run of experiment 1" data-run="exp1">
-        <button type="button" data-run="1" aria-pressed="true">Run 1</button>
-        <button type="button" data-run="2" aria-pressed="false">Run 2</button>
+<header class="band ink" id="brief">
+  <div class="wrap">
+    <div class="topline"><span>bookshelf-benchmark &middot; October 2026</span><nav><a href="#photos">Photos</a><a href="#results">Results</a><a href="#one-photo">One photo at a time</a><a href="#cost">Cost</a><i>|</i><a href="#story">Full story</a><a href="#caveats">Caveats</a></nav></div>
+    <div class="aimgrid">
+      <div>
+        <div class="kicker"><b>The question</b></div>
+        <h1>Can an AI chat model read a <mark>bookshelf?</mark></h1>
+        <p class="ps">We gave Claude, Gemini and ChatGPT the same six photos of real bookshelves and asked each one: <strong>which books can you read here?</strong> Then we checked every answer against a hand-verified list of 295 books.</p>
+        <div class="answer">
+          <div class="y"><small>Short answer: carefully</small>What they name is almost always there: 84&ndash;98% of the books they listed were really on the shelf.</div>
+          <div class="n"><small>But not thoroughly</small>The best setup found 82% of the books. The weakest found under a third. Crowded shelves hurt most.</div>
+        </div>
       </div>
-      <div class="seg" role="group" aria-label="Metric for experiment 1" data-target="exp1">
-        <button type="button" data-metric="f1" aria-pressed="true">F1</button>
-        <button type="button" data-metric="recall" aria-pressed="false">Recall</button>
-        <button type="button" data-metric="precision" aria-pressed="false">Precision</button>
+      <div>
+        <div class="kicker"><b>What we did</b></div>
+        <ul class="aims">
+          <li><b>Photos</b><span><strong>6 real bookshelf photos</strong>, from a tidy shelf to a crowded one. <strong>295 books</strong> in the answer key, each checked by a person.</span></li>
+          <li><b>Models</b><span><strong>7 models</strong> from Anthropic, Google and OpenAI. With their thinking settings, that is <strong>12 setups</strong>, used in the normal chat apps.</span></li>
+          <li class="main"><b>Task</b><span>The same prompt for every setup: all six photos in one message, <strong>&ldquo;list every book whose title you can read. Do not guess.&rdquo;</strong> <a class="more" href="#setup">See the prompt &darr;</a></span></li>
+          <li><b>Scoring</b><span>Two numbers per answer: <strong>how many of the books it found</strong>, and <strong>how many of the books it named were really there</strong>. Small differences in wording are forgiven. <a class="more" href="#scoring">How &darr;</a></span></li>
+        </ul>
       </div>
-      <div class="legend" aria-hidden="true"><span>0</span><span class="bar"></span><span>1</span></div>
     </div>
-    <div class="scroll"><table class="heat" id="exp1"></table></div>
-    <p class="note">Photos a and b are easy, c and d medium, e and f hard. Book counts are the number of books in the answer key for that photo. Run 2 was done on 4 October 2026 in incognito/temporary chats, driven through the browser by a coding agent.</p>
-  </section>
+    <div class="figures" id="figures"></div>
+  </div>
+</header>
 
-  <section class="card" aria-labelledby="h-cost">
-    <h2 id="h-cost">Accuracy vs cost</h2>
-    <p class="desc">Each point is one model setup from run 2. Up is more accurate and left is cheaper, so the top-left corner is best. Cost is on a log scale. Lines join the same model at its two settings; the filled point is the higher-effort one. The chat apps don't report token counts, so the cost is an estimate of what the same request would cost through the API at list prices, and the whisker shows its low to high range.</p>
-    <div class="key" id="costKey"></div>
-    <div id="scatter"></div>
-    <details class="tableview">
-      <summary>Show the numbers as a table</summary>
-      <div class="scroll"><table class="costs" id="costTable"></table></div>
-    </details>
-    <ul class="note" style="padding-left:18px">
-      <li><strong>Input:</strong> the prompt plus the six photos, using each provider's image-token rule (Claude: up to about 4,800 tokens per large photo; Gemini: 1,120 per photo; GPT: one token per 32×32 patch of the image as ChatGPT stored it).</li>
-      <li><strong>Output:</strong> the saved reply, plus thinking. The apps hide the thinking itself. For Claude, the chat data records how long it thought, and that time is multiplied by the speed at which the same run wrote its reply. For Gemini, it's the extra time over the standard run of the same model.</li>
-      <li><strong>ChatGPT:</strong> even in standard mode it ran Python OCR on the photos in a loop (12–15 model turns), re-reading the images each turn, and its "Think" mode was served by a different model (gpt-5-6-t-mini). Its hidden reasoning is unknown, so its range is the widest. Both GPT modes are priced at the GPT-5.6 Luna rate.</li>
-      <li>Hidden system prompts added by the apps are not counted. Treat the costs as rough: good for comparing orders of magnitude, not cents.</li>
-    </ul>
-  </section>
+<main>
+<section class="band" id="photos">
+  <div class="wrap">
+    <div class="kicker"><b>The data</b></div>
+    <h2>Six real shelves, from tidy to chaotic</h2>
+    <div class="shelfgrid">
+      <div class="shelves" id="shelves"></div>
+      <ul class="tight">
+        <li><b>Two easy, two medium, two hard.</b> The number of books varies a lot, from 8 on photo d to <mark>108 on photo e</mark>.</li>
+        <li><b>The answer key is a list of every book a person confirmed</b> in the photo. Books nobody could read with confidence were left out. <a class="more" href="#answer-source">How it was made &darr;</a></li>
+        <li><b>Each title counts once per photo</b>, even with several copies on the shelf.</li>
+        <li><b>The key is frozen.</b> A model naming a book does not add it to the key, even when the book turns out to be real. <a class="more" href="#caveats">Caveats &darr;</a></li>
+        <li class="note">Click a photo to open it larger.</li>
+      </ul>
+    </div>
+    <h3 id="answer-source" style="margin-top:44px">Where the answer key came from</h3>
+    <p class="prose">Every model is scored against this list, so it had to be right. It was drafted by an AI working slowly, then checked book by book by a person.</p>
+    <div class="steps" style="margin-top:18px">
+      <div><i>STEP 1</i><h4>Cut each photo into sections</h4><p>Claude Opus 5.5 at medium effort, running in Claude Code, split every photo into small sections of the full-resolution image, over a hundred in all, and read the spines in each one.</p></div>
+      <div><i>STEP 2</i><h4>Draft the full list</h4><p>From those sections it wrote one list per photo: every title it could read, with the author where it could.</p></div>
+      <div><i>STEP 3</i><h4>A person checks every book</h4><p>Each book on the list was checked by hand against the photo: there, or not there. Nothing went into the answer key without a person seeing it.</p></div>
+    </div>
+    <div class="bottom" style="margin-top:3px"><b>The biggest lesson of the project started here.</b> The same model did far better inside Claude Code at medium effort, working section by section, than in the Claude.ai chat at high effort, which found 77% of the books on the hardest photo. The harness around a model matters, not just the model. <a class="more" href="#harness">More &darr;</a></div>
+    <p class="note" style="margin-top:14px">The work started with 11 photos. Five still had too many readable books left to check and were dropped, leaving 295 books on 6 photos. The list was then frozen.</p>
+  </div>
+</section>
 
-  <section class="card" aria-labelledby="h-exp2">
-    <h2 id="h-exp2">Experiment 2: the hard photos, one per chat</h2>
-    <p class="desc">The two hard photos, sent on their own instead of with the other five. Each pair of columns compares the same model on the same photo: six photos at once (run 1) versus one photo per chat. Rows are grouped by model, higher effort first.</p>
-    <div class="controls">
-      <div class="seg" role="group" aria-label="Metric for experiment 2" data-target="exp2">
-        <button type="button" data-metric="f1" aria-pressed="false">F1</button>
-        <button type="button" data-metric="recall" aria-pressed="true">Recall</button>
-        <button type="button" data-metric="precision" aria-pressed="false">Precision</button>
+<section class="band white" id="results">
+  <div class="wrap">
+    <div class="kicker"><b>Results</b></div>
+    <h2>Careful readers, not thorough ones</h2>
+    <p class="lede">Each tile is one setup on one photo. Pick what the tiles show, and which of the two runs. <mark>Click any tile to see every book behind it</mark>: what was found, what was missed, and what was named but is not in the answer key.</p>
+    <div class="bar">
+      <div class="ctrls">
+        <div class="chips" id="metric" role="group" aria-label="What the tiles show">
+          <button type="button" data-v="recall" aria-pressed="true">Books found</button><button type="button" data-v="precision" aria-pressed="false">Right when named</button><button type="button" data-v="f1" aria-pressed="false">F1</button>
+        </div>
+        <div class="chips" id="run" role="group" aria-label="Which run">
+          <button type="button" data-v="run1" aria-pressed="true">Run 1</button><button type="button" data-v="run2" aria-pressed="false">Run 2</button>
+        </div>
       </div>
-      <div class="legend" aria-hidden="true"><span>0</span><span class="bar"></span><span>1</span></div>
+      <span class="note">Rows are setups. Columns are photos, easy to hard.</span>
     </div>
-    <div class="scroll"><table class="heat" id="exp2"></table></div>
-    <p class="note" id="skipped"></p>
-  </section>
+    <div class="results">
+      <div class="scroll"><table class="heat" id="heat"></table></div>
+      <aside class="key">
+        <h4>How to read a tile</h4>
+        <div class="demo"><div><b>77%</b><span>83 of 108</span></div><span><b>Top:</b> the share of the books on that shelf the model found.<br><b>Below:</b> the count behind it.</span></div>
+        <div class="scale" id="scale"></div>
+        <dl>
+          <dt>Books found</dt><dd>Recall. Of the books in the answer key, how many the model listed.</dd>
+          <dt>Right when named</dt><dd>Precision. Of the books the model listed, how many are in the answer key.</dd>
+          <dt>F1</dt><dd>One number that balances the two.</dd>
+          <dt>All six</dt><dd>All 295 books pooled, so the big photos count most.</dd>
+        </dl>
+        <p style="display:flex;flex-wrap:wrap;gap:2px 12px"><span><i class="dot Claude"></i>Anthropic</span><span><i class="dot Gemini"></i>Google</span><span><i class="dot GPT"></i>OpenAI</span></p>
+        <p class="note">Run 2 repeated run 1 four days later, with the same prompt and photos.</p>
+      </aside>
+    </div>
+    <div class="points">
+      <div style="border-color:var(--s-claude)"><b>Crowded shelves split the field.</b>On photo e (108 books), Claude setups found <mark>44&ndash;77%</mark>. GPT found 31&ndash;40% and Gemini 7&ndash;20%.</div>
+      <div style="border-color:var(--s-gemini)"><b>Tidy shelves flip it.</b>On the two easy photos, Gemini 3.8 Flash scored highest of all setups, in both runs.</div>
+      <div style="border-color:var(--red)"><b>One run is not enough.</b>Claude Opus 5.5 at low effort went from F1 0.72 to <mark>0.87</mark> between the two runs. Same prompt, same photos.</div>
+    </div>
+  </div>
+</section>
 
-  <section class="card" aria-labelledby="h-find">
-    <h2 id="h-find">What we found</h2>
-    <ol class="findings">
-      <li><strong>Precision is high almost everywhere; recall is what separates the models.</strong> When a model names a book, it is nearly always really there. The difference is how many of the books each model manages to list.</li>
-      <li><strong>Claude reads crowded shelves far better.</strong> On the two hard photos, every Claude setup found more books than every Gemini and GPT setup. With one photo per chat, even the weakest Claude run found about twice as many as the best Gemini run.</li>
-      <li><strong>Gemini 3.8 Flash is best on the easy shelves.</strong> On the two easy photos it scored higher than every other model, including all the Claude runs.</li>
-      <li><strong>Sending six photos at once held Claude back.</strong> With one photo per chat, every Claude run found at least as many books, and Claude Opus 5.5 at low effort caught up with Opus 5.5 at high effort.</li>
-      <li><strong>One run per setting isn't enough.</strong> Repeating experiment 1 a week later moved some scores a lot: Opus 5.5 at low effort went from F1 0.72 to 0.87, close to its high-effort score (0.89). Most setups moved by 0.01–0.10. Claude still came out on top and GPT at the bottom.</li>
-      <li><strong>Extra effort pays off unevenly.</strong> For Opus 5.5, Gemini 3.1 Pro and GPT, the higher setting added only about 0.01–0.02 F1 while costing 1.3–1.7× as much. For Sonnet 5.5 (+0.10) and Gemini 3.8 Flash (+0.08, at about 5× the cost) it made a real difference.</li>
-      <li><strong>Cost and accuracy go together across providers.</strong> The cheapest setups (GPT and Gemini, about $0.02–0.09 per run) were also the least accurate. The most accurate, Opus 5.5, cost about $0.17–0.31; Opus 5 cost more than Opus 5.5 and scored lower.</li>
-      <li><strong>Gemini's limit is how well it reads, not the batching.</strong> Sent one hard photo at a time, Gemini still listed about the same number of books. It just named fewer wrong ones.</li>
-      <li><strong>Newer models improved.</strong> Opus 5.5 beat Opus 5, and Sonnet 5.5 beat Sonnet 5 by a wide margin, at the same effort.</li>
-    </ol>
-  </section>
+<section class="band blue" id="one-photo">
+  <div class="wrap">
+    <div class="kicker"><b>Experiment 2</b></div>
+    <h2>One photo per chat: Claude found more books. Gemini did not.</h2>
+    <p class="lede">The two hard photos again, each sent in a chat of its own instead of with five others. Each row is one setup, on both hard photos together (147 books). <b>The hollow dot is all six photos at once; the filled dot is one photo per chat.</b> Click a row to see the books.</p>
+    <div class="panel" style="padding:14px 14px 6px;margin-top:22px"><div class="scroll"><svg class="chart" id="dumbbell" role="group" aria-label="Share of books found on the two hard photos: all six photos at once against one photo per chat"></svg></div></div>
+    <p class="note" style="margin-top:12px" id="skipped"></p>
+    <div class="stats">
+      <div class="stat y"><strong>47% &rarr; 78%</strong><span>Claude Opus 5.5 at low effort, the biggest jump. Alone, it matched Opus 5.5 at high effort.</span></div>
+      <div class="stat"><strong>57% &rarr; 68%</strong><span>All Claude setups together. What they named stayed right (95% &rarr; 92%).</span></div>
+      <div class="stat k"><strong>20% &rarr; 22%</strong><span>All Gemini setups together. Its limit is reading a crowded shelf, not sharing attention.</span></div>
+    </div>
+  </div>
+</section>
 
-  <section class="card" aria-labelledby="h-fail">
-    <h2 id="h-fail">Where models went wrong</h2>
-    <p class="desc">Real examples from experiment 1. The model's answer is struck through; the book on the shelf follows.</p>
+<section class="band" id="cost">
+  <div class="wrap">
+    <div class="kicker"><b>Cost</b></div>
+    <h2>What being right costs</h2>
+    <p class="lede">Each point is one setup from run 2. <b>Up is more accurate, left is cheaper.</b> The cost axis is logarithmic. The chat apps show no token counts, so cost is an estimate: what the same request would cost through the API at list prices, with a low-to-high whisker.</p>
+    <div class="panel" style="padding:18px 18px 10px;margin-top:22px"><div class="scroll"><svg class="chart" id="scatter" role="group" aria-label="F1 against estimated cost per run, run 2"></svg></div></div>
+    <div class="legend" id="legend"></div>
+    <details class="tableview"><summary>Show the numbers as a table</summary><div class="panel pad" style="margin-top:10px"><div class="scroll"><table class="plain" id="costTable"></table></div></div></details>
+    <div class="kicker" style="margin-top:34px"><b>Not obvious from the numbers</b></div>
+    <div class="two">
+      <ul class="tight">
+        <li><mark>Claude Opus 5.5 is the most accurate</mark>, at about $0.17&ndash;0.31 for all six photos. The older Opus 5 cost more ($0.45) and scored lower.</li>
+        <li><b>Extra thinking pays off unevenly.</b> It added 0.01&ndash;0.02 F1 for Opus 5.5, Gemini 3.1 Pro and GPT, and 0.08&ndash;0.10 for Sonnet 5.5 and Gemini 3.8 Flash.</li>
+      </ul>
+      <ul class="tight">
+        <li><b>Gemini 3.8 Flash is the cheapest</b>, about 2 cents, and the best on tidy shelves.</li>
+        <li><b>ChatGPT was cheap but slow.</b> Even in standard mode it ran Python text recognition on the photos in a loop for five minutes. Its Think mode took 17 minutes.</li>
+      </ul>
+    </div>
+    <div class="bottom"><b>Bottom line.</b> In a single chat, these models are careful but not thorough at reading a bookshelf. Which one to use depends on the shelf: Claude for crowded ones, Gemini Flash for tidy ones. And how a model is used can matter more than which model it is. <a class="more" href="#harness">Model vs harness &darr;</a></div>
+  </div>
+</section>
+
+<section id="story-start"><div class="wrap" id="story"><b>That is the result. Everything below is the how.</b><span>Optional reading &middot; the story, the method, what went wrong, the caveats</span></div></section>
+
+<div class="story">
+<section class="band ink">
+  <div class="wrap">
+    <div class="kicker"><b>The full story</b></div>
+    <h2>Ten steps from a bookshop photo to a benchmark</h2>
+    <p class="lede">This started as a practical annoyance and turned into a small, repeatable experiment. What follows is how it was planned, what was actually done, and what changed along the way.</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="chapter"><b>1</b> The itch</div>
+    <div class="two">
+      <div>
+        <h2>&ldquo;What books are on this shelf?&rdquo;</h2>
+        <p>It began with photos of messy bookshop and bookshelf displays, and an AI chat model asked to name the books in them. It sort of worked. It also misread spines, missed books, and sometimes named books that were not there.</p>
+        <p>My manager turned that into a question that can be measured:</p>
+      </div>
+      <blockquote>Given bookshelf photos where the real books are known, how well do different models, and different ways of using them, identify the books?</blockquote>
+    </div>
+    <p class="prose" style="margin-top:12px">Two rules came with it. Keep it small and quick: a prototype and a web page, not a product. And do not try to crown a best model: measure where each approach succeeds and fails.</p>
+  </div>
+</section>
+
+<section class="band white" id="answer-key">
+  <div class="wrap">
+    <div class="chapter"><b>2</b> The answer key</div>
+    <div class="two">
+      <div>
+        <h2>Before scoring a model, decide what the right answer is</h2>
+        <p>A score needs a list of the books that are really in each photo. Building it was the slowest part of the project.</p>
+        <p>Claude Opus 5.5 at medium effort, in Claude Code, cut each photo into small sections, over a hundred in all, and drafted a full list of the books it could read. Then <mark>a person reviewed every single book on that list</mark> against the photo and kept only the ones really there. <a href="#answer-source">The three steps are at the top &uarr;</a></p>
+      </div>
+      <div>
+        <p>It started with 11 photos. Five still had too many readable books left to check. Keeping them would have marked correct answers as wrong, so they were dropped.</p>
+        <p><mark>295 books on 6 photos, frozen from then on.</mark> Unknown authors are left blank. The five dropped photos and their draft labels are kept in the repository&rsquo;s <code>archive/</code> folder.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band ink" id="setup">
+  <div class="wrap">
+    <div class="chapter"><b>3</b> One prompt, three chat apps</div>
+    <div class="two">
+      <div>
+        <h2>Same photos, same words, twelve setups</h2>
+        <p>The plan preferred APIs, for control. There was no API access, so every run used the normal chat apps: ChatGPT, Claude.ai and Gemini. That is closer to how people use these tools, but the apps can resize images, add hidden instructions or run tools, and none of that can be seen.</p>
+        <p>Each setup got all six photos in one message, in order, with this prompt pasted beside them. The reply was saved exactly as given. Broken JSON would have counted as broken.</p>
+      </div>
+      <div class="panel pad">
+        <table class="plain">
+          <thead><tr><th>Model</th><th>Settings run</th></tr></thead>
+          <tbody>
+            <tr><td><i class="dot Claude"></i>Claude Opus 5.5</td><td>low and high effort</td></tr>
+            <tr><td><i class="dot Claude"></i>Claude Sonnet 5.5</td><td>low and high effort</td></tr>
+            <tr><td><i class="dot Claude"></i>Claude Opus 5</td><td>high effort</td></tr>
+            <tr><td><i class="dot Claude"></i>Claude Sonnet 5</td><td>high effort</td></tr>
+            <tr><td><i class="dot Gemini"></i>Gemini 3.1 Pro</td><td>standard and extended thinking</td></tr>
+            <tr><td><i class="dot Gemini"></i>Gemini 3.8 Flash</td><td>standard and extended thinking</td></tr>
+            <tr><td><i class="dot GPT"></i>GPT 5.6 Luna</td><td>standard and thinking</td></tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin:12px 0 0">The older Claude models ran at high effort only, so any gap to the newer ones comes from the model. Medium effort was skipped: low against high gives the clearest signal.</p>
+      </div>
+    </div>
+    <pre>I have attached 6 photos of bookshelves, named a, b, c, d, e and f (in that order).
+
+For each photo, list every book whose title you can read.
+
+Rules:
+- Only include a book if you can actually read its title in that photo. Do not guess, and do not
+  add books that are likely to be there but whose titles you cannot read.
+- Keep the photos separate. List each book under the photo it appears in.
+- If several copies of the same book are visible in a photo, list it once.
+- Include the author if you can read it or are confident who wrote the book. Otherwise use null.
+- Write titles as they appear on the book, in their original language and script.
+
+Reply with only this JSON and nothing else:
+{ "a": {"difficulty": "easy", "books": [{"title": "...", "author": "..."}]}, "b": ..., "f": ... }</pre>
+  </div>
+</section>
+
+<section class="band" id="scoring">
+  <div class="wrap">
+    <div class="chapter"><b>4</b> Scoring that forgives wording</div>
+    <div class="two">
+      <div>
+        <h2>&ldquo;Attack on Titan Omnibus&rdquo; is the same book</h2>
+        <p>Models rarely write a title exactly as the answer key does. So titles are compared loosely: case, punctuation, accents, word order, a leading &ldquo;The&rdquo; and a missing subtitle are all forgiven. A pair counts as the same book above 85% similarity. Authors are scored separately and never decide a match.</p>
+        <h3>A surprise: the photos got shuffled</h3>
+        <p>In run 1, every Claude reply looked terrible at first, then turned out to be right under the wrong letters. Its list for &ldquo;a&rdquo; was really photo d. The Claude app does not show the model the filenames, so it lettered the photos in its own order. The scorer now finds the best letter-to-photo match and corrects it before scoring. Only whole lists move; a single book under the wrong photo still counts against the model.</p>
+      </div>
+      <div class="panel pad">
+        <table class="plain">
+          <thead><tr><th>Model wrote</th><th>Answer key</th><th>Match?</th></tr></thead>
+          <tbody>
+            <tr><td>Attack on Titan Omnibus</td><td>Attack on Titan: Omnibus (Volumes 1-2-3)</td><td class="hit">Yes</td></tr>
+            <tr><td>Disgusting Digestion</td><td>Horrible Science: Disgusting Digestion</td><td class="hit">Yes</td></tr>
+            <tr><td>Modern Judgements: Racine</td><td>Racine: Modern Judgements</td><td class="hit">Yes</td></tr>
+            <tr><td>You Can</td><td>You Can Win</td><td class="miss">No</td></tr>
+            <tr><td>Harry Potter</td><td>Harry Potter and the Goblet of Fire</td><td class="miss">No</td></tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin:12px 0 0">Every match and non-match is saved, so any number on this page can be checked book by book.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band red" id="failures">
+  <div class="wrap">
+    <div class="chapter"><b>5</b> Where it went wrong</div>
+    <div class="two">
+      <div>
+        <h2>Four ways to get a bookshelf wrong</h2>
+        <p>Real examples from the replies. Struck through is what the model wrote; after the arrow is the book on the shelf.</p>
+      </div>
+      <div class="stats" style="grid-template-columns:1fr 1fr;margin:0">
+        <div class="stat k"><strong>28</strong><span>books that no chat found, across all 42</span></div>
+        <div class="stat y"><strong>46&ndash;52</strong><span>books that every setup found, in each run</span></div>
+      </div>
+    </div>
     <div class="fails">
       <div class="fail">
-        <h3>Right author, wrong book</h3>
-        <p>The model reads the author and names their better-known title.</p>
+        <h4>Right author, wrong book</h4>
+        <p>The model reads the author, then names their better-known title.</p>
         <ul>
-          <li><span class="said">The Magic of the Lost Temple</span><span class="arrow">→</span>The Magic of the Lost Earrings <span class="tag">· 5 runs</span></li>
-          <li><span class="said">Behave</span><span class="arrow">→</span>Determined <span class="tag">· Sapolsky</span></li>
-          <li><span class="said">Bit of a Blur</span><span class="arrow">→</span>All Cheeses Great &amp; Small <span class="tag">· Alex James</span></li>
+          <li><s>The Magic of the Lost Temple</s><span class="arrow">&rarr;</span>The Magic of the Lost Earrings <small>&middot; 5 runs</small></li>
+          <li><s>Behave</s><span class="arrow">&rarr;</span>Determined <small>&middot; Sapolsky</small></li>
+          <li><s>Bit of a Blur</s><span class="arrow">&rarr;</span>All Cheeses Great &amp; Small <small>&middot; Alex James</small></li>
         </ul>
       </div>
       <div class="fail">
-        <h3>Missed by every model</h3>
-        <p>41 of the 295 books were found by none of the 12 runs.</p>
+        <h4>Missed by every model</h4>
+        <p>In run 1, 41 of the 295 books were found by none of the 12 setups.</p>
         <ul>
-          <li>Hindi titles <span class="tag">· जादू, मेघनाद, डेरे वाले</span></li>
-          <li>Upside-down or thin spines <span class="tag">· Silas Marner, Hunted</span></li>
-          <li>Partly hidden covers <span class="tag">· The Great Gatsby, Wild Fictions</span></li>
+          <li>Hindi titles <small>&middot; जादू, मेघनाद, डेरे वाले</small></li>
+          <li>Upside-down or thin spines <small>&middot; Silas Marner, Hunted</small></li>
+          <li>Partly hidden covers <small>&middot; The Great Gatsby, Wild Fictions</small></li>
         </ul>
       </div>
       <div class="fail">
-        <h3>Too vague to count</h3>
+        <h4>Too vague to count</h4>
         <p>Part of the title, not enough to say which book.</p>
         <ul>
-          <li><span class="said">Harry Potter</span><span class="arrow">→</span>Harry Potter and the Goblet of Fire</li>
-          <li><span class="said">Diary of a Wimpy Kid</span><span class="arrow">→</span>Diary of a Wimpy Kid: The Long Haul</li>
-          <li><span class="said">British Art</span><span class="arrow">→</span>The Thames and Hudson Encyclopaedia of British Art</li>
+          <li><s>Harry Potter</s><span class="arrow">&rarr;</span>Harry Potter and the Goblet of Fire</li>
+          <li><s>Diary of a Wimpy Kid</s><span class="arrow">&rarr;</span>Diary of a Wimpy Kid: The Long Haul</li>
+          <li><s>British Art</s><span class="arrow">&rarr;</span>The Thames and Hudson Encyclopaedia of British Art</li>
         </ul>
       </div>
       <div class="fail">
-        <h3>Marked wrong, but really there</h3>
+        <h4>Marked wrong, but really there</h4>
         <p>On the shelf, but left out of the answer key as too hard to confirm.</p>
         <ul>
-          <li>The Secret Life of Bees <span class="tag">· named in 6 runs</span></li>
-          <li>Jiggy McCue <span class="tag">· 3 runs</span></li>
-          <li>The Bitcoin Standard <span class="tag">· 2 runs</span></li>
+          <li>The Secret Life of Bees <small>&middot; named in 6 run-1 replies</small></li>
+          <li>Jiggy McCue <small>&middot; 3 in run 1, 5 in run 2</small></li>
+          <li>The Bitcoin Standard <small>&middot; 2 in run 1, 4 in run 2</small></li>
         </ul>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="card" aria-labelledby="h-harness">
-    <h2 id="h-harness">Model vs harness: same model, very different result</h2>
-    <p class="desc">The answer key itself was built with Claude Opus 5.5, the same model that scored best here, and together with a person it found nearly every readable book. Yet in a single chat, Opus 5.5 at high effort found about 77% of the books on the hardest photo. The model was the same; what changed was how it was used.</p>
-    <div class="scroll"><table class="compare">
-      <thead><tr><th scope="col"></th><th scope="col">Building the answer key</th><th scope="col">A single chat</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Image detail</th><td>Full-resolution originals, cropped into small regions and enlarged</td><td>The whole photo at once; chat apps usually shrink large images before the model sees them</td></tr>
-        <tr><th scope="row">Passes</th><td>Over a hundred zoomed crops, shelf by shelf, some rotated so spines read upright</td><td>One look at the whole shelf</td></tr>
-        <tr><th scope="row">Task</th><td>Check and extend an existing list</td><td>List everything from scratch</td></tr>
-        <tr><th scope="row">Checking</th><td>A person confirmed every addition against a crop</td><td>The model alone, in one reply</td></tr>
-      </tbody>
-    </table></div>
-    <p class="note" style="font-size:14px;color:var(--text-secondary)">The biggest factor is resolution: in a shrunk 24-megapixel photo, a spine title can end up only a few pixels tall and simply can't be read. Effort mattered less: in experiment 2, low effort matched high once the six-photo batching was removed. In other words, the surrounding system (zooming, multiple passes, verification) can matter more than the model or its settings.</p>
-  </section>
+<section class="band white">
+  <div class="wrap">
+    <div class="chapter"><b>6</b> Too many photos at once?</div>
+    <div class="two">
+      <div>
+        <h2>Was the model rationing its answer?</h2>
+        <p>Run 1 had a pattern: on the hard photos, what models named was right, but they named too few. On photo e most setups found under half the books, and every Gemini setup stopped at about 20&ndash;27 titles.</p>
+        <p>So experiment 2 sent the two hard photos one per chat, with the same rules. If the six-photo message was holding models back, they should list more.</p>
+      </div>
+      <div>
+        <p>It was, for Claude. <mark>Every Claude setup found at least as many books alone</mark>, and Opus 5.5 at low effort caught up with Opus 5.5 at high effort. That changes the reading of run 1: most of the gap between low and high effort came from the six-photo setup, not the effort setting.</p>
+        <p>Gemini barely moved. Alone it still listed only 19&ndash;25 books on photo e; it just named fewer wrong ones.</p>
+        <p class="note">Three setups were dropped: Gemini 3.8 Flash with extended thinking, and both GPT setups, which kept failing in their apps. <a href="#one-photo">The chart is at the top &uarr;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section class="card" aria-labelledby="h-next">
-    <h2 id="h-next">Possible next experiments</h2>
-    <ul>
-      <li><strong>A simple zoom harness:</strong> split each hard photo into overlapping full-resolution crops, ask the model about each crop, then merge the lists. This would measure how much of the gap is resolution alone. It needs API access rather than the chat apps.</li>
-      <li><strong>Repeat runs:</strong> run each setup several times to see how much results vary from run to run.</li>
-      <li><strong>Image compression:</strong> compare original, moderately and heavily compressed photos for accuracy and cost.</li>
-      <li><strong>Other ways of packaging the photos:</strong> a ZIP, a PDF, or a document instead of separate images.</li>
-    </ul>
-  </section>
+<section class="band">
+  <div class="wrap">
+    <div class="chapter"><b>7</b> Run it again</div>
+    <div class="two">
+      <div>
+        <h2>The same twelve chats, four days later</h2>
+        <p>Cost needed timing data the first chats had not kept, so all twelve setups were run again on 4 October. This time a coding agent did the clicking: Claude Code, driving the chat apps in the Brave browser through the Claude in Chrome extension. It opened private chats, chose the model and setting, attached the photos, pasted the prompt and saved the reply exactly as given. It also read each app&rsquo;s own conversation data, which confirmed the model used and recorded when it started and stopped thinking.</p>
+        <p>The rerun doubled as a first look at consistency, and <mark>the results moved more than expected</mark>.</p>
+        <h3>Things only the rerun showed</h3>
+        <ul class="tight">
+          <li>ChatGPT ran Python text recognition on the photos <b>even in standard mode</b>, 11 code calls in one reply.</li>
+          <li>ChatGPT&rsquo;s Think mode was served by a different model, <code>gpt-5-6-t-mini</code>.</li>
+          <li>Gemini 3.8 Flash with extended thinking failed once (&ldquo;something went wrong&rdquo;) and was retried in a new chat.</li>
+        </ul>
+      </div>
+      <div class="panel pad">
+        <table class="plain" id="runTable"></table>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section class="card" aria-labelledby="h-how">
-    <h2 id="h-how">How it was measured</h2>
-    <ul>
-      <li><strong>Answer key:</strong> six photos, 295 books, each confirmed by a person against a zoomed-in crop of the photo. Books too hard to read with confidence were left out.</li>
-      <li><strong>Recall:</strong> of the books in the answer key, the share the model found. <strong>Precision:</strong> of the books the model named, the share that are in the answer key. <strong>F1</strong> combines the two.</li>
-      <li><strong>Matching:</strong> titles are matched approximately, so small differences in wording, punctuation, word order or a missing subtitle don't count as wrong.</li>
-      <li><strong>"Not in the answer key" isn't always a mistake.</strong> Models sometimes found real books that were left out of the answer key because they were hard to confirm, so precision is slightly understated.</li>
-      <li><strong>Setup:</strong> all runs used the normal consumer apps (ChatGPT, Claude.ai in incognito chats, Gemini). Experiment 1 was run twice; small differences between runs may be noise.</li>
-      <li><strong>Run 2:</strong> a coding agent (Claude Code with the Claude in Chrome extension) drove the chat apps in the browser: it opened temporary chats, picked the model and mode, attached the photos, pasted the prompt and saved the reply exactly as written. It also read each app's own conversation data, which confirmed the model and setting used and gave thinking and reply timestamps for the cost estimate. Gemini 3.8 Flash with extended thinking failed once ("something went wrong") and was retried in a new chat.</li>
-      <li><strong>Photo labels:</strong> the Claude app doesn't show the model the filenames, so Claude lettered the photos in a different order. Its lists were matched back to the right photos before scoring.</li>
-    </ul>
-  </section>
+<section class="band white">
+  <div class="wrap">
+    <div class="chapter"><b>8</b> Counting the cost</div>
+    <div class="two">
+      <div>
+        <h2>An estimate, built from what the apps reveal</h2>
+        <p>Chat apps do not report tokens, so each run was priced as if the same request had gone through the API at list prices, as a low, middle and high estimate. <a href="#cost">The chart is at the top &uarr;</a></p>
+      </div>
+      <ul class="tight">
+        <li><b>Input:</b> the prompt plus the six photos, by each provider&rsquo;s published image-token rule. Claude: up to about 4,800 tokens per large photo. Gemini: 1,120 per photo. GPT: one token per 32&times;32 patch.</li>
+        <li><b>Output:</b> the saved reply, plus thinking. Thinking is hidden, so it is estimated from time: how long the model thought, times how fast the same run wrote its reply.</li>
+        <li><b>ChatGPT:</b> its Python loop re-read the photos on every turn, and its hidden reasoning is unknown, so its range is the widest.</li>
+        <li>Hidden system prompts are not counted. Good for comparing orders of magnitude, not cents.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    Data, prompts and scoring code: <a href="https://github.com/atharva-729/bookshelf-benchmark">github.com/atharva-729/bookshelf-benchmark</a>.
-    Details in <a href="https://github.com/atharva-729/bookshelf-benchmark/blob/main/EXPERIMENTS.md">EXPERIMENTS.md</a> and <a href="https://github.com/atharva-729/bookshelf-benchmark/blob/main/METRICS.md">METRICS.md</a>.
-  </footer>
+<section class="band green" id="harness">
+  <div class="wrap">
+    <div class="chapter"><b>9</b> The model, or the way it is used?</div>
+    <div class="two">
+      <div>
+        <h2>Same model, very different result</h2>
+        <p>The answer key was drafted by Claude Opus 5.5, the model that scored best here, at <b>medium</b> effort in Claude Code. Working section by section, it listed nearly every readable book. In the Claude.ai chat at <b>high</b> effort, the same model found about 77% of the books on the hardest photo.</p>
+        <p>The model did not change, and it even had less effort. The way it was used did. The biggest factor is probably resolution: chat apps shrink large photos, and in a shrunk 24-megapixel photo a spine title can be a few pixels tall. <mark>The harness around a model can matter more than the model or its settings.</mark> This was the biggest lesson of the project.</p>
+        <p class="note">The planned verification harness (identify, flag the unsure ones, zoom in, re-check) was not built, because it needs API access. This is an observation, not a measured result.</p>
+      </div>
+      <div class="panel pad">
+        <table class="plain">
+          <thead><tr><th></th><th>Drafting the answer key</th><th>A single chat</th></tr></thead>
+          <tbody>
+            <tr><td><b>Where</b></td><td>Claude Code, medium effort</td><td>Claude.ai chat, high effort</td></tr>
+            <tr><td><b>Detail</b></td><td>Small sections of the full-resolution photo</td><td>The whole photo, usually shrunk by the app</td></tr>
+            <tr><td><b>Passes</b></td><td>Over a hundred sections, one at a time</td><td>One look at six photos</td></tr>
+            <tr><td><b>Checking</b></td><td>A person reviewed every book on the list</td><td>None</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band ink">
+  <div class="wrap">
+    <div class="chapter"><b>10</b> Planned, done, and what it means</div>
+    <div class="two">
+      <div>
+        <h2>What was planned against what happened</h2>
+        <p>The plan had a first benchmark, then a harness experiment, then a set of &ldquo;does the packaging matter?&rdquo; experiments. The benchmark is done and went further than planned. Most of the packaging experiments are still open.</p>
+      </div>
+      <div class="panel pad">
+        <table class="plain">
+          <thead><tr><th>Planned</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Frozen answer key, 6 photos</td><td><span class="tag good">Done</span></td></tr>
+            <tr><td>2&ndash;3 models, one standard prompt</td><td><span class="tag good">Done</span> <small>7 models, 12 setups</small></td></tr>
+            <tr><td>Scorer: precision, recall, F1, per photo</td><td><span class="tag good">Done</span></td></tr>
+            <tr><td>Failure examples and a results page</td><td><span class="tag good">Done</span></td></tr>
+            <tr><td>Use APIs for control</td><td><span class="tag part">Changed</span> <small>chat apps only</small></td></tr>
+            <tr><td>All photos at once vs one per prompt</td><td><span class="tag good">Done</span> <small>hard photos</small></td></tr>
+            <tr><td>Repeat runs for consistency</td><td><span class="tag part">Partly</span> <small>2 runs</small></td></tr>
+            <tr><td>Cost per run</td><td><span class="tag good">Done</span> <small>estimated</small></td></tr>
+            <tr><td>Direct prompting vs a verification harness</td><td><span class="tag bad">Not done</span> <small>needs API</small></td></tr>
+            <tr><td>ZIP vs separate images</td><td><span class="tag bad">Not done</span></td></tr>
+            <tr><td>Image compression</td><td><span class="tag bad">Not done</span></td></tr>
+            <tr><td>PDF, Markdown, base64 and other formats</td><td><span class="tag bad">Not done</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="two" style="margin-top:44px">
+      <div>
+        <h3 style="margin-top:0" id="caveats">Read with care</h3>
+        <ul class="tight">
+          <li><b>Two runs at most.</b> Scores moved by up to 0.15 F1 between runs, so small gaps between setups may be noise.</li>
+          <li><b>Chat apps, not APIs.</b> Each app may resize photos, add hidden instructions or run tools. A result means &ldquo;model X in app Y on that date&rdquo;.</li>
+          <li><b>&ldquo;Not in the answer key&rdquo; is not always wrong.</b> Some real books were left out as too hard to confirm, so precision is slightly understated for everyone.</li>
+          <li><b>Loose matching can slip.</b> It can pair two similar titles, and a Hindi title written in Latin letters does not match the same title in Devanagari.</li>
+          <li><b>Six photos.</b> Enough to see patterns, not to rank models in general.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-top:0">What could come next</h3>
+        <ul class="tight">
+          <li><b>A zoom harness:</b> cut each hard photo into overlapping full-resolution crops, ask about each, merge the lists. That would measure how much of the gap is resolution alone.</li>
+          <li><b>More repeat runs</b>, to put error bars on every score.</li>
+          <li><b>Compression:</b> original against moderately and heavily compressed photos, for accuracy and cost.</li>
+          <li><b>Packaging:</b> the same photos as a ZIP, a PDF or a document.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="two" style="margin-top:28px">
+      <div>
+        <h3 style="margin-top:0">Run it yourself</h3>
+        <p>Every photo, prompt, raw reply and score is in the repository. Scoring needs only Python 3, with nothing to install.</p>
+      </div>
+      <pre style="white-space:pre;margin-top:0">python benchmark/evaluate.py         <i># experiment 1</i>
+python benchmark/evaluate_single.py  <i># experiment 2</i>
+python benchmark/estimate_cost.py    <i># run 2 cost</i>
+python benchmark/build_site.py       <i># this page</i></pre>
+    </div>
+    <p style="margin-top:28px"><a href="https://github.com/atharva-729/bookshelf-benchmark">Repository</a> &nbsp;&middot;&nbsp; <a href="https://github.com/atharva-729/bookshelf-benchmark/blob/main/README.md">The full story, with more detail</a> &nbsp;&middot;&nbsp; <a href="https://github.com/atharva-729/bookshelf-benchmark/blob/main/notes/experiments.md">Experiment notes</a> &nbsp;&middot;&nbsp; <a href="https://github.com/atharva-729/bookshelf-benchmark/blob/main/notes/metrics.md">How scoring works</a> &nbsp;&middot;&nbsp; <a href="https://github.com/atharva-729/bookshelf-benchmark/tree/main/results">Every raw reply</a></p>
+  </div>
+</section>
 </div>
+</main>
 
-<div id="tip" role="tooltip" aria-hidden="true"></div>
+<dialog id="cell" aria-labelledby="cellTitle"></dialog>
+
+<footer><div class="wrap">Atharva Sharma &middot; Runs done in the ChatGPT, Claude and Gemini chat apps between 30 September and 4 October 2026.</div></footer>
 
 <script src="data.js"></script>
 <script>
 (function () {
-  const D = window.BENCH;
-  const METRIC_NAMES = { f1: 'F1', recall: 'Recall', precision: 'Precision' };
-  const state = { exp1: 'f1', exp2: 'recall', run: '1' };
-  const photoById = Object.fromEntries(D.photos.map(p => [p.id, p]));
-  const totalBooks = D.photos.reduce((s, p) => s + p.books, 0);
-  const fmt = v => (v == null ? '–' : v.toFixed(2));
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const step = v => Math.max(0, Math.min(12, Math.round(v * 12)));
-  const cellStyle = v => `background:var(--seq-${step(v)});color:var(--ink-${step(v)})`;
-  const runLabel = r => `<span>${esc(r.model)}</span> <span class="mode">· ${esc(r.mode)}</span>`;
+const D = window.BENCH;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
+const dec = (v) => (v == null ? "–" : v.toFixed(2));
+const money = (v) => (v < 0.1 ? "$" + v.toFixed(3) : "$" + v.toFixed(2));
+const PHOTO = Object.fromEntries(D.photos.map((p) => [p.id, p]));
+const SETUP = Object.fromEntries(D.setups.map((s) => [s.id, s]));
+const COLOR = { Claude: "var(--s-claude)", Gemini: "var(--s-gemini)", GPT: "var(--s-gpt)" };
+const RUN_NAME = { run1: "run 1", run2: "run 2" };
+const totalBooks = D.photos.reduce((a, p) => a + p.books, 0);
 
-  // Same model at two settings sits together, higher effort first. Pairs come first (best F1 first),
-  // then models run at a single setting.
-  const effortRank = mode => (/high|thinking|extended/.test(mode) ? 2 : 1);
-  function grouped(runs, score) {
-    const byModel = {};
-    runs.forEach(r => (byModel[r.model] = byModel[r.model] || []).push(r));
-    const groups = Object.entries(byModel).map(([model, rs]) =>
-      ({ model, runs: rs.sort((a, b) => effortRank(b.mode) - effortRank(a.mode)) }));
-    const best = g => Math.max(...g.runs.map(score));
-    return groups.sort((a, b) => (b.runs.length > 1) - (a.runs.length > 1) || best(b) - best(a));
+// Rows: providers in a fixed order, then each model by its best F1 over both runs, higher effort first.
+const PROVIDERS = ["Claude", "Gemini", "GPT"];
+const meanF1 = (id) => (D.exp1.run1[id].overall.f1 + D.exp1.run2[id].overall.f1) / 2;
+const isHigher = (mode) => /high|thinking/.test(mode);
+const modelBest = {};
+D.setups.forEach((s) => (modelBest[s.model] = Math.max(modelBest[s.model] || 0, meanF1(s.id))));
+const ROWS = [...D.setups].sort((a, b) =>
+  PROVIDERS.indexOf(a.provider) - PROVIDERS.indexOf(b.provider) ||
+  modelBest[b.model] - modelBest[a.model] || a.model.localeCompare(b.model) ||
+  isHigher(b.mode) - isHigher(a.mode));
+
+// ---------- headline figures
+$("figures").innerHTML = [
+  [totalBooks, "books in the answer key, each checked by a person"],
+  [D.setups.length, "model setups from 3 providers"],
+  [42, "chats, every reply saved unedited"],
+  [pct(Math.max(...D.setups.map((s) => D.exp1.run2[s.id].overall.recall))), "of the books: the most any setup found in one chat"],
+].map(([a, b]) => `<div><strong>${a}</strong><span>${b}</span></div>`).join("");
+
+// ---------- photos
+$("shelves").innerHTML = D.photos.map((p) => `<figure style="margin:0">
+  <a class="ph" href="photos/${p.id}.jpg" target="_blank" rel="noopener" aria-label="Open photo ${p.id}, ${p.difficulty}, ${p.books} books, larger">
+    <img src="photos/${p.id}_thumb.jpg" alt="Bookshelf photo ${p.id}" loading="lazy"></a>
+  <figcaption><b>${p.id}</b><span class="tag ${p.difficulty}">${p.difficulty}</span><span>${p.books} books</span></figcaption></figure>`).join("");
+
+// ---------- tooltip
+const tip = $("tip");
+function showTip(el, e) {
+  tip.innerHTML = el.dataset.tip; tip.style.opacity = 1;
+  const r = el.getBoundingClientRect();
+  const x = e && e.clientX != null ? e.clientX : r.left + r.width / 2, y = e && e.clientY != null ? e.clientY : r.top;
+  tip.style.left = Math.max(8, Math.min(x + 14, innerWidth - tip.offsetWidth - 8)) + "px";
+  tip.style.top = (y - tip.offsetHeight - 12 < 8 ? y + 18 : y - tip.offsetHeight - 12) + "px";
+}
+const hideTip = () => (tip.style.opacity = 0);
+document.addEventListener("mousemove", (e) => { const el = e.target.closest("[data-tip]"); el ? showTip(el, e) : hideTip(); });
+document.addEventListener("focusin", (e) => { const el = e.target.closest("[data-tip]"); if (el) showTip(el); });
+document.addEventListener("focusout", hideTip);
+addEventListener("scroll", hideTip, { passive: true });
+
+// ---------- heatmap
+const state = { metric: "recall", run: "run1" };
+const METRIC = {
+  recall: { name: "Books found", main: (c) => pct(c.recall), sub: (c) => `${c.found} of ${c.total}`, ends: ["none found", "all found"] },
+  precision: { name: "Right when named", main: (c) => pct(c.found + c.wrong ? c.precision : null),
+    sub: (c) => (c.found + c.wrong === 0 ? "none listed" : c.wrong ? `${c.wrong} not in key` : "none wrong"), ends: ["0%", "100%"] },
+  f1: { name: "F1", main: (c) => dec(c.f1), sub: (c) => `${c.found} found, ${c.wrong} extra`, ends: ["0", "1"] },
+};
+const who = (s) => `${s.model}, ${s.mode}`;
+const cellTip = (s, label, c) => `<b>${esc(who(s))}</b>${esc(label)} &middot; ${RUN_NAME[state.run]}<br>Found ${c.found} of ${c.total} books (${pct(c.recall)})<br>${c.found + c.wrong} named, ${c.wrong} not in the answer key<br>F1 ${dec(c.f1)}<br><i>Click to see every book</i>`;
+function tile(s, pid, c, cls) {
+  const m = METRIC[state.metric], v = state.metric === "precision" && c.found + c.wrong === 0 ? 0 : c[state.metric];
+  const k = Math.round(Math.max(0, Math.min(1, v)) * 10);
+  const label = pid === "all" ? "All six photos" : `Photo ${pid} (${PHOTO[pid].difficulty})`;
+  return `<td class="${cls || ""}" tabindex="0" role="button" data-s="${s.id}" data-p="${pid}" style="background:var(--q${k});color:var(--f${k})"
+    aria-label="${esc(who(s))}, ${label}: ${m.name} ${m.main(c)}. Show the books." data-tip="${esc(cellTip(s, label, c))}"><b>${m.main(c)}</b><span>${m.sub(c)}</span></td>`;
+}
+function drawHeat() {
+  const run = D.exp1[state.run];
+  let h = `<thead><tr><th></th><th class="all" scope="col">All six<small>${totalBooks} books</small></th>${D.photos.map((p) =>
+    `<th scope="col">${p.id}<small>${p.difficulty} &middot; ${p.books}</small></th>`).join("")}</tr></thead><tbody>`;
+  ROWS.forEach((s, i) => {
+    if (i && ROWS[i - 1].provider !== s.provider) h += `<tr class="gap" aria-hidden="true"><td colspan="${D.photos.length + 2}"></td></tr>`;
+    const r = run[s.id], all = { ...r.overall };
+    h += `<tr><th scope="row"><i class="dot ${s.provider}"></i>${esc(s.model)}<small>${esc(s.mode)}</small></th>${tile(s, "all", all, "all")}${D.photos.map((p) => tile(s, p.id, r.photos[p.id])).join("")}</tr>`;
+  });
+  $("heat").innerHTML = h + "</tbody>";
+  const ends = METRIC[state.metric].ends;
+  $("scale").innerHTML = `<span>${ends[0]}</span><span>${Array.from({ length: 11 }, (_, k) => `<i style="background:var(--q${k})"></i>`).join("")}</span><span>${ends[1]}</span>`;
+  document.querySelectorAll("#metric button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.metric));
+  document.querySelectorAll("#run button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.run));
+}
+$("metric").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { state.metric = b.dataset.v; drawHeat(); } });
+$("run").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { state.run = b.dataset.v; drawHeat(); } });
+drawHeat();
+
+// ---------- the box behind a tile: every book on each photo, sorted into found, missed and extra
+function photoBlock(pid, c, note) {
+  const p = PHOTO[pid], hit = new Set(c.hit.map((h) => h[0]));
+  const found = c.hit.map(([i, w]) => `<li>${esc(p.titles[i])}${w ? `<small>written as &ldquo;${esc(w)}&rdquo;</small>` : ""}</li>`);
+  const missed = p.titles.filter((_, i) => !hit.has(i)).map((t) => `<li>${esc(t)}</li>`);
+  const extra = c.extra.map((t) => `<li>${esc(t)}</li>`);
+  const list = (cls, title, items, empty) => `<div class="${cls}"><h5>${title} &middot; ${items.length}</h5>${items.length ? `<ul>${items.join("")}</ul>` : `<p class="none">${empty}</p>`}</div>`;
+  return `<section class="dphoto"><div class="top"><a href="photos/${pid}.jpg" target="_blank" rel="noopener"><img src="photos/${pid}_thumb.jpg" alt="Bookshelf photo ${pid}"></a>
+    <div><h4>Photo ${pid} <span class="tag ${p.difficulty}">${p.difficulty}</span></h4><p>Found <b>${c.found} of ${p.books}</b> books (${pct(c.recall)}). Named ${c.found + c.wrong}, of which ${c.wrong === 0 ? "none are" : c.wrong === 1 ? "1 is" : c.wrong + " are"} not in the answer key.${note ? " " + note : ""}</p></div></div>
+    <div class="lists">${list("found", "Found", found, "None.")}${list("missed", "Missed", missed, "None. Every book found.")}${list("extra", "Named, not in the answer key", extra, "None.")}</div></section>`;
+}
+function openDialog(title, sub, blocks) {
+  $("cell").innerHTML = `<div class="dhead"><div><h3 id="cellTitle">${title}</h3><p>${sub}</p></div><button type="button" autofocus>Close &times;</button></div>
+    <div class="dkey"><span>Titles are the answer key&rsquo;s. &ldquo;Written as&rdquo; shows where the model&rsquo;s wording differed but still matched.</span><span>&ldquo;Not in the answer key&rdquo; is usually a misread, and sometimes a real book left out of the key.</span></div>${blocks}`;
+  hideTip();
+  $("cell").showModal();
+  $("cell").scrollTop = 0;
+}
+function openTile(sid, pid) {
+  const s = SETUP[sid], r = D.exp1[state.run][sid], dotted = `<i class="dot ${s.provider}"></i>${esc(who(s))}`;
+  const relabel = r.relabelled ? "The app lettered the photos in its own order; the lists were matched back to the right photos before scoring." : "";
+  if (pid === "all") {
+    const o = r.overall;
+    openDialog(`${dotted} &middot; all six photos &middot; ${RUN_NAME[state.run]}`,
+      `<b>Found ${o.found} of ${o.total} books (${pct(o.recall)}).</b> ${o.wrong} of the ${o.found + o.wrong} named are not in the answer key. ${relabel}`,
+      D.photos.map((p) => photoBlock(p.id, r.photos[p.id])).join(""));
+  } else {
+    const c = r.photos[pid];
+    openDialog(`${dotted} &middot; photo ${pid} &middot; ${RUN_NAME[state.run]}`,
+      `All six photos were sent in one message. ${relabel}`, photoBlock(pid, c));
   }
-  const spacer = cols => `<tr class="spacer" aria-hidden="true"><td colspan="${cols}"></td></tr>`;
+}
+const tileOf = (e) => { const td = e.target.closest("td[data-s]"); if (td) openTile(td.dataset.s, td.dataset.p); return td; };
+$("heat").addEventListener("click", tileOf);
+$("heat").addEventListener("keydown", (e) => (e.key === "Enter" || e.key === " ") && tileOf(e) && e.preventDefault());
+$("cell").addEventListener("click", (e) => (e.target === $("cell") || e.target.closest(".dhead button")) && $("cell").close());
 
-  // ---------- header, tiles ----------
-  document.getElementById('meta').textContent =
-    `${D.photos.length} photos · ${totalBooks} books in the answer key · ${D.exp1.length} model setups · consumer chat apps`;
-
-  const byF1 = [...D.exp1].sort((a, b) => b.overall.f1 - a.overall.f1);
-  const best = byF1[0];
-  const easyF1 = r => {
-    const cells = D.photos.filter(p => p.difficulty === 'easy').map(p => r.photos[p.id]);
-    const tp = cells.reduce((s, c) => s + c.found, 0), fp = cells.reduce((s, c) => s + c.wrong, 0);
-    const tot = cells.reduce((s, c) => s + c.total, 0);
-    const pr = tp / (tp + fp), rc = tp / tot;
-    return 2 * pr * rc / (pr + rc);
+// ---------- experiment 2: dumbbells, all at once against one photo per chat
+function hollowDot(x, y, color, r = 7) { return `<circle cx="${x}" cy="${y}" r="${r}" fill="var(--surface)" stroke="${color}" stroke-width="3"/>`; }
+function solidDot(x, y, color, r = 8) { return `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" stroke="var(--surface)" stroke-width="2"/>`; }
+function drawDumbbell() {
+  const ids = ROWS.map((s) => s.id).filter((id) => D.exp2[id]);
+  const W = 960, L = 230, R = 92, T = 40, RH = 42, H = T + ids.length * RH + 46;
+  const X = (v) => L + v * (W - L - R);
+  let s = "";
+  [0, 0.25, 0.5, 0.75, 1].forEach((v) => {
+    s += `<line class="grid" x1="${X(v)}" x2="${X(v)}" y1="${T - 12}" y2="${H - 40}"/><text class="tick" x="${X(v)}" y="${H - 20}" text-anchor="middle">${v * 100}%</text>`;
+  });
+  s += `<text class="tick" x="${W - 8}" y="${T - 18}" text-anchor="end">change</text>`;
+  s += `<text class="axis" x="${L}" y="${T - 18}">Share of the 147 books on photos e and f found</text>`;
+  ids.forEach((id, i) => {
+    const st = SETUP[id], c = D.exp2[id].combined, y = T + i * RH + RH / 2, col = COLOR[st.provider];
+    const a = X(c.batch.recall), b = X(c.single.recall), d = c.single.recall - c.batch.recall;
+    const t = `<b>${esc(who(st))}</b>Photos e and f, 147 books<br>All six at once: found ${c.batch.found} (${pct(c.batch.recall)}), ${c.batch.wrong} not in key<br>One per chat: found ${c.single.found} (${pct(c.single.recall)}), ${c.single.wrong} not in key<br><i>Click to see every book</i>`;
+    s += `<g class="row" tabindex="0" role="button" data-s="${id}" data-tip="${esc(t)}" aria-label="${esc(who(st))}: ${pct(c.batch.recall)} all at once, ${pct(c.single.recall)} one per chat. Show the books.">
+      <rect class="hit" x="0" y="${y - RH / 2 + 2}" width="${W}" height="${RH - 4}" fill="transparent"/>
+      <circle cx="16" cy="${y}" r="5.5" fill="${col}"/><text x="30" y="${y - 2}" style="font-size:14.5px;font-weight:600">${esc(st.model)}</text><text class="lab2" x="30" y="${y + 14}">${esc(st.mode)}</text>
+      <line x1="${a}" x2="${b}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="4" stroke-opacity="0.45"/>${hollowDot(a, y, col)}${solidDot(b, y, col)}
+      <text x="${W - 8}" y="${y + 5}" text-anchor="end" style="font:600 14px 'IBM Plex Mono',monospace">${d >= 0 ? "+" : "−"}${Math.abs(Math.round(d * 100))} pts</text></g>`;
+  });
+  const svg = $("dumbbell");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = s;
+  const openRow = (e) => {
+    const g = e.target.closest("g[data-s]"); if (!g) return null;
+    const st = SETUP[g.dataset.s], x = D.exp2[g.dataset.s];
+    openDialog(`<i class="dot ${st.provider}"></i>${esc(who(st))} &middot; one photo per chat`,
+      `Each hard photo sent on its own. All at once (run 1), this setup found ${x.combined.batch.found} of 147; one per chat, ${x.combined.single.found}.`,
+      ["e", "f"].map((pid) => photoBlock(pid, x[pid].single)).join(""));
+    return g;
   };
-  const bestEasy = [...D.exp1].sort((a, b) => easyF1(b) - easyF1(a))[0];
-  const gains = D.exp2.map(r => ({ r, d: r.photos.combined.single.f1 - r.photos.combined.batch.f1 }))
-    .sort((a, b) => b.d - a.d);
-  const tiles = [
-    { label: 'Best overall (experiment 1)', value: best.overall.f1.toFixed(2), sub: `F1 · ${best.model}, ${best.mode}` },
-    { label: 'Best on the easy shelves', value: easyF1(bestEasy).toFixed(2), sub: `F1 · ${bestEasy.model}, ${bestEasy.mode}` },
-    gains.length && { label: 'Biggest gain from one photo per chat', value: `+${gains[0].d.toFixed(2)}`,
-      sub: `F1 on the hard photos · ${gains[0].r.model}, ${gains[0].r.mode}` },
-  ].filter(Boolean);
-  document.getElementById('tiles').innerHTML = tiles.map(t =>
-    `<div class="tile"><div class="label">${esc(t.label)}</div><div class="value">${esc(t.value)}</div><div class="sub">${esc(t.sub)}</div></div>`
-  ).join('');
+  svg.addEventListener("click", openRow);
+  svg.addEventListener("keydown", (e) => (e.key === "Enter" || e.key === " ") && openRow(e) && e.preventDefault());
+  const skipped = D.exp2Skipped.map((k) => who(SETUP[k.id]));
+  $("skipped").textContent = `Not run: ${skipped.join("; ")}. These kept failing in their chat apps. Changes of about 5 points can be run-to-run noise.`;
+}
+drawDumbbell();
 
-  // ---------- photo gallery ----------
-  const cap = w => w.charAt(0).toUpperCase() + w.slice(1);
-  document.getElementById('photos').innerHTML = D.photos.map(p => `
-    <figure>
-      <a class="ph" href="photos/${p.id}.jpg" target="_blank" rel="noopener" aria-label="Open photo ${p.id} (${p.difficulty}, ${p.books} books) larger">
-        <img src="photos/${p.id}_thumb.jpg" alt="Bookshelf photo ${p.id}, ${p.difficulty}, ${p.books} books in the answer key" loading="lazy">
-      </a>
-      <figcaption><span class="id">${p.id}</span><span class="diff">${cap(p.difficulty)}</span><span class="count">${p.books} books</span></figcaption>
-    </figure>`).join('');
-
-  // ---------- tooltip ----------
-  const tip = document.getElementById('tip');
-  function showTip(el) {
-    tip.innerHTML = el.dataset.tip;
-    tip.classList.add('on');
-    const r = el.getBoundingClientRect();
-    const tw = tip.offsetWidth, th = tip.offsetHeight;
-    let x = r.left + r.width / 2 - tw / 2;
-    x = Math.max(8, Math.min(x, window.innerWidth - tw - 8));
-    let y = r.top - th - 8;
-    if (y < 8) y = r.bottom + 8;
-    tip.style.left = x + 'px';
-    tip.style.top = y + 'px';
-  }
-  function hideTip() { tip.classList.remove('on'); }
-  document.addEventListener('mouseover', e => { const c = e.target.closest('[data-tip]'); if (c) showTip(c); });
-  document.addEventListener('mouseout', e => { if (e.target.closest('[data-tip]')) hideTip(); });
-  document.addEventListener('focusin', e => { const c = e.target.closest('[data-tip]'); if (c) showTip(c); });
-  document.addEventListener('focusout', hideTip);
-  window.addEventListener('scroll', hideTip, { passive: true });
-
-  function tipHtml(title, sub, c, extra) {
-    const rows = [['Recall', c.recall], ['Precision', c.precision], ['F1', c.f1]]
-      .map(([k, v]) => `<div class="row"><span>${k}</span><b>${fmt(v)}</b></div>`).join('');
-    const counts = c.total != null ? `<div class="dim">Found ${c.found} of ${c.total} · ${c.wrong} not in answer key</div>` : '';
-    return `<div><b>${esc(title)}</b></div><div class="dim">${esc(sub)}</div>${rows}${counts}${extra || ''}`;
-  }
-
-  // ---------- experiment 1 ----------
-  function renderExp1() {
-    const m = state.exp1;
-    const runs = state.run === '2' && D.exp1Run2.length ? D.exp1Run2 : D.exp1;
-    const cols = D.photos.length + 3;
-    const head = `<thead><tr><th class="rowh" scope="col">Model · mode</th>
-      <th scope="col">Overall<span class="small">${totalBooks} books</span></th><td class="gap"></td>
-      ${D.photos.map(p => `<th scope="col">${p.id}<span class="small">${p.difficulty} · ${p.books}</span></th>`).join('')}
-      </tr></thead>`;
-    const row = r => {
-      const who = `${r.model} · ${r.mode} · run ${state.run}`;
-      const overall = r.overall;
-      const oCell = `<td class="cell" tabindex="0" style="${cellStyle(overall[m])}"
-        aria-label="${esc(who)}, overall ${METRIC_NAMES[m]} ${fmt(overall[m])}"
-        data-tip="${esc(tipHtml(who, 'All six photos', overall))}">${fmt(overall[m])}</td>`;
-      const cells = D.photos.map(p => {
-        const c = r.photos[p.id];
-        if (!c) return `<td class="cell empty">–</td>`;
-        const sub = `Photo ${p.id} · ${p.difficulty} · ${p.books} books`;
-        return `<td class="cell" tabindex="0" style="${cellStyle(c[m])}"
-          aria-label="${esc(who)}, photo ${p.id}, ${METRIC_NAMES[m]} ${fmt(c[m])}"
-          data-tip="${esc(tipHtml(who, sub, c))}">${fmt(c[m])}</td>`;
-      }).join('');
-      return `<tr><th class="rowh" scope="row">${runLabel(r)}</th>${oCell}<td class="gap"></td>${cells}</tr>`;
-    };
-    const body = grouped(runs, r => r.overall.f1).map(g => g.runs.map(row).join('')).join(spacer(cols));
-    document.getElementById('exp1').innerHTML =
-      `<caption style="position:absolute;left:-9999px">Experiment 1, run ${state.run}: ${METRIC_NAMES[m]} by model and photo</caption>${head}<tbody>${body}</tbody>`;
-  }
-
-  // ---------- experiment 2 ----------
-  function renderExp2() {
-    const m = state.exp2;
-    const groups = [
-      { id: 'e', label: 'Photo e', sub: `${photoById.e ? photoById.e.books : ''} books` },
-      { id: 'f', label: 'Photo f', sub: `${photoById.f ? photoById.f.books : ''} books` },
-      { id: 'combined', label: 'Both combined', sub: `${(photoById.e?.books || 0) + (photoById.f?.books || 0)} books` },
-    ];
-    const head = `<thead>
-      <tr><th class="rowh"></th>${groups.map((g, i) =>
-        `${i ? '<td class="gap"></td>' : ''}<th class="group" colspan="2" scope="colgroup">${g.label}<span class="small">${g.sub}</span></th>`).join('')}
-        <td class="gap"></td><th scope="col" rowspan="2" style="text-align:right">Change<span class="small">both, ${METRIC_NAMES[m]}</span></th></tr>
-      <tr><th class="rowh" scope="col">Model · mode</th>${groups.map((g, i) =>
-        `${i ? '<td class="gap"></td>' : ''}<th scope="col">6 at once</th><th scope="col">1 per chat</th>`).join('')}<td class="gap"></td></tr>
-      </thead>`;
-    const row = r => {
-      const who = `${r.model} · ${r.mode}`;
-      const cells = groups.map((g, i) => {
-        const c = r.photos[g.id];
-        const pair = ['batch', 'single'].map(k => {
-          if (!c) return `<td class="cell empty">–</td>`;
-          const v = c[k][m];
-          const cond = k === 'batch' ? 'All six photos in one message' : 'One photo per chat';
-          const data = { ...c[k], total: c.total };
-          return `<td class="cell" tabindex="0" style="${cellStyle(v)}"
-            aria-label="${esc(who)}, ${g.label}, ${cond}, ${METRIC_NAMES[m]} ${fmt(v)}"
-            data-tip="${esc(tipHtml(who, `${g.label} · ${cond}`, data))}">${fmt(v)}</td>`;
-        }).join('');
-        return (i ? '<td class="gap"></td>' : '') + pair;
-      }).join('');
-      const d = r.photos.combined.single[m] - r.photos.combined.batch[m];
-      const sign = d > 0.0005 ? '+' : d < -0.0005 ? '−' : '±';
-      const deltaTxt = `${sign}${Math.abs(d).toFixed(2)}`;
-      const delta = `<td class="delta">${Math.abs(d) >= 0.05 ? `<strong>${deltaTxt}</strong>` : deltaTxt}</td>`;
-      return `<tr><th class="rowh" scope="row">${runLabel(r)}</th>${cells}<td class="gap"></td>${delta}</tr>`;
-    };
-    const body = grouped(D.exp2, r => r.photos.combined.single.f1)
-      .map(g => g.runs.map(row).join('')).join(spacer(groups.length * 3 + 2));
-    document.getElementById('exp2').innerHTML =
-      `<caption style="position:absolute;left:-9999px">Experiment 2 ${METRIC_NAMES[m]}: six photos at once versus one photo per chat</caption>${head}<tbody>${body}</tbody>`;
-    const sk = D.exp2Skipped || [];
-    document.getElementById('skipped').textContent = sk.length
-      ? `Not run: ${sk.map(s => `${s.model} (${s.mode})`).join(', ')}. These kept giving trouble in their chat apps. Changes of 0.05 or more are in bold; smaller ones may be run-to-run noise.`
-      : 'Changes of 0.05 or more are in bold; smaller ones may be run-to-run noise.';
-  }
-
-  // ---------- controls ----------
-  document.querySelectorAll('.seg').forEach(seg => {
-    seg.addEventListener('click', e => {
-      const b = e.target.closest('button[data-metric]');
-      if (!b) return;
-      state[seg.dataset.target] = b.dataset.metric;
-      seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-      seg.dataset.target === 'exp1' ? renderExp1() : renderExp2();
-    });
+// ---------- accuracy against cost, run 2
+const LABEL_AT = {  // where each model's name sits, by hand, to avoid overlaps
+  "Claude Opus 5.5": { at: "mid", anchor: "middle", dx: 0, dy: -16 },
+  "Claude Opus 5": { at: 0, anchor: "start", dx: 13, dy: 5 },
+  "Claude Sonnet 5.5": { at: 0, anchor: "end", dx: -13, dy: 5 },
+  "Claude Sonnet 5": { at: 0, anchor: "start", dx: 13, dy: 5 },
+  "Gemini 3.1 Pro": { at: 1, anchor: "middle", dx: 0, dy: 27 },
+  "Gemini 3.8 Flash": { at: 1, anchor: "end", dx: -13, dy: 5 },
+  "GPT 5.6 Luna": { at: 1, anchor: "start", dx: 4, dy: 24 },
+};
+function drawScatter() {
+  const run = D.exp1.run2;
+  const W = 960, H = 480, L = 64, R = 24, T = 22, B = 56;
+  const xs = [0.008, 0.8], ys = [0.5, 0.95];
+  const X = (v) => L + (Math.log(v) - Math.log(xs[0])) / (Math.log(xs[1]) - Math.log(xs[0])) * (W - L - R);
+  const Y = (v) => T + (ys[1] - v) / (ys[1] - ys[0]) * (H - T - B);
+  let s = "";
+  [0.5, 0.6, 0.7, 0.8, 0.9].forEach((v) => (s += `<line class="grid" x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}"/><text class="tick" x="${L - 10}" y="${Y(v) + 4}" text-anchor="end">${v.toFixed(1)}</text>`));
+  [0.01, 0.02, 0.05, 0.1, 0.2, 0.5].forEach((v) => (s += `<line class="grid" x1="${X(v)}" x2="${X(v)}" y1="${T}" y2="${H - B}"/><text class="tick" x="${X(v)}" y="${H - B + 20}" text-anchor="middle">$${v}</text>`));
+  s += `<text class="axis" x="${(L + W - R) / 2}" y="${H - 8}" text-anchor="middle">Estimated API cost of one run, all six photos (log scale)</text>`;
+  s += `<text class="axis" transform="translate(16 ${(T + H - B) / 2}) rotate(-90)" text-anchor="middle">F1, all six photos</text>`;
+  s += `<text class="lab2" x="${L + 10}" y="${T + 16}">&#8598; better: more accurate and cheaper</text>`;
+  const byModel = {};
+  ROWS.filter((r) => D.cost[r.id]).forEach((r) => (byModel[r.model] = byModel[r.model] || []).push(r));
+  const pt = (r) => [X(D.cost[r.id].mid), Y(run[r.id].overall.f1)];
+  Object.values(byModel).forEach((g) => {
+    if (g.length < 2) return;
+    const [a, b] = g.map(pt);
+    s += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${COLOR[g[0].provider]}" stroke-width="2.5" stroke-opacity="0.5"/>`;
   });
-  document.querySelectorAll('.seg[data-run]').forEach(seg => {
-    if (!D.exp1Run2.length) { seg.hidden = true; return; }
-    seg.addEventListener('click', e => {
-      const b = e.target.closest('button[data-run]');
-      if (!b) return;
-      state.run = b.dataset.run;
-      seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-      renderExp1();
-    });
+  Object.values(byModel).forEach((g) => g.forEach((r, i) => {
+    const c = D.cost[r.id], o = run[r.id].overall, col = COLOR[r.provider], [px, py] = pt(r), low = g.length > 1 && i === 1;
+    const t = `<b>${esc(who(r))}</b>Run 2 &middot; F1 ${dec(o.f1)}, found ${pct(o.recall)}<br>Estimated cost ${money(c.mid)} (${money(c.low)}&ndash;${money(c.high)})<br>~${Math.round(c.inTokens / 1000)}k tokens in, ~${Math.round(c.outTokens / 1000)}k out<br>${Math.round(c.latency)} s from send to finished reply`;
+    s += `<g class="pt" tabindex="0" data-tip="${esc(t)}" aria-label="${esc(who(r))}: F1 ${dec(o.f1)}, estimated cost ${money(c.mid)}">
+      <line x1="${X(c.low)}" x2="${X(c.high)}" y1="${py}" y2="${py}" stroke="${col}" stroke-width="2" stroke-opacity="0.45"/>
+      <circle cx="${px}" cy="${py}" r="16" fill="transparent"/>${low ? hollowDot(px, py, col, 6.5) : solidDot(px, py, col, 8)}
+      <circle class="ring" cx="${px}" cy="${py}" r="12" fill="none" stroke="none"/></g>`;
+  }));
+  Object.entries(byModel).forEach(([model, g]) => {
+    const o = LABEL_AT[model] || { at: 0, anchor: "start", dx: 13, dy: 5 }, pts = g.map(pt);
+    const [px, py] = o.at === "mid" ? [(pts[0][0] + pts[1][0]) / 2, Math.min(pts[0][1], pts[1][1])] : pts[Math.min(o.at, pts.length - 1)];
+    s += `<text class="lab" x="${px + o.dx}" y="${py + o.dy}" text-anchor="${o.anchor}">${esc(model)}</text>`;
   });
+  $("scatter").setAttribute("viewBox", `0 0 ${W} ${H}`);
+  $("scatter").innerHTML = s;
+  $("legend").innerHTML = PROVIDERS.map((p) => `<span><i class="dot ${p}" style="margin:0"></i>${p === "GPT" ? "OpenAI" : p === "Claude" ? "Anthropic" : "Google"}</span>`).join("") +
+    `<span><i class="solid"></i>higher effort or thinking</span><span><i class="hollow"></i>lower effort or standard</span><span>Lines join the same model&rsquo;s two settings</span>`;
+  $("costTable").innerHTML = `<thead><tr><th>Setup</th><th class="num">F1</th><th class="num">Est. cost</th><th class="num">Range</th><th class="num">Tokens in</th><th class="num">Tokens out</th><th class="num">Time</th></tr></thead><tbody>` +
+    ROWS.filter((r) => D.cost[r.id]).map((r) => { const c = D.cost[r.id];
+      return `<tr><td><i class="dot ${r.provider}"></i>${esc(r.model)} <small>${esc(r.mode)}</small></td><td class="num">${dec(run[r.id].overall.f1)}</td><td class="num">${money(c.mid)}</td><td class="num">${money(c.low)}&ndash;${money(c.high)}</td><td class="num">${(c.inTokens / 1000).toFixed(1)}k</td><td class="num">${(c.outTokens / 1000).toFixed(1)}k</td><td class="num">${Math.round(c.latency)} s</td></tr>`; }).join("") + "</tbody>";
+}
+drawScatter();
 
-  // ---------- accuracy vs cost (run 2) ----------
-  const PROVIDER_COLOR = { Claude: 'var(--s-claude)', Gemini: 'var(--s-gemini)', GPT: 'var(--s-gpt)' };
-  const money = v => (v < 0.1 ? `$${v.toFixed(3)}` : `$${v.toFixed(2)}`);
-  // Where each model's name goes, relative to its higher-effort point (hand-placed to avoid overlaps).
-  const LABEL_AT = {
-    'Claude Opus 5.5': { at: 'mid', anchor: 'middle', dx: 0, dy: -14 },
-    'Claude Opus 5': { at: 0, anchor: 'start', dx: 11, dy: 4 },
-    'Claude Sonnet 5.5': { at: 0, anchor: 'end', dx: -11, dy: 4 },
-    'Claude Sonnet 5': { at: 0, anchor: 'start', dx: 11, dy: 4 },
-    'Gemini 3.1 Pro': { at: 1, anchor: 'end', dx: -11, dy: 12 },
-    'Gemini 3.8 Flash': { at: 1, anchor: 'end', dx: -11, dy: 4 },
-    'GPT 5.6 Luna': { at: 1, anchor: 'start', dx: 4, dy: 22 },
-  };
-
-  function renderScatter() {
-    const runs = D.exp1Run2.filter(r => D.cost[r.id]);
-    if (!runs.length) { document.getElementById('h-cost').closest('section').hidden = true; return; }
-    const W = 900, H = 470, L = 58, R = 24, T = 18, B = 50;
-    const xs = [0.008, 0.8], ys = [0.5, 0.95];
-    const x = v => L + (Math.log(v) - Math.log(xs[0])) / (Math.log(xs[1]) - Math.log(xs[0])) * (W - L - R);
-    const y = v => T + (ys[1] - v) / (ys[1] - ys[0]) * (H - T - B);
-    let s = '';
-    [0.5, 0.6, 0.7, 0.8, 0.9].forEach(v => {
-      s += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>`;
-      s += `<text class="tick" x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v.toFixed(1)}</text>`;
-    });
-    [0.01, 0.02, 0.05, 0.1, 0.2, 0.5].forEach(v => {
-      s += `<line class="grid" x1="${x(v)}" x2="${x(v)}" y1="${T}" y2="${H - B}"/>`;
-      s += `<text class="tick" x="${x(v)}" y="${H - B + 18}" text-anchor="middle">$${v}</text>`;
-    });
-    s += `<text class="title" x="${(L + W - R) / 2}" y="${H - 8}" text-anchor="middle">Estimated API cost per run (US$, log scale)</text>`;
-    s += `<text class="title" transform="translate(14 ${(T + H - B) / 2}) rotate(-90)" text-anchor="middle">F1 (all six photos)</text>`;
-    s += `<text class="corner" x="${L + 8}" y="${T + 14}">↖ better: more accurate and cheaper</text>`;
-
-    const groups = grouped(runs, r => r.overall.f1);
-    groups.forEach(g => {  // pair lines under the points
-      if (g.runs.length < 2) return;
-      const [a, b] = g.runs;
-      s += `<line x1="${x(D.cost[a.id].mid)}" y1="${y(a.overall.f1)}" x2="${x(D.cost[b.id].mid)}" y2="${y(b.overall.f1)}"
-        stroke="${PROVIDER_COLOR[a.provider]}" stroke-width="2" stroke-opacity="0.55"/>`;
-    });
-    groups.forEach(g => g.runs.forEach((r, i) => {
-      const c = D.cost[r.id], col = PROVIDER_COLOR[r.provider];
-      const px = x(c.mid), py = y(r.overall.f1);
-      const hollow = g.runs.length > 1 && i === 1;
-      const tip = `<div><b>${esc(r.model)}</b></div><div class="dim">${esc(r.mode)} · run 2</div>
-        <div class="row"><span>F1</span><b>${fmt(r.overall.f1)}</b></div>
-        <div class="row"><span>Recall</span><b>${fmt(r.overall.recall)}</b></div>
-        <div class="row"><span>Est. cost</span><b>${money(c.mid)}</b></div>
-        <div class="dim">Range ${money(c.low)}–${money(c.high)} · ~${Math.round(c.inTokens / 1000)}k in, ~${Math.round(c.outTokens / 1000)}k out · ${Math.round(c.latency)} s</div>`;
-      s += `<g class="pt" tabindex="0" role="img" aria-label="${esc(`${r.model}, ${r.mode}: F1 ${fmt(r.overall.f1)}, estimated cost ${money(c.mid)}`)}" data-tip="${esc(tip)}">
-        <line x1="${x(c.low)}" x2="${x(c.high)}" y1="${py}" y2="${py}" stroke="${col}" stroke-width="1.5" stroke-opacity="0.45"/>
-        <circle class="hit" cx="${px}" cy="${py}" r="14" fill="transparent"/>
-        <circle cx="${px}" cy="${py}" r="${hollow ? 5.5 : 6.5}" fill="${hollow ? 'var(--surface-1)' : col}"
-          stroke="${hollow ? col : 'var(--surface-1)'}" stroke-width="${hollow ? 2.5 : 2}"/></g>`;
-    }));
-    groups.forEach(g => {  // direct labels, one per model
-      const o = LABEL_AT[g.model] || { at: 0, anchor: 'start', dx: 11, dy: 4 };
-      const pts = g.runs.map(r => [x(D.cost[r.id].mid), y(r.overall.f1)]);
-      const [px, py] = o.at === 'mid' ? [(pts[0][0] + pts[1][0]) / 2, Math.min(pts[0][1], pts[1][1])]
-        : pts[Math.min(o.at, pts.length - 1)];
-      s += `<text class="lbl" x="${px + o.dx}" y="${py + o.dy}" text-anchor="${o.anchor}">${esc(g.model)}</text>`;
-    });
-    document.getElementById('scatter').innerHTML =
-      `<svg class="scatter" viewBox="0 0 ${W} ${H}" role="group" aria-label="F1 against estimated cost for each model setup in run 2">${s}</svg>`;
-
-    document.getElementById('costKey').innerHTML =
-      Object.entries(PROVIDER_COLOR).map(([p, c]) => `<span><i style="background:${c}"></i>${p}</span>`).join('') +
-      `<span><i style="background:var(--text-secondary)"></i>higher effort / thinking</span>
-       <span><i class="hollow"></i>lower effort / standard</span>`;
-
-    const rowsHtml = groups.flatMap(g => g.runs).map(r => {
-      const c = D.cost[r.id];
-      return `<tr><td>${esc(r.model)} <span style="color:var(--text-secondary)">· ${esc(r.mode)}</span></td>
-        <td>${fmt(r.overall.f1)}</td><td>${money(c.mid)}</td><td>${money(c.low)}–${money(c.high)}</td>
-        <td>${(c.inTokens / 1000).toFixed(1)}k</td><td>${(c.outTokens / 1000).toFixed(1)}k</td><td>${Math.round(c.latency)} s</td></tr>`;
-    }).join('');
-    document.getElementById('costTable').innerHTML =
-      `<thead><tr><th scope="col">Model · mode</th><th scope="col">F1</th><th scope="col">Est. cost</th><th scope="col">Range</th>
-       <th scope="col">Input tokens</th><th scope="col">Output tokens</th><th scope="col">Time</th></tr></thead><tbody>${rowsHtml}</tbody>`;
-  }
-
-  const themes = ['auto', 'light', 'dark'];
-  const themeBtn = document.getElementById('themeBtn');
-  function applyTheme(t) {
-    if (t === 'auto') document.documentElement.removeAttribute('data-theme');
-    else document.documentElement.setAttribute('data-theme', t);
-    themeBtn.textContent = `Theme: ${t}`;
-  }
-  let theme = 'auto';
-  try { theme = localStorage.getItem('bb-theme') || 'auto'; } catch (e) { /* storage unavailable */ }
-  if (!themes.includes(theme)) theme = 'auto';
-  applyTheme(theme);
-  themeBtn.addEventListener('click', () => {
-    theme = themes[(themes.indexOf(theme) + 1) % themes.length];
-    applyTheme(theme);
-    try { localStorage.setItem('bb-theme', theme); } catch (e) { /* storage unavailable */ }
-  });
-
-  renderExp1();
-  renderExp2();
-  renderScatter();
+// ---------- run 1 against run 2
+$("runTable").innerHTML = `<thead><tr><th>Setup</th><th class="num">F1 run 1</th><th class="num">Run 2</th><th class="num">Change</th></tr></thead><tbody>` +
+  ROWS.map((s) => { const a = D.exp1.run1[s.id].overall.f1, b = D.exp1.run2[s.id].overall.f1, d = b - a;
+    return `<tr><td><i class="dot ${s.provider}"></i>${esc(s.model)} <small>${esc(s.mode)}</small></td><td class="num">${dec(a)}</td><td class="num">${dec(b)}</td><td class="num ${Math.abs(d) >= 0.05 ? (d > 0 ? "up" : "down") : ""}">${d >= 0 ? "+" : "−"}${Math.abs(d).toFixed(2)}</td></tr>`; }).join("") + "</tbody>";
 })();
 </script>
 </body>

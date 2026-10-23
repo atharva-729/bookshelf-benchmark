@@ -1,14 +1,15 @@
-"""Score pasted model replies against ground_truth.json.
+"""Score pasted model replies against data/ground_truth.json.
 
 Usage:
-    python benchmark/evaluate.py [raw_dir] [out_dir]
+    python benchmark/evaluate.py [run_dir ...]
 
-By default reads results/raw/*.md (one reply with all 6 images per file) and writes to results/:
+Each run_dir (default: every results/exp1-* folder) holds replies/*.md, one reply with all
+6 images per file. Writes into the same run_dir:
     summary.csv       one row per experiment
     per_image.csv     one row per experiment x image
     details/<experiment>.json   matched, missed and not-in-ground-truth books
 
-See METRICS.md for what each number means. Uses only the Python standard library.
+See notes/metrics.md for what each number means. Uses only the Python standard library.
 """
 import csv
 import json
@@ -21,7 +22,7 @@ from itertools import permutations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-GT_PATH = ROOT / 'ground_truth.json'
+GT_PATH = ROOT / 'data' / 'ground_truth.json'
 TITLE_THRESHOLD = 0.85   # minimum title similarity to count as the same book
 AUTHOR_THRESHOLD = 0.80  # minimum author similarity to count the author as right
 PART_SCORE = 0.90        # score when one title is the start or end of the other (subtitle or series name left out)
@@ -258,9 +259,8 @@ def label_of(image):
     return Path(image).stem
 
 
-def main():
-    raw_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'results' / 'raw'
-    out_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / 'results'
+def score_run(out_dir):
+    raw_dir = out_dir / 'replies'
     gt = json.loads(GT_PATH.read_text(encoding='utf-8'))
     (out_dir / 'details').mkdir(parents=True, exist_ok=True)
 
@@ -355,6 +355,14 @@ def main():
               f"{r.get('easy_f1', ''):>7}{r.get('medium_f1', ''):>7}{r.get('hard_f1', ''):>7}"
               f"{r['author_accuracy']:>7}{flag}")
     print(f'\nWrote {out_dir / "summary.csv"}, {out_dir / "per_image.csv"} and {out_dir / "details"}/')
+
+
+def main():
+    run_dirs = [Path(a) for a in sys.argv[1:]] or sorted((ROOT / 'results').glob('exp1-*'))
+    for run_dir in run_dirs:
+        print(f'== {run_dir.name} ==')
+        score_run(run_dir)
+        print()
 
 
 if __name__ == '__main__':

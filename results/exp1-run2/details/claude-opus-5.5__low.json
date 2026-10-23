@@ -1,6 +1,7 @@
 {
   "metadata": {
     "model": "Claude Opus 5.5",
+    "model_slug": "claude-opus-5-5",
     "mode": "low",
     "interface": "Claude.ai web app (incognito chat), driven by Claude Code via Claude in Chrome (Brave)",
     "date": "2026-10-04",

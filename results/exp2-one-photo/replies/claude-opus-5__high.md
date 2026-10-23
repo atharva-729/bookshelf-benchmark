@@ -1,6 +1,6 @@
 # Claude Opus 5 / high / one photo per chat
 
-<!-- Run e.jpg and f.jpg in two separate new chats, using benchmark/prompt_single.md. -->
+<!-- Run e.jpg and f.jpg in two separate new chats, using benchmark/prompts/one_photo.md. -->
 <!-- Paste each full reply under its photo heading. Leave a section empty until it has been run. -->
 
 model: Claude Opus 5

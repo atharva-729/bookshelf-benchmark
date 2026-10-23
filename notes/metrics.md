@@ -1,6 +1,6 @@
 # Metrics
 
-What `benchmark/evaluate.py` calculates, and how.
+What `benchmark/evaluate.py` calculates, and how. In the paths below, `<run>` is a results folder such as `exp1-run1` or `exp1-run2`.
 
 ## Matching a model's answer to the ground truth
 
@@ -23,7 +23,7 @@ All 6 photos are sent in one message, and the model labels its lists `a` to `f`.
 
 So before scoring, the script finds the one-to-one letter → photo assignment that matches the most books. If that beats the letters as written, it uses that assignment and reports it in the `relabelled` column (for example `a->d b->e ...`). Only whole lists move: a single book listed under the wrong photo still counts as a miss and as "not in the ground truth". `per_image.csv` and the details files show which letter each photo's list came from (`reply_label`).
 
-The thresholds are constants at the top of `evaluate.py`. Every match and non-match is written to `results/details/<experiment>.json`, so you can check the matching by hand.
+The thresholds are constants at the top of `evaluate.py`. Every match and non-match is written to `results/<run>/details/<experiment>.json`, so you can check the matching by hand.
 
 ## Counts per image
 
@@ -65,9 +65,9 @@ Empty reply files are skipped entirely: they're experiments that haven't been ru
 
 | File | Contents |
 | --- | --- |
-| `results/summary.csv` | One row per experiment, with all the scores above |
-| `results/per_image.csv` | One row per experiment × image: counts, precision, recall, F1, author accuracy, parse status |
-| `results/details/<experiment>.json` | For each image: every matched pair with its similarity, every missed book, and every book not in the ground truth |
+| `results/<run>/summary.csv` | One row per experiment, with all the scores above |
+| `results/<run>/per_image.csv` | One row per experiment × image: counts, precision, recall, F1, author accuracy, parse status |
+| `results/<run>/details/<experiment>.json` | For each image: every matched pair with its similarity, every missed book, and every book not in the ground truth |
 
 ## Known limitations
 

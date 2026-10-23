@@ -3,12 +3,13 @@
 Usage:
     python benchmark/evaluate_single.py
 
-Reads results/raw_single/*.md (one section per photo: '## e.jpg', '## f.jpg') and, for the
-same experiment, results/raw/*.md (all 6 photos in one message). Writes to results/single/:
+Reads results/exp2-one-photo/replies/*.md (one section per photo: '## e.jpg', '## f.jpg') and,
+for the same experiment, results/exp1-run1/replies/*.md (all 6 photos in one message). Writes to
+results/exp2-one-photo/:
     summary.csv                  one row per experiment x photo, both conditions side by side
     details/<experiment>.json    matched, missed and not-in-ground-truth books (single-photo runs)
 
-Matching and scoring are the same as benchmark/evaluate.py; see METRICS.md.
+Matching and scoring are the same as benchmark/evaluate.py; see notes/metrics.md.
 """
 import csv
 import json
@@ -17,9 +18,9 @@ from pathlib import Path
 
 import evaluate as ev
 
-SINGLE_DIR = ev.ROOT / 'results' / 'raw_single'
-BATCH_DIR = ev.ROOT / 'results' / 'raw'
-OUT_DIR = ev.ROOT / 'results' / 'single'
+OUT_DIR = ev.ROOT / 'results' / 'exp2-one-photo'
+SINGLE_DIR = OUT_DIR / 'replies'
+BATCH_DIR = ev.ROOT / 'results' / 'exp1-run1' / 'replies'
 
 
 def parse_single_file(path):

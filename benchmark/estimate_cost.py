@@ -4,7 +4,7 @@ Usage:
     python benchmark/estimate_cost.py
 
 The runs were done in consumer chat apps, which report no token counts, so this is an
-estimate built from what the apps do expose (logged in results/raw_run2/):
+estimate built from what the apps do expose (logged in results/exp1-run2/replies/ and usage/):
 
 - input: the prompt text plus the six photos, using each provider's published image-token rule;
 - visible output: the reply text, counted from the saved reply;
@@ -12,7 +12,7 @@ estimate built from what the apps do expose (logged in results/raw_run2/):
 - ChatGPT: the app ran Python on the images in a loop, so each loop turn re-reads the context.
 
 Every estimate is a low / mid / high range. Prices are list API prices per million tokens on
-2026-10-04. Hidden app system prompts are not counted. Writes results/run2/cost.csv.
+2026-10-04. Hidden app system prompts are not counted. Writes results/exp1-run2/cost.csv.
 """
 import csv
 import json
@@ -20,9 +20,10 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / 'results' / 'raw_run2'
-USAGE = RAW / 'usage'
-OUT = ROOT / 'results' / 'run2' / 'cost.csv'
+RUN = ROOT / 'results' / 'exp1-run2'
+RAW = RUN / 'replies'
+USAGE = RUN / 'usage'
+OUT = RUN / 'cost.csv'
 
 # $ per 1M tokens (input, output). GPT: the ChatGPT Go plan served gpt-5-6 (standard) and
 # gpt-5-6-t-mini (Think); both priced at the GPT-5.6 Luna tier, an assumption.

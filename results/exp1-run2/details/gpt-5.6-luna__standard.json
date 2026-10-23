@@ -1,6 +1,7 @@
 {
   "metadata": {
     "model": "GPT 5.6 Luna",
+    "model_slug": "gpt-5-6",
     "mode": "standard",
     "interface": "ChatGPT web app, Go plan (temporary chat), driven by Claude Code via Claude in Chrome (Brave)",
     "date": "2026-10-04",

@@ -1,6 +1,6 @@
 # Standard prompt
 
-Attach all 6 images from `data/` (`a.jpg`, `b.jpg`, `c.png`, `d.jpg`, `e.jpg`, `f.jpg`) in that order, then send this exact text in the same message. Use this prompt for every experiment. Copy everything between the lines.
+Attach all 6 images from `data/images/` (`a.jpg`, `b.jpg`, `c.png`, `d.jpg`, `e.jpg`, `f.jpg`) in that order, then send this exact text in the same message. Use this prompt for every experiment. Copy everything between the lines.
 
 ---
 
