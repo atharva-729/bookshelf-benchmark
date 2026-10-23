@@ -714,10 +714,17 @@ python benchmark/build_site.py       <i># this page</i></pre>
 
 <footer><div class="wrap">Atharva Sharma &middot; Runs done in the ChatGPT, Claude and Gemini chat apps between 30 September and 4 October 2026.</div></footer>
 
-<script src="data.js"></script>
+<script src="data.js?v=1cee9f8c37"></script>
 <script>
 (function () {
 const D = window.BENCH;
+if (!D || !D.setups) {  // data.js missing or out of date: say so rather than leave blank charts
+  document.querySelectorAll("#figures, #shelves, #heat, #dumbbell, #scatter").forEach((el) => {
+    const box = el.closest(".scroll") || el;
+    box.insertAdjacentHTML("beforebegin", '<p class="note" style="padding:12px 16px;border:2px solid var(--red);background:var(--surface);color:var(--ink)">The results data did not load. Please reload the page (Ctrl+F5 or Cmd+Shift+R).</p>');
+  });
+  return;
+}
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const pct = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
