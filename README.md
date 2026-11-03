@@ -69,7 +69,7 @@ The project went through eight stages. Each one fed the next, and two of them (6
 
 In words:
 
-1. **Idea.** Trying to get an AI to name the books in photos of chaotic bookshop displays gave mixed results: misread spines, missed books, and books that weren't there. My manager turned that into a measurable question: on photos where the real books are known, how well do different models, and different ways of using them, identify the books?
+1. **Idea.** Trying to get an AI to name the books in photos of chaotic bookshop displays gave mixed results: misread spines, missed books, and books that weren't there. That became a measurable question: on photos where the real books are known, how well do different models, and different ways of using them, identify the books?
 2. **Answer key.** You can't score a model without knowing the right answer, so the first job was a list of every readable book in each photo. This was the slowest step (details below).
 3. **Prompt.** One prompt, written once and then frozen, so every model got the same task. It asks for JSON so the answers can be scored automatically.
 4. **Run.** Each of the 12 setups got the six photos and the prompt in a fresh chat. The reply was pasted, unedited, into a file in `results/`.

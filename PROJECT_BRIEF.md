@@ -6,7 +6,7 @@ This is a personal experiment. The objective is to build a small, presentable be
 
 The original idea came from trying to use an LLM to identify books from photographs of chaotic bookstore/bookshelf displays. The models sometimes struggled with OCR, image quality, and hallucinated or incorrectly identified book titles.
 
-My manager reframed this into a benchmark:
+This was then reframed into a benchmark:
 
 > Given a collection of bookshelf photographs for which the actual books are known, compare how well different frontier multimodal models and different ways of interacting with those models can identify the books.
 
@@ -102,7 +102,7 @@ The evaluator must not rely solely on exact string matching. Minor title-formatt
 
 ## 5. Direct Model vs Harness / Agent
 
-My manager specifically raised the distinction between models and the systems/harnesses used to operate them.
+An important distinction is the one between models and the systems/harnesses used to operate them.
 
 A later experiment should compare:
 
@@ -386,7 +386,7 @@ Do not approach the project as an attempt to determine a universally "best" mode
 
 Instead, measure specific capabilities and document where different approaches succeed and fail.
 
-The goal is to produce an interesting, measurable, reproducible experiment that can be discussed with others and potentially expanded into a more general benchmark of AI information representation and processing.
+The goal is to produce an interesting, measurable, reproducible experiment that can be discussed and potentially expanded into a more general benchmark of AI information representation and processing.
 
 ---
 
